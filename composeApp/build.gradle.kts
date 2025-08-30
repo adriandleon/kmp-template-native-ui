@@ -17,6 +17,7 @@ kotlin {
             implementation(libs.splashscreen)
         }
         commonMain.dependencies {
+            implementation(projects.shared)
             implementation(compose.runtime)
             implementation(compose.foundation)
             implementation(compose.material3)
@@ -25,7 +26,8 @@ kotlin {
             implementation(compose.components.uiToolingPreview)
             implementation(libs.androidx.lifecycle.viewmodelCompose)
             implementation(libs.androidx.lifecycle.runtimeCompose)
-            implementation(projects.shared)
+            implementation(libs.decompose)
+            implementation(libs.decompose.extensions)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)
