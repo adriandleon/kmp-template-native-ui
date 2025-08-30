@@ -28,6 +28,7 @@ kotlin {
             implementation(compose.ui)
             implementation(libs.decompose)
             implementation(libs.decompose.extensions)
+            implementation(libs.koin.compose)
             implementation(libs.lifecycle.runtime.compose)
             implementation(libs.lifecycle.viewmodel.compose)
         }
