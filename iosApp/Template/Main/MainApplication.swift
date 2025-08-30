@@ -13,11 +13,11 @@ import SwiftUI
 struct MainApplication: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self)
     private var appDelegate: AppDelegate
-    
+
     init() {
         KoinAppKt.doInitKoin()
     }
-    
+
     var body: some Scene {
         WindowGroup {
             RootView(appDelegate.root)
@@ -27,6 +27,6 @@ struct MainApplication: App {
 
 private class AppDelegate: NSObject, UIApplicationDelegate {
     let root: RootComponent = DefaultRootComponent(
-        componentContext: DefaultComponentContext(lifecycle: ApplicationLifecycle())
+        componentContext: DefaultComponentContext(lifecycle: ApplicationLifecycle()),
     )
 }

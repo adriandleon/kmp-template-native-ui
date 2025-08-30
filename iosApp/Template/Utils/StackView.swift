@@ -32,8 +32,8 @@ struct StackView<T: AnyObject, Content: View>: View {
             NavigationStack(
                 path: Binding(
                     get: { stack.dropFirst() },
-                    set: { updatedPath in onBack(Int32(updatedPath.count)) }
-                )
+                    set: { updatedPath in onBack(Int32(updatedPath.count)) },
+                ),
             ) {
                 childContent(stack.first!.instance!)
                     .navigationDestination(for: Child<AnyObject, T>.self) {
@@ -45,7 +45,7 @@ struct StackView<T: AnyObject, Content: View>: View {
                 components: stack.map { $0.instance! },
                 getTitle: getTitle,
                 onBack: onBack,
-                childContent: childContent
+                childContent: childContent,
             )
         }
     }

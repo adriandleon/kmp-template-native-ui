@@ -1,0 +1,8 @@
+# file options
+--exclude Pods
+
+# Disabled Rules
+--disable wrapMultilineStatementBraces
+
+# Swift version
+--swiftversion 6.1

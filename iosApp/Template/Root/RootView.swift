@@ -15,7 +15,7 @@ struct RootView: View {
     init(_ component: RootComponent) {
         self.component = component
     }
-    
+
     var body: some View {
         StackView(
             stackValue: StateValue(component.stack),
@@ -31,7 +31,7 @@ struct RootView: View {
                 case let child as RootComponentChildHome: HomeView(child.component)
                 default: EmptyView()
                 }
-            }
+            },
         )
     }
 }
