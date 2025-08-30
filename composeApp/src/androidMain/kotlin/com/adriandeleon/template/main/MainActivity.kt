@@ -4,23 +4,19 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.adriandeleon.template.App
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.adriandeleon.template.root.DefaultRootComponent
+import com.adriandeleon.template.root.RootView
+import com.arkivanov.decompose.retainedComponent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
+        installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
-        setContent {
-            App()
-        }
-    }
-}
+        val root = retainedComponent { DefaultRootComponent(it) }
 
-@Preview
-@Composable
-fun AppAndroidPreview() {
-    App()
+        setContent { RootView(component = root) }
+    }
 }
