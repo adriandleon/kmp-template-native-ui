@@ -1,0 +1,49 @@
+repos:
+
+- repo: https://github.com/nicklockwood/SwiftFormat
+  rev: 0.57.2
+  hooks:
+  - id: swiftformat
+    name: Swift Format
+    entry: swiftformat iosApp/ --config config/.swiftformat
+
+- repo: https://github.com/realm/SwiftLint
+  rev: 0.60.0
+  hooks:
+  - id: swiftlint
+    name: Swift Lint
+    entry: swiftlint --fix --strict --config config/.swiftlint.yml
+
+- repo: https://github.com/jguttman94/pre-commit-gradle
+  rev: v0.3.0
+  hooks:
+  - id: gradle-task
+    name: Kotlin Format
+    args: [--wrapper, ktfmtFormat]
+
+- repo: https://github.com/jguttman94/pre-commit-gradle
+  rev: v0.3.0
+  hooks:
+  - id: gradle-task
+    name: Kotlin Lint
+    args: [--wrapper, detekt]
+
+- repo: https://github.com/macisamuele/language-formatters-pre-commit-hooks
+  rev: v2.15.0
+  hooks:
+  - id: pretty-format-yaml
+    name: Yaml Format
+    args: [--autofix, --indent, '2']
+
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v6.0.0
+  hooks:
+  - id: detect-private-key
+    name: Detect Private Keys
+
+- repo: https://github.com/Yelp/detect-secrets
+  rev: v1.5.0
+  hooks:
+  - id: detect-secrets
+    name: Detect Secrets
+    args: [--baseline, config/.secrets.baseline]

@@ -72,6 +72,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ## 📚 Project Documentation
 
+- [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md)
 - [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md)
 - [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md)
 
