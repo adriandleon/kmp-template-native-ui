@@ -89,7 +89,7 @@ In the workflow file [.github/workflows/shared_test_lint.yml](https://github.com
 
 ### Detekt Installation
 
-Install [detekt](Install [ktfmt](https://github.com/facebook/ktfmt#installation) in your local machine using homebrew) in your local machine using homebrew
+Install [detekt](https://github.com/facebook/ktfmt#installation) in your local machine using homebrew
 
 ```shell
 brew install detekt
@@ -97,7 +97,7 @@ brew install detekt
 
 ### Detekt Gradle Plugin Installation
 
-We use the [detekt-gradle](https://github.com/cortinico/ktfmt-gradle) gradle plugin to integrate with the build system. And we add the plugin to each module's `build.gradle.kts` file containing kotlin code.) gradle plugin to integrate with the build system.
+We use the [detekt-gradle](https://detekt.dev/docs/gettingstarted/gradle/) gradle plugin to integrate with the build system. And we add the plugin to each module's `build.gradle.kts` file containing kotlin code.
 
 Add the plugin to root `build.gradle.kts` file.
 
