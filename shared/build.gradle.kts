@@ -1,8 +1,10 @@
-import org.gradle.kotlin.dsl.detektPlugins
+import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.buildkonfig)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotest)
     alias(libs.plugins.ktfmt.gradle)
@@ -94,4 +96,36 @@ detekt {
     parallel = true
     buildUponDefaultConfig = true
     config.setFrom("$rootDir/config/detekt.yml")
+}
+
+buildkonfig {
+    packageName = "com.adriandeleon.template"
+
+    // DefaultConfig
+    defaultConfigs {
+        buildConfigField(
+            type = BOOLEAN,
+            name = "DEBUG",
+            value = "true",
+            nullable = false,
+            const = true,
+        )
+    }
+
+    // Flavored DefaultConfig
+    defaultConfigs("release") {
+        buildConfigField(
+            type = BOOLEAN,
+            name = "DEBUG",
+            value = "false",
+            nullable = false,
+            const = true,
+        )
+    }
+}
+
+fun getSecret(key: String): String {
+    return gradleLocalProperties(rootDir, providers).getProperty(key)
+        ?: System.getenv(key)
+        ?: throw Exception("Missing secret $key in local.properties or environment variables")
 }
