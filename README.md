@@ -103,6 +103,11 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - **[Kotest](https://kotest.io/)** (6.0.1) - Testing framework
 - **[Mokkery](https://github.com/mockk/mokkery)** (2.9.0) - Mocking library
 
+### Code Quality & Formatting
+- **[Ktfmt](https://github.com/facebook/ktfmt)** - Kotlin code formatter following official style guide
+- **[Detekt](https://detekt.dev/)** - Static code analysis tool
+- **[Detekt Compose Rules](https://github.com/mrmans0n/compose-rules)** - Compose-specific linting rules
+
 ### Logging & Monitoring
 - **[Kermit](https://github.com/touchlab/Kermit)** (2.0.8) - Multiplatform logging
 - **[ConfigCat](https://configcat.com/)** (5.1.0) - Feature flags and configuration
@@ -170,6 +175,41 @@ This template follows a clean, scalable architecture:
 - **Unit Tests**: In each module's `test` source set
 - **Shared Tests**: Common test logic in `shared/commonTest`
 - **Platform Tests**: Platform-specific tests in respective modules
+
+## 🎨 Code Quality
+
+### Code Formatting
+```bash
+# Format all code
+./gradlew ktfmtFormat
+
+# Check formatting without changes
+./gradlew ktfmtCheck
+```
+
+### Static Analysis
+```bash
+# Run detekt on all modules
+./gradlew detektAll
+
+# Run on specific module
+./gradlew :shared:detekt
+./gradlew :composeApp:detekt
+```
+
+### Pre-commit Hooks
+The project includes pre-commit hooks that automatically:
+- Format code with ktfmt
+- Run detekt analysis
+- Block commits with quality issues
+
+**Setup:**
+```bash
+pip install pre-commit
+pre-commit install
+```
+
+For detailed information, see [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md).
 
 ## 📦 Building
 
