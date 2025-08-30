@@ -17,6 +17,21 @@ struct RootView: View {
     }
     
     var body: some View {
-        Text("Root View")
+        StackView(
+            stackValue: StateValue(component.stack),
+            getTitle: {
+                switch $0 {
+                case is RootComponentChildHome: ""
+                default: ""
+                }
+            },
+            onBack: { _ in },
+            childContent: {
+                switch $0 {
+                case let child as RootComponentChildHome: HomeView(child.component)
+                default: EmptyView()
+                }
+            }
+        )
     }
 }

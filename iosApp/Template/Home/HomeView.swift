@@ -6,14 +6,18 @@
 //  Copyright © 2025 Template. All rights reserved.
 //
 
+import Shared
 import SwiftUI
 
 struct HomeView: View {
-    var body: some View {
-        Text("Home View")
+    private let component: HomeComponent
+    
+    init(_ component: HomeComponent) {
+        self.component = component
     }
-}
-
-#Preview {
-    HomeView()
+    
+    var body: some View {
+        Text(component.title)
+            .font(.title)
+    }
 }
