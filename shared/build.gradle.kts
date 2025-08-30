@@ -7,13 +7,14 @@ plugins {
     alias(libs.plugins.mokkery)
     alias(libs.plugins.kotest)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.ktfmt.gradle)
 }
 
 kotlin {
     jvmToolchain(17)
 
     androidTarget { compilerOptions.jvmTarget.set(JvmTarget.JVM_17) }
-    
+
     listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
@@ -22,7 +23,7 @@ kotlin {
             export(libs.essenty.lifecycle)
         }
     }
-    
+
     sourceSets {
         commonMain.dependencies {
             api(libs.decompose)
@@ -52,9 +53,7 @@ kotlin {
             implementation(libs.ktor.client.okhttp)
         }
 
-        iosMain.dependencies {
-            implementation(libs.ktor.client.darwin)
-        }
+        iosMain.dependencies { implementation(libs.ktor.client.darwin) }
 
         commonTest.dependencies {
             implementation(libs.kotlinx.coroutines.test)
@@ -76,7 +75,11 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    defaultConfig {
-        minSdk = libs.versions.android.minSdk.get().toInt()
-    }
+    defaultConfig { minSdk = libs.versions.android.minSdk.get().toInt() }
+}
+
+ktfmt {
+    kotlinLangStyle()
+    removeUnusedImports = true
+    manageTrailingCommas = true
 }

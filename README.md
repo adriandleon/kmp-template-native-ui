@@ -1,11 +1,11 @@
 # Kotlin Multiplatform Template
 
-A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with native UI. This template provides a solid foundation for creating cross-platform apps using **Compose Multiplatform for Android** and **SwiftUI for iOS**.
+A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with native UI targeting Android and iOS. This template provides a solid foundation for creating cross-platform apps using **Jetpack Compose** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
 
 ## 🚀 Features
 
 - **Kotlin Multiplatform** with Kotlin 2.2.10
-- **Compose Multiplatform** for Android UI
+- **Jetpack Compose** for Android UI
 - **SwiftUI** for iOS UI
 - **Decompose** for navigation and component lifecycle management
 - **MVVM + MVI** architecture with MVIKotlin
@@ -22,39 +22,6 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - **Android**: API 24+ (Android 7.0+)
 - **iOS**: iOS 18.2+
 - **Shared**: Common Kotlin code
-
-## 🏗️ Project Structure
-
-```
-Template/
-├── composeApp/                 # Android application module
-│   ├── src/
-│   │   ├── androidMain/       # Android-specific code
-│   │   │   ├── kotlin/        # Kotlin source files
-│   │   │   └── res/           # Android resources
-│   │   └── androidUnitTest/   # Android unit tests
-│   └── build.gradle.kts       # Android module configuration
-├── iosApp/                     # iOS application module
-│   ├── Template.xcodeproj/    # Xcode project
-│   ├── Template/              # iOS source code
-│   │   ├── Main/             # App entry point
-│   │   ├── Root/             # Root navigation
-│   │   ├── Home/             # Home screen
-│   │   └── Utils/            # iOS utilities
-│   └── Configuration/         # iOS configuration files
-├── shared/                     # Shared Kotlin code
-│   ├── src/
-│   │   ├── commonMain/        # Common Kotlin code
-│   │   ├── androidMain/       # Android-specific implementations
-│   │   ├── iosMain/          # iOS-specific implementations
-│   │   └── commonTest/       # Shared tests
-│   └── build.gradle.kts       # Shared module configuration
-├── gradle/                     # Gradle configuration
-│   └── libs.versions.toml     # Dependency versions
-├── build.gradle.kts            # Root project configuration
-├── settings.gradle.kts         # Project settings
-└── gradle.properties           # Gradle properties
-```
 
 ## 🛠️ Getting Started
 
@@ -103,7 +70,11 @@ Template/
 3. **Update bundle identifier**
    - iOS: Update `CFBundleIdentifier` in `iosApp/Template/Info.plist`
 
-## 📚 Key Libraries & Dependencies
+## 📚 Project Documentation
+
+- [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md)
+
+## 🛠️ Tech Stack & Libraries
 
 ### Architecture & Navigation
 - **[Decompose](https://github.com/arkivanov/Decompose)** (3.3.0) - Navigation and component lifecycle
@@ -124,7 +95,7 @@ Template/
 
 ### Data & Storage
 - **[Supabase](https://supabase.com/)** (3.2.2) - Backend-as-a-Service
-- **[DataStore](https://developer.android.com/jetpack/compose/datastore)** (1.1.7) - Data storage
+- **[DataStore](https://developer.android.com/jetpack/compose/datastore)** (1.1.7) - Local data storage
 - **[Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)** (1.9.0) - JSON serialization
 - **[Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime)** (0.7.1) - Date and time utilities
 

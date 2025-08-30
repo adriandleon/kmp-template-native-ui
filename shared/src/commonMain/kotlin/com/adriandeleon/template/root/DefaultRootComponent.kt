@@ -16,18 +16,19 @@ import kotlinx.serialization.Serializable
  * @param componentContext context of this component
  * @see RootComponent
  */
-class DefaultRootComponent(componentContext: ComponentContext) : RootComponent,
-    ComponentContext by componentContext {
+class DefaultRootComponent(componentContext: ComponentContext) :
+    RootComponent, ComponentContext by componentContext {
 
     private val navigation = StackNavigation<Configuration>()
 
-    override val stack: Value<ChildStack<*, Child>> = childStack(
-        source = navigation,
-        serializer = Configuration.serializer(),
-        initialConfiguration = Configuration.Home,
-        handleBackButton = true,
-        childFactory = ::createChild,
-    )
+    override val stack: Value<ChildStack<*, Child>> =
+        childStack(
+            source = navigation,
+            serializer = Configuration.serializer(),
+            initialConfiguration = Configuration.Home,
+            handleBackButton = true,
+            childFactory = ::createChild,
+        )
 
     private fun createChild(configuration: Configuration, context: ComponentContext): Child =
         when (configuration) {
@@ -42,7 +43,6 @@ class DefaultRootComponent(componentContext: ComponentContext) : RootComponent,
     @Serializable
     private sealed interface Configuration {
 
-        @Serializable
-        data object Home : Configuration
+        @Serializable data object Home : Configuration
     }
 }

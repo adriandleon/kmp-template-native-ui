@@ -8,8 +8,8 @@ import com.arkivanov.decompose.ComponentContext
  * @param componentContext Context of the component
  * @see HomeComponent
  */
-internal class DefaultHomeComponent(componentContext: ComponentContext
-) : HomeComponent, ComponentContext by componentContext {
+internal class DefaultHomeComponent(componentContext: ComponentContext) :
+    HomeComponent, ComponentContext by componentContext {
 
     override val title: String = "Home Screen"
 }

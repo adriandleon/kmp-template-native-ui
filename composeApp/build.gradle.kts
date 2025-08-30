@@ -5,11 +5,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.multiplatform)
     alias(libs.plugins.compose.compiler)
+    alias(libs.plugins.ktfmt.gradle)
 }
 
 kotlin {
     androidTarget { compilerOptions.jvmTarget.set(JvmTarget.JVM_17) }
-    
+
     sourceSets {
         androidMain.dependencies {
             implementation(compose.preview)
@@ -29,9 +30,7 @@ kotlin {
             implementation(libs.decompose)
             implementation(libs.decompose.extensions)
         }
-        commonTest.dependencies {
-            implementation(libs.kotlin.test)
-        }
+        commonTest.dependencies { implementation(libs.kotlin.test) }
     }
 }
 
@@ -46,23 +45,18 @@ android {
         versionCode = 1
         versionName = "1.0"
     }
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
-    }
-    buildTypes {
-        getByName("release") {
-            isMinifyEnabled = false
-        }
-    }
+    packaging { resources { excludes += "/META-INF/{AL2.0,LGPL2.1}" } }
+    buildTypes { getByName("release") { isMinifyEnabled = false } }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+
+    ktfmt {
+        kotlinLangStyle()
+        removeUnusedImports = true
+        manageTrailingCommas = true
+    }
 }
 
-dependencies {
-    debugImplementation(compose.uiTooling)
-}
-
+dependencies { debugImplementation(compose.uiTooling) }

@@ -16,9 +16,7 @@ fun HomeView(component: HomeComponent, modifier: Modifier = Modifier) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
-        modifier = modifier
-            .fillMaxSize()
-            .padding(32.dp)
+        modifier = modifier.fillMaxSize().padding(32.dp),
     ) {
         Text(component.title)
     }
