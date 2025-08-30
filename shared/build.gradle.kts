@@ -25,10 +25,46 @@ kotlin {
     
     sourceSets {
         commonMain.dependencies {
-            // put your Multiplatform dependencies here
+            api(libs.decompose)
+            api(libs.essenty.lifecycle)
+            api(libs.koin.core)
+            implementation(libs.slf4j.nop)
+            implementation(libs.decompose.extensions)
+            implementation(libs.essenty.lifecycle.coroutines)
+            implementation(libs.kotlinx.coroutines)
+            implementation(libs.kotlinx.serialization)
+            implementation(libs.kotlinx.datetime)
+            implementation(libs.mvikotlin.core)
+            implementation(libs.mvikotlin.main)
+            implementation(libs.mvikotlin.logging)
+            implementation(libs.mvikotlin.timetravel)
+            implementation(libs.mvikotlin.coroutines)
+            implementation(libs.supabase.postgrest)
+            implementation(libs.kermit)
+            implementation(libs.kermit.koin)
+            implementation(libs.kermit.crashlytics)
+            implementation(libs.configcat)
+            implementation(libs.datastore.preferences)
         }
+
+        androidMain.dependencies {
+            api(libs.koin.android)
+            implementation(libs.ktor.client.okhttp)
+        }
+
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+        }
+
         commonTest.dependencies {
-            implementation(libs.kotlin.test)
+            implementation(libs.kotlinx.coroutines.test)
+            implementation(libs.kotest.framework.engine)
+            implementation(libs.kotest.assertions.core)
+            implementation(libs.kotest.property)
+            implementation(libs.kotest.extensions.koin)
+            implementation(libs.koin.test)
+            implementation(libs.ktor.client.mock)
+            implementation(libs.kermit.test)
         }
     }
 }
