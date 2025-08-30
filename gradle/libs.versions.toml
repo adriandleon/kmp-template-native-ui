@@ -7,6 +7,7 @@ androidx-activity = "1.10.1"
 androidx-datastore = "1.1.7"
 androidx-lifecycle = "2.9.2"
 compose-multiplatform = "1.8.2"
+compose-rules = "0.4.27"
 configcat = "5.1.0"
 decompose = "3.3.0"
 detekt = "1.23.8"
@@ -33,6 +34,7 @@ configcat = { module = "com.configcat:configcat-kotlin-client", version.ref = "c
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
+detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref="compose-rules" }
 essenty-lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", version.ref = "essenty" }
 essenty-lifecycle-coroutines = { group = "com.arkivanov.essenty", name ="lifecycle-coroutines", version.ref = "essenty" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }

@@ -58,6 +58,15 @@ android {
         removeUnusedImports = true
         manageTrailingCommas = true
     }
+
+    detekt {
+        parallel = true
+        buildUponDefaultConfig = true
+        config.setFrom("$rootDir/config/detekt.yml")
+    }
 }
 
-dependencies { debugImplementation(compose.uiTooling) }
+dependencies {
+    debugImplementation(compose.uiTooling)
+    detektPlugins(libs.detekt.compose)
+}

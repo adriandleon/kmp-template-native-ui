@@ -1,12 +1,10 @@
 package com.adriandeleon.template
 
-import kotlin.test.Test
-import kotlin.test.assertEquals
+import io.kotest.core.spec.style.FunSpec
+import io.kotest.matchers.shouldBe
 
-class SharedCommonTest {
-
-    @Test
-    fun example() {
-        assertEquals(3, 1 + 2)
+class SharedCommonTest : FunSpec({
+    test("example test") {
+        1 + 2 shouldBe 3
     }
-}
+})

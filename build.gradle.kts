@@ -1,3 +1,6 @@
+import io.gitlab.arturbosch.detekt.Detekt
+import org.gradle.kotlin.dsl.withType
+
 plugins {
     // this is necessary to avoid the plugins to be loaded multiple times
     // in each subproject's classloader
@@ -9,4 +12,14 @@ plugins {
     alias(libs.plugins.kotest) apply false
     alias(libs.plugins.kotlin.multiplatform) apply false
     alias(libs.plugins.ksp) apply false
+}
+
+subprojects {
+    tasks.register("detektAll") {
+        allprojects { this@register.dependsOn(tasks.withType<Detekt>()) }
+    }
+
+    tasks.withType<Detekt>().configureEach {
+        jvmTarget = "17"
+    }
 }

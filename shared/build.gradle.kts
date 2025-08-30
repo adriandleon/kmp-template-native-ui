@@ -1,3 +1,4 @@
+import org.gradle.kotlin.dsl.detektPlugins
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -77,10 +78,20 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     defaultConfig { minSdk = libs.versions.android.minSdk.get().toInt() }
+
+    testOptions.unitTests.all { it.useJUnitPlatform() }
 }
+
+dependencies { detektPlugins(libs.detekt.compose) }
 
 ktfmt {
     kotlinLangStyle()
     removeUnusedImports = true
     manageTrailingCommas = true
+}
+
+detekt {
+    parallel = true
+    buildUponDefaultConfig = true
+    config.setFrom("$rootDir/config/detekt.yml")
 }

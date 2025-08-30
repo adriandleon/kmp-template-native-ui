@@ -2,7 +2,7 @@ package com.adriandeleon.template.root
 
 import com.adriandeleon.template.home.DefaultHomeComponent
 import com.adriandeleon.template.home.HomeComponent
-import com.adriandeleon.template.root.RootComponent.*
+import com.adriandeleon.template.root.RootComponent.Child
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.router.stack.StackNavigation
