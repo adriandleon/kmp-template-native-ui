@@ -15,6 +15,7 @@ struct MainApplication: App {
     private var appDelegate: AppDelegate
 
     init() {
+        FirebaseHelperKt.startCrashKiOS()
         KoinAppKt.doInitKoin()
     }
 

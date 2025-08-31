@@ -1,3 +1,4 @@
+import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -11,7 +12,9 @@ plugins {
     alias(libs.plugins.ksp)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
+    alias(libs.plugins.kover)
     alias(libs.plugins.mokkery)
+    alias(libs.plugins.test.logger)
 }
 
 kotlin {
@@ -36,7 +39,11 @@ kotlin {
             implementation(libs.configcat)
             implementation(libs.datastore.preferences)
             implementation(libs.decompose.extensions)
+            implementation(libs.crashkios.crashlytics)
             implementation(libs.essenty.lifecycle.coroutines)
+            implementation(libs.firebase.analytics)
+            implementation(libs.firebase.config)
+            implementation(libs.firebase.crashlytics)
             implementation(libs.kermit)
             implementation(libs.kermit.crashlytics)
             implementation(libs.kermit.koin)
@@ -96,6 +103,24 @@ detekt {
     parallel = true
     buildUponDefaultConfig = true
     config.setFrom("$rootDir/config/detekt.yml")
+}
+
+kover.reports {
+    verify.rule { minBound(90) }
+
+    filters.excludes {
+        classes("com.adriandeleon.template.common.util.AndroidDispatcher")
+        files("*.*Module.*", "*.di.*Module*", "*.di.*")
+    }
+}
+
+testlogger {
+    theme = ThemeType.MOCHA
+    showFullStackTraces = false
+    slowThreshold = 2000
+    showSummary = true
+    showPassed = true
+    showSkipped = true
 }
 
 buildkonfig {

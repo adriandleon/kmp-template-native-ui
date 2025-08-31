@@ -4,9 +4,12 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.compose.multiplatform)
+    alias(libs.plugins.crashlytics)
     alias(libs.plugins.detekt)
+    alias(libs.plugins.google.services)
     alias(libs.plugins.ktfmt.gradle)
     alias(libs.plugins.kotlin.multiplatform)
+    alias(libs.plugins.lumo)
 }
 
 kotlin {
@@ -28,6 +31,8 @@ kotlin {
             implementation(compose.ui)
             implementation(libs.decompose)
             implementation(libs.decompose.extensions)
+            implementation(libs.coil.compose)
+            implementation(libs.coil.network.okhttp)
             implementation(libs.koin.compose)
             implementation(libs.lifecycle.runtime.compose)
             implementation(libs.lifecycle.viewmodel.compose)

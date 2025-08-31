@@ -5,14 +5,19 @@ android-minSdk = "24"
 android-targetSdk = "36"
 androidx-activity = "1.10.1"
 androidx-datastore = "1.1.7"
-androidx-lifecycle = "2.9.2"
+androidx-lifecycle = "2.9.3"
 buildkonfig = "0.17.1"
+coil-compose = "3.3.0"
 compose-multiplatform = "1.8.2"
 compose-rules = "0.4.27"
 configcat = "5.1.0"
+crashkios = "0.9.0"
 decompose = "3.3.0"
 detekt = "1.23.8"
 essenty = "2.5.0"
+firebase-gitlive = "2.3.0"
+gradle-crashlytics = "3.0.6"
+gradle-google-services = "4.4.3"
 kermit = "2.0.8"
 koin = "4.1.0"
 kotest = "6.0.1"
@@ -20,24 +25,33 @@ kotlin = "2.2.10"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
 kotlinx-serialization = "1.9.0"
+kover = "0.9.1"
 ksp = "2.2.10-2.0.2"
 ktfmt-gradle = "0.23.0"
 ktor = "3.2.3"
+lumo-ui = "1.2.5"
 mokkery = "2.9.0"
 mvikotlin = "4.3.0"
 slf4j = "2.0.17"
 splashscreen = "1.2.0-rc01"
 supabase = "3.2.2"
+test-logger = "4.0.0"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil-compose" }
+coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil-compose" }
 configcat = { module = "com.configcat:configcat-kotlin-client", version.ref = "configcat" }
+crashkios-crashlytics = { module = "co.touchlab.crashkios:crashlytics", version.ref = "crashkios" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
 decompose = { module = "com.arkivanov.decompose:decompose", version.ref = "decompose" }
 decompose-extensions = { module = "com.arkivanov.decompose:extensions-compose", version.ref = "decompose" }
 detekt-compose = { module = "io.nlopez.compose.rules:detekt", version.ref="compose-rules" }
 essenty-lifecycle = { group = "com.arkivanov.essenty", name = "lifecycle", version.ref = "essenty" }
 essenty-lifecycle-coroutines = { group = "com.arkivanov.essenty", name ="lifecycle-coroutines", version.ref = "essenty" }
+firebase-analytics = { group = "dev.gitlive", name = "firebase-analytics", version.ref = "firebase-gitlive" }
+firebase-config = { group = "dev.gitlive", name = "firebase-config", version.ref = "firebase-gitlive" }
+firebase-crashlytics = { group = "dev.gitlive", name = "firebase-crashlytics", version.ref = "firebase-gitlive" }
 kermit = { group = "co.touchlab", name = "kermit", version.ref = "kermit" }
 kermit-crashlytics = { group = "co.touchlab", name = "kermit-crashlytics", version.ref = "kermit" }
 kermit-koin = { group = "co.touchlab", name = "kermit-koin", version.ref = "kermit" }
@@ -75,10 +89,15 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 buildkonfig = { id = "com.codingfeline.buildkonfig", version.ref = "buildkonfig" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 compose-multiplatform = { id = "org.jetbrains.compose", version.ref = "compose-multiplatform" }
+crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "gradle-crashlytics" }
 detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
+google-services = { id = "com.google.gms.google-services", version.ref = "gradle-google-services" }
 kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
 ktfmt-gradle = { id = "com.ncorti.ktfmt.gradle", version.ref = "ktfmt-gradle" }
+lumo = { id = "com.nomanr.plugin.lumo", version.ref = "lumo-ui" }
 mokkery = { id = "dev.mokkery", version.ref = "mokkery" }
+test-logger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }

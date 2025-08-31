@@ -2,7 +2,7 @@ package com.adriandeleon.template.main
 
 import android.app.Application
 import com.adriandeleon.template.common.androidModule
-import com.adriandeleon.template.common.initKoin
+import com.adriandeleon.template.common.di.initKoin
 import org.koin.android.ext.koin.androidContext
 
 class MainApplication : Application() {
