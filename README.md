@@ -2,7 +2,6 @@
 
 ![Static Badge](https://img.shields.io/badge/Compose-327CF3?style=flat&logo=android&logoColor=white)
 ![Static Badge](https://img.shields.io/badge/SwiftUI-FA7343?style=flat&logo=swift&logoColor=white)
-[![Kotlin](https://img.shields.io/badge/Kotlin-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
 ![Static Badge](https://img.shields.io/badge/Kotlin-663399?&style=flat&logo=kotlin&logoColor=white)
 [![Android App Deploy](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml/badge.svg?branch=main)](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml)
 
