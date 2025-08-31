@@ -20,12 +20,12 @@ env:
   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APPSTORE_PRIVATE_KEY }}
   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: true
   MATCH_TYPE: appstore
-  MATCH_APP_IDENTIFIER: uy.jorgemarquez.MisionVida
+  MATCH_APP_IDENTIFIER: com.adriandeleon.Template
   MATCH_GIT_URL: https://github.com/japsystem/apple-certificates.git
   MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
   MATCH_PASSWORD: ${{ secrets.MATCH_PASSPHRASE }}
   MATCH_READONLY: true
-  PILOT_APP_IDENTIFIER: uy.jorgemarquez.MisionVida
+  PILOT_APP_IDENTIFIER: com.adriandeleon.Template
   PILOT_GROUPS: Internals
 
 jobs:
@@ -67,7 +67,7 @@ jobs:
         cache: gradle
 
     - name: Load Google Service PLIST file
-      run: echo $GOOGLE_SERVICES_PLIST | base64 -d > iosApp/MisionVida/GoogleService-Info.plist
+      run: echo $GOOGLE_SERVICES_PLIST | base64 -d > iosApp/Template/GoogleService-Info.plist
 
     - name: Set Up Ruby
       uses: ruby/setup-ruby@v1

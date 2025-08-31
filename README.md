@@ -1,11 +1,13 @@
 # Kotlin Multiplatform Template
 
-A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with native UI targeting Android and iOS. This template provides a solid foundation for creating cross-platform apps using **Jetpack Compose** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
+A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with 
+native UI targeting Android and iOS. This template provides a solid foundation for creating 
+cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
 
 ## 🚀 Features
 
 - **Kotlin Multiplatform** with Kotlin 2.2.10
-- **Jetpack Compose** for Android UI
+- **Compose Multiplatform** for Android UI
 - **SwiftUI** for iOS UI
 - **Decompose** for navigation and component lifecycle management
 - **MVVM + MVI** architecture with MVIKotlin

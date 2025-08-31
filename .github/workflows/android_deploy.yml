@@ -192,7 +192,7 @@ jobs:
       uses: r0adkll/upload-google-play@v1.1.3
       with:
         serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        packageName: uy.jorgemarquez.misionvida
+        packageName: com.adriandeleon.template
         releaseFiles: composeApp/build/outputs/bundle/release/composeApp-release.aab
         track: internal
         whatsNewDirectory: composeApp/release/whatsNew/

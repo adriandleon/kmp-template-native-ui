@@ -82,7 +82,7 @@ jobs:
           ${{ runner.os }}-spm-
 
     - name: Load Google Service PLIST file
-      run: echo $GOOGLE_SERVICES_PLIST | base64 -d > iosApp/MisionVida/GoogleService-Info.plist
+      run: echo $GOOGLE_SERVICES_PLIST | base64 -d > iosApp/Template/GoogleService-Info.plist
 
     - name: Install SwiftLint
       run: brew install swiftlint
@@ -126,7 +126,7 @@ jobs:
 
       # Unit tests run when the gradle task koverVerify run.
       #    - name: Run Unit Tests
-      #      run: ./gradlew :shared:cleanTestDebugUnitTest :shared:testDebugUnitTest --tests 'uy.jorgemarquez.misionvida.*'
+      #      run: ./gradlew :shared:cleanTestDebugUnitTest :shared:testDebugUnitTest --tests 'com.adriandeleon.template.*'
 
     - name: Check coverage metrics
       run: ./gradlew koverVerify koverXmlReport
