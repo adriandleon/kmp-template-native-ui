@@ -1,10 +1,40 @@
 name: iOS App Deploy
 
-on:
-  push:
-    branches: [main]
-
+# =============================================================================
+# CONFIGURABLE VARIABLES - Customize these for your project
+# =============================================================================
 env:
+  # Project Configuration
+  PROJECT_NAME: Template
+  ANDROID_APP_MODULE: composeApp
+  IOS_APP_MODULE: iosApp
+  SHARED_MODULE: shared
+
+  # Android Configuration
+  ANDROID_PACKAGE_NAME: com.adriandeleon.template
+  ANDROID_GOOGLE_SERVICES_FILE: google-services.json
+
+  # iOS Configuration
+  IOS_BUNDLE_ID: com.adriandeleon.Template
+  IOS_GOOGLE_SERVICES_FILE: GoogleService-Info.plist
+  IOS_APP_FOLDER: Template
+  IOS_TARGET_NAME: Template
+
+  # Build Configuration
+  JAVA_VERSION: '17'
+  RUBY_VERSION: '3.3'
+  GRADLE_WRAPPER: ./gradlew
+  XCODE_VERSION: latest-stable
+
+  # Code Signing Configuration
+  MATCH_TYPE: appstore
+  MATCH_GIT_URL: https://github.com/japsystem/apple-certificates.git
+  MATCH_READONLY: 'true'
+
+  # TestFlight Configuration
+  PILOT_GROUPS: Internals
+
+  # Environment Variables (from secrets)
   SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_PROD }}
@@ -19,14 +49,12 @@ env:
   APP_STORE_CONNECT_API_KEY_ISSUER_ID: ${{ secrets.APPSTORE_ISSUER_ID }}
   APP_STORE_CONNECT_API_KEY_KEY: ${{ secrets.APPSTORE_PRIVATE_KEY }}
   APP_STORE_CONNECT_API_KEY_IS_KEY_CONTENT_BASE64: true
-  MATCH_TYPE: appstore
-  MATCH_APP_IDENTIFIER: com.adriandeleon.Template
-  MATCH_GIT_URL: https://github.com/japsystem/apple-certificates.git
   MATCH_GIT_BASIC_AUTHORIZATION: ${{ secrets.MATCH_GIT_BASIC_AUTHORIZATION }}
   MATCH_PASSWORD: ${{ secrets.MATCH_PASSPHRASE }}
-  MATCH_READONLY: true
-  PILOT_APP_IDENTIFIER: com.adriandeleon.Template
-  PILOT_GROUPS: Internals
+
+on:
+  push:
+    branches: [main]
 
 jobs:
   ios_tests:
@@ -57,24 +85,24 @@ jobs:
     - name: Set Xcode version
       uses: maxim-lobanov/setup-xcode@v1.6.0
       with:
-        xcode-version: latest-stable
+        xcode-version: ${{ env.XCODE_VERSION }}
 
-    - name: Set Up SDK 17
+    - name: Set Up SDK ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: ${{ env.JAVA_VERSION }}
         cache: gradle
 
     - name: Load Google Service PLIST file
-      run: echo $GOOGLE_SERVICES_PLIST | base64 -d > iosApp/Template/GoogleService-Info.plist
+      run: echo $GOOGLE_SERVICES_PLIST | base64 -d > ${{ env.IOS_APP_MODULE }}/${{ env.IOS_APP_FOLDER }}/${{ env.IOS_GOOGLE_SERVICES_FILE }}
 
     - name: Set Up Ruby
       uses: ruby/setup-ruby@v1
       with:
-        ruby-version: '3.3'
+        ruby-version: ${{ env.RUBY_VERSION }}
         bundler-cache: true
-        working-directory: iosApp
+        working-directory: ${{ env.IOS_APP_MODULE }}
 
     - name: iOS Unit Tests (bundle exec)
       run: bundle exec fastlane tests
@@ -83,13 +111,13 @@ jobs:
 #      uses: maierj/fastlane-action@v3.1.0
 #      with:
 #        lane: tests
-#        subdirectory: iosApp
+#        subdirectory: ${{ env.IOS_APP_MODULE }}
 #
 #    - name: iOS Release to TestFlight
 #      uses: maierj/fastlane-action@v3.1.0
 #      with:
 #        lane: release
-#        subdirectory: iosApp
+#        subdirectory: ${{ env.IOS_APP_MODULE }}
 
 #    - name: Gather code coverage
 #      run: xcrun llvm-cov export -format="lcov" .build/debug/{YOUR_PACKAGE_NAME}PackageTests.xctest/Contents/MacOS/{YOUR_PACKAGE_NAME}PackageTests -instr-profile .build/debug/codecov/default.profdata > coverage_report.lcov

@@ -138,6 +138,8 @@ The logic behind this function, is to load the variables from local properties, 
 in the root folder of the project ([see section for development credentials](#credentials-for-development-environment)).
 Otherwise, try to load the variables from the system environment variables if we are running in CI
 environment and use the secrets from Github Actions for example ([see section for production credentials](#credentials-for-production-environment)).
+
+> **Note**: The GitHub Actions workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 If the variable is not found in any of these places then the build will fail with an Exception.
 
 ### Credentials for Development environment
@@ -192,7 +194,9 @@ buildkonfig.flavor=release
 - Log in to the GitHub repository of the project and [create secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) for Github Actions.
 - Because we only need to build against remote Supabase from CI we copy the same value for both environments:
     - Add secrets `SUPABASE_URL_PROD` and `SUPABASE_KEY_PROD` with the Supabase project remote URL and project anon key
-- In each workflow that compiles the project, add this env variables and the beginning of the workflow:
+- In each workflow that compiles the project, add this env variables at the beginning of the workflow:
+
+> **Note**: The GitHub Actions workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 
 ```yaml
 on: pull_request

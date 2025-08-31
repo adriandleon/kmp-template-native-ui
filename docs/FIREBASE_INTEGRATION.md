@@ -155,6 +155,8 @@ base64 -i composeApp/google-services.json
 - Create a secret with the name `GOOGLE_SERVICES_JSON` and paste the content of the file encoded in base64 format
 - Add the following step after `checkout` in each workflow which runs `gradle` commands:
 
+> **Note**: The GitHub Actions workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
+
 ```yaml
 env:
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
@@ -177,6 +179,8 @@ base64 -i iosApp/Template/GoogleService-Info.plist
 - Log in to the GitHub repository of the project and [create secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) for Github Actions.
 - Create a secret with the name `GOOGLE_SERVICES_PLIST` and paste the content of the file encoded in base64 format
 - Add the following step after `checkout` in each workflow which needs to build the iOS app:
+
+> **Note**: The GitHub Actions workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 
 ```yaml
 env:

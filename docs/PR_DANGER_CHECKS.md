@@ -5,14 +5,16 @@ meets the minimum standards to be merged.
 
 [danger-kotlin](https://github.com/danger/kotlin) runs on the CI environment every time a PR is pushed
 
-In the workflow file [.github/workflows/shared_test_lint.yml](https://github.com/adriandleon/MisionVida/blob/main/.github/workflows/shared_test_lint.yml)
+In the workflow file [.github/workflows/shared_test_lint.yml](.github/workflows/shared_test_lint.yml)
 there is a job `danger` with a step named `Danger Checks` that runs danger-kotlin on every Pull Request and prints its output in the PR itself.
+
+> **Note**: This workflow is fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 
 ## Grant permissions for Danger
 
 Grant `read and write` permissions to the GITHUB_TOKEN for workflows in GitHub:
 
-- Go to `Settings -> Code and automation -> Actions -> General`, for this [repository](https://github.com/adriandleon/MisionVida/settings/actions)
+- Go to `Settings -> Code and automation -> Actions -> General` in your repository
 - In the `Workflow permissions` section, select `Read and write permissions` and save.
 
 ## Danger Checks

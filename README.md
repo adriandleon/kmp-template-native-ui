@@ -1,5 +1,11 @@
 # Kotlin Multiplatform Template
 
+![Static Badge](https://img.shields.io/badge/Compose-327CF3?style=flat&logo=android&logoColor=white)
+![Static Badge](https://img.shields.io/badge/SwiftUI-FA7343?style=flat&logo=swift&logoColor=white)
+[![Kotlin](https://img.shields.io/badge/Kotlin-blue.svg?style=flat&logo=kotlin)](https://kotlinlang.org)
+![Static Badge](https://img.shields.io/badge/Kotlin-663399?&style=flat&logo=kotlin&logoColor=white)
+[![Android App Deploy](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml/badge.svg?branch=main)](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml)
+
 A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with 
 native UI targeting Android and iOS. This template provides a solid foundation for creating 
 cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
@@ -57,6 +63,11 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
    - Select an iOS simulator or device
    - Press `Cmd + R` to build and run
 
+5. **Set up GitHub Actions** (Optional)
+   - Configure required secrets in your repository settings
+   - Customize workflow variables for your project
+   - See [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) for detailed setup
+
 ### Customization
 
 1. **Update package names**
@@ -74,6 +85,7 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
 
 ## 📚 Project Documentation
 
+- [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) - Configurable CI/CD workflows
 - [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md)
 - [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md)
 - [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md)
@@ -120,6 +132,11 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
 - **[Ktfmt](https://github.com/facebook/ktfmt)** - Kotlin code formatter following official style guide
 - **[Detekt](https://detekt.dev/)** - Static code analysis tool
 - **[Detekt Compose Rules](https://github.com/mrmans0n/compose-rules)** - Compose-specific linting rules
+
+### CI/CD & Automation
+- **[GitHub Actions](https://github.com/features/actions)** - Configurable CI/CD workflows for testing, building, and deployment
+- **[Danger](https://github.com/danger/danger)** - Automated PR review and quality checks
+- **[Codecov](https://about.codecov.io/)** - Code coverage reporting and analysis
 
 ### Logging & Monitoring
 - **[Kermit](https://github.com/touchlab/Kermit)** (2.0.8) - Multiplatform logging
@@ -223,6 +240,20 @@ pre-commit install
 ```
 
 For detailed information, see [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md).
+
+### Continuous Integration
+The project includes fully configurable GitHub Actions workflows that automatically:
+- Run code quality checks on every PR
+- Execute unit tests and coverage analysis
+- Build and deploy Android and iOS apps
+- Validate code formatting and linting
+
+**Key Workflows:**
+- **Shared Test & Lint** - Code quality and testing on PRs
+- **Android Deploy** - Build, test, and deploy to Play Store
+- **iOS Deploy** - Build, test, and deploy to TestFlight
+
+For detailed information and customization, see [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md).
 
 ## 📦 Building
 

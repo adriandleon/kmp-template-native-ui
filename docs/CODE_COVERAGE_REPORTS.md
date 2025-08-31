@@ -83,6 +83,8 @@ the file `.github/workflows/shared_test_lint.yml` in job `tests` for Pull Reques
 and in job `coverage_report` in the file `.github/workflows/android_deploy.yml` for Merge Pull Request
 coverage reports in main branch:
 
+> **Note**: These workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
+
 ```yaml
 - name: Check coverage metrics
   run: ./gradlew koverVerify koverXmlReport

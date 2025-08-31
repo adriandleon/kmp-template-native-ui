@@ -1,10 +1,44 @@
 name: Android App Deploy
 
-on:
-  push:
-    branches: [main]
-
+# =============================================================================
+# CONFIGURABLE VARIABLES - Customize these for your project
+# =============================================================================
 env:
+  # Project Configuration
+  PROJECT_NAME: Template
+  ANDROID_APP_MODULE: composeApp
+  SHARED_MODULE: shared
+
+  # Android Configuration
+  ANDROID_PACKAGE_NAME: com.adriandeleon.template
+  ANDROID_GOOGLE_SERVICES_FILE: google-services.json
+  ANDROID_NAMESPACE: com.adriandeleon.template
+
+  # Build Configuration
+  JAVA_VERSION: '17'
+  GRADLE_WRAPPER: ./gradlew
+  GRADLE_PATH: composeApp/build.gradle.kts
+
+  # APK Configuration
+  APK_DEBUG_NAME: composeApp-debug.apk
+  APK_DEBUG_PATH: composeApp/build/outputs/apk/debug
+  APK_TEST_NAME: composeApp-debug-androidTest.apk
+  APK_TEST_PATH: composeApp/build/outputs/apk/androidTest/debug
+  BUNDLE_RELEASE_NAME: composeApp-release.aab
+  BUNDLE_RELEASE_PATH: composeApp/build/outputs/bundle/release
+
+  # Firebase Test Lab Configuration
+  FIREBASE_DEVICE_MODEL: shiba
+  FIREBASE_DEVICE_VERSION: '34'
+  FIREBASE_LOCALE: es
+  FIREBASE_ORIENTATION: portrait
+  FIREBASE_TIMEOUT: 15m
+
+  # Play Store Configuration
+  PLAY_STORE_TRACK: internal
+  RELEASE_NOTES_DIR: composeApp/release/whatsNew
+
+  # Environment Variables (from secrets)
   SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_PROD }}
@@ -15,6 +49,10 @@ env:
   CONFIGCAT_IOS_TEST_KEY: ${{ secrets.CONFIGCAT_IOS_TEST_KEY }}
   CONFIGCAT_IOS_LIVE_KEY: ${{ secrets.CONFIGCAT_IOS_LIVE_KEY }}
   GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+
+on:
+  push:
+    branches: [main]
 
 jobs:
   generate-apk:
@@ -34,33 +72,33 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: ${{ runner.os }}-gradle-
 
-    - name: Set Up SDK 17
+    - name: Set Up SDK ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v4
       with:
-        java-version: 17
+        java-version: ${{ env.JAVA_VERSION }}
         distribution: temurin
         cache: gradle
 
     - name: Load Google Service JSON file
-      run: echo $GOOGLE_SERVICES_JSON | base64 -di > composeApp/google-services.json
+      run: echo $GOOGLE_SERVICES_JSON | base64 -di > ${{ env.ANDROID_APP_MODULE }}/${{ env.ANDROID_GOOGLE_SERVICES_FILE }}
 
     - name: Assemble App Debug APK
-      run: ./gradlew composeApp:assembleDebug
+      run: ${{ env.GRADLE_WRAPPER }} ${{ env.ANDROID_APP_MODULE }}:assembleDebug
 
     - name: Upload App APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug
-        path: composeApp/build/outputs/apk/debug/composeApp-debug.apk
+        path: ${{ env.APK_DEBUG_PATH }}/${{ env.APK_DEBUG_NAME }}
 
     - name: Assemble App Instrumentation Tests
-      run: ./gradlew composeApp:assembleDebugAndroidTest
+      run: ${{ env.GRADLE_WRAPPER }} ${{ env.ANDROID_APP_MODULE }}:assembleDebugAndroidTest
 
     - name: Upload App Tests APK
       uses: actions/upload-artifact@v4
       with:
         name: app-debug-androidTest
-        path: composeApp/build/outputs/apk/androidTest/debug/composeApp-debug-androidTest.apk
+        path: ${{ env.APK_TEST_PATH }}/${{ env.APK_TEST_NAME }}
 
   firebase:
     name: Run UI tests with Firebase Test Lab
@@ -101,7 +139,7 @@ jobs:
       uses: google-github-actions/setup-gcloud@v2
 
     - name: Run instrumentations tests in Firebase Test Lab
-      run: gcloud firebase test android run --type instrumentation --app composeApp-debug.apk --test composeApp-debug-androidTest.apk --device model=shiba,version=34,locale=es,orientation=portrait --timeout 15m
+      run: gcloud firebase test android run --type instrumentation --app ${{ env.APK_DEBUG_NAME }} --test ${{ env.APK_TEST_NAME }} --device model=${{ env.FIREBASE_DEVICE_MODEL }},version=${{ env.FIREBASE_DEVICE_VERSION }},locale=${{ env.FIREBASE_LOCALE }},orientation=${{ env.FIREBASE_ORIENTATION }} --timeout ${{ env.FIREBASE_TIMEOUT }}
 
   coverage_report:
     name: Update Code Coverage Report
@@ -120,24 +158,24 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: ${{ runner.os }}-gradle-
 
-    - name: Set Up SDK 17
+    - name: Set Up SDK ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v4
       with:
-        java-version: 17
         distribution: temurin
+        java-version: ${{ env.JAVA_VERSION }}
         cache: gradle
 
     - name: Load Google Service JSON file
-      run: echo $GOOGLE_SERVICES_JSON | base64 -di > composeApp/google-services.json
+      run: echo $GOOGLE_SERVICES_JSON | base64 -di > ${{ env.ANDROID_APP_MODULE }}/${{ env.ANDROID_GOOGLE_SERVICES_FILE }}
 
     - name: Check coverage metrics
-      run: ./gradlew koverVerify koverXmlReport
+      run: ${{ env.GRADLE_WRAPPER }} koverVerify koverXmlReport
 
     - name: Upload coverage reports
       uses: codecov/codecov-action@v5
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        files: shared/build/reports/kover/report.xml
+        files: ${{ env.SHARED_MODULE }}/build/reports/kover/report.xml
         disable_search: true
         fail_ci_if_error: false
 
@@ -159,30 +197,30 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
         restore-keys: ${{ runner.os }}-gradle-
 
-    - name: Set Up SDK 17
+    - name: Set Up SDK ${{ env.JAVA_VERSION }}
       uses: actions/setup-java@v4
       with:
         distribution: temurin
-        java-version: 17
+        java-version: ${{ env.JAVA_VERSION }}
         cache: gradle
 
     - name: Load Google Service JSON file
-      run: echo $GOOGLE_SERVICES_JSON | base64 -di > composeApp/google-services.json
+      run: echo $GOOGLE_SERVICES_JSON | base64 -di > ${{ env.ANDROID_APP_MODULE }}/${{ env.ANDROID_GOOGLE_SERVICES_FILE }}
 
     - name: Bump version number
       uses: chkfung/android-version-actions@v1.2.3
       with:
-        gradlePath: composeApp/build.gradle.kts
+        gradlePath: ${{ env.GRADLE_PATH }}
         versionCode: ${{ github.run_number }}
         versionName: 1.0.${{ github.run_number }}
 
     - name: Assemble Release Bundle
-      run: ./gradlew composeApp:bundleRelease -Pbuildkonfig.flavor=release
+      run: ${{ env.GRADLE_WRAPPER }} ${{ env.ANDROID_APP_MODULE }}:bundleRelease -Pbuildkonfig.flavor=release
 
     - name: Sign Release
       uses: r0adkll/sign-android-release@v1
       with:
-        releaseDirectory: composeApp/build/outputs/bundle/release
+        releaseDirectory: ${{ env.BUNDLE_RELEASE_PATH }}
         signingKeyBase64: ${{ secrets.ANDROID_KEYSTORE }}
         keyStorePassword: ${{ secrets.KEYSTORE_PASSWORD }}
         alias: ${{ secrets.ANDROID_KEY_ALIAS }}
@@ -192,7 +230,7 @@ jobs:
       uses: r0adkll/upload-google-play@v1.1.3
       with:
         serviceAccountJsonPlainText: ${{ secrets.GOOGLE_SERVICE_ACCOUNT }}
-        packageName: com.adriandeleon.template
-        releaseFiles: composeApp/build/outputs/bundle/release/composeApp-release.aab
-        track: internal
-        whatsNewDirectory: composeApp/release/whatsNew/
+        packageName: ${{ env.ANDROID_PACKAGE_NAME }}
+        releaseFiles: ${{ env.BUNDLE_RELEASE_PATH }}/${{ env.BUNDLE_RELEASE_NAME }}
+        track: ${{ env.PLAY_STORE_TRACK }}
+        whatsNewDirectory: ${{ env.RELEASE_NOTES_DIR }}

@@ -179,6 +179,8 @@ There are some defined gradle run configurations stored in the folder `config/.r
 The unit tests in the multiplatform `Shared` module runs on CI on every Pull Request push, these
 are define as two jobs in the workflow `.github/workflows/shared_test_lint.yml`
 
+> **Note**: This workflow is fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
+
 The first step runs the Konsist tests located in the konsistTest module:
 
 ```yaml

@@ -70,7 +70,9 @@ Make sure to install the [pre-commit hooks](#pre-commit-hooks). This will instal
 
 - Runs on CI on every Pull Request
 
-In the workflow file [.github/workflows/shared_test_lint.yml](https://github.com/adriandleon/MisionVida/blob/main/.github/workflows/shared_test_lint.yml) there is a job `swift-check` with a step named `Swift Format Check` that runs SwiftFormat Lint on every Pull Request.
+In the workflow file [.github/workflows/shared_test_lint.yml](.github/workflows/shared_test_lint.yml) there is a job `swift-check` with a step named `Swift Format Check` that runs SwiftFormat Lint on every Pull Request.
+
+> **Note**: This workflow is fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 
 ```yaml
 - name: Swift format check
@@ -117,7 +119,9 @@ Make sure to install the [pre-commit hooks](#pre-commit-hooks). This will instal
 
 - Runs on CI on every Pull Request
 
-In the workflow file [.github/workflows/shared_test_lint.yml](https://github.com/adriandleon/MisionVida/blob/main/.github/workflows/shared_test_lint.yml) there is a job `swift-check` with a step named `Swift Lint` that runs SwiftLint on every Pull Request.
+In the workflow file [.github/workflows/shared_test_lint.yml](.github/workflows/shared_test_lint.yml) there is a job `swift-check` with a step named `Swift Lint` that runs SwiftLint on every Pull Request.
+
+> **Note**: This workflow is fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 
 ```yaml
   run: brew install swiftlint
