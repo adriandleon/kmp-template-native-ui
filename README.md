@@ -5,9 +5,7 @@
 ![Static Badge](https://img.shields.io/badge/Kotlin-663399?&style=flat&logo=kotlin&logoColor=white)
 [![Android App Deploy](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml/badge.svg?branch=main)](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml)
 
-A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with 
-native UI targeting Android and iOS. This template provides a solid foundation for creating 
-cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
+A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with native UI targeting Android and iOS. This template provides a solid foundation for creating cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
 
 ## 🚀 Features
 
@@ -91,18 +89,18 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
 
 - [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) - Configurable CI/CD workflows
 - [MCP Servers Configuration](docs/MCP_SERVERS.md) - AI assistance setup and configuration
-- [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md)
-- [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md)
-- [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md)
-- [Pull Request Checks](docs/PR_DANGER_CHECKS.md)
-- [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md)
-- [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md)
-- [Supabase Integration](docs/SUPABASE_INTEGRATION.md)
-- [Firebase Integration](docs/FIREBASE_INTEGRATION.md)
-- [Analytics Integration](docs/ANALYTICS_INTEGRATION.md)
-- [Deploy Android Version](docs/DEPLOY_ANDROID.md)
-- [Deploy iOS Version](docs/DEPLOY_IOS.md)
-- [Logging Multiplatform](docs/LOGGING_MULTIPLATFORM.md)
+- [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md) - Local code quality automation
+- [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md) - Kotlin code quality tools
+- [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md) - Swift code quality tools
+- [Pull Request Checks](docs/PR_DANGER_CHECKS.md) - Automated PR validation
+- [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md) - Testing strategies and tools
+- [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md) - Coverage configuration and reporting
+- [Supabase Integration](docs/SUPABASE_INTEGRATION.md) - Backend-as-a-Service setup
+- [Firebase Integration](docs/FIREBASE_INTEGRATION.md) - Analytics and crash reporting
+- [Analytics Integration](docs/ANALYTICS_INTEGRATION.md) - User analytics and tracking
+- [Deploy Android Version](docs/DEPLOY_ANDROID.md) - Play Store deployment guide
+- [Deploy iOS Version](docs/DEPLOY_IOS.md) - App Store deployment guide
+- [Logging Multiplatform](docs/LOGGING_MULTIPLATFORM.md) - Cross-platform logging setup
 
 ## 🛠️ Tech Stack & Libraries
 
@@ -211,10 +209,7 @@ This template follows a clean, scalable architecture:
 ./gradlew testDebugUnitTestCoverage
 ```
 
-### Test Structure
-- **Unit Tests**: In each module's `test` source set
-- **Shared Tests**: Common test logic in `shared/commonTest`
-- **Platform Tests**: Platform-specific tests in respective modules
+For detailed testing information, see [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md) and [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md).
 
 ## 🎨 Code Quality
 
@@ -249,7 +244,7 @@ pip install pre-commit
 pre-commit install
 ```
 
-For detailed information, see [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md).
+For detailed information, see [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md), [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md), and [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md).
 
 ### Continuous Integration
 The project includes fully configurable GitHub Actions workflows that automatically:
@@ -312,10 +307,14 @@ For setup and configuration, see [MCP Servers Configuration](docs/MCP_SERVERS.md
 3. Sign with your release keystore
 4. Upload to Google Play Console
 
+For detailed deployment guide, see [Deploy Android Version](docs/DEPLOY_ANDROID.md).
+
 ### iOS
 1. Update version in Xcode project
 2. Archive the project
 3. Upload to App Store Connect
+
+For detailed deployment guide, see [Deploy iOS Version](docs/DEPLOY_IOS.md).
 
 ## 🤝 Contributing
 

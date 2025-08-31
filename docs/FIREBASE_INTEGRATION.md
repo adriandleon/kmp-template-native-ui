@@ -1,194 +1,691 @@
-# Firebase Integration
+# Firebase Integration Guide
 
-Table of Contents
------------------
+This document covers the complete Firebase integration setup for the Kotlin Multiplatform project, including analytics, crash reporting, testing, and configuration for both Android and iOS platforms.
 
-- [Used Products](#used-products)
-- [Installing Firebase](#installing-firebase)
-    - [Create Firebase project](#create-firebase-project)
-    - [Add configuration for Android](#add-configuration-for-android)
-    - [Add configuration for iOS](#add-configuration-for-ios)
-    - [Setting up the Firebase SDK](#setting-up-the-firebase-sdk)
-    - [Testing the implementation](#testing-the-implementation)
-- [Authorize Android App with Firebase in CI](#authorize-android-app-with-firebase-in-ci)
-- [Authorize iOS App with Firebase in CI](#authorize-ios-app-with-firebase-in-ci)
+## 📋 Table of Contents
 
-## Used Products
+- [Overview](#overview)
+- [What is Firebase?](#what-is-firebase)
+- [Architecture](#architecture)
+- [Setup](#setup)
+- [Configuration](#configuration)
+- [Analytics](#analytics)
+- [Crash Reporting](#crash-reporting)
+- [Firebase Test Lab](#firebase-test-lab)
+- [Testing](#testing)
+- [Troubleshooting](#troubleshooting)
+- [Best Practices](#best-practices)
 
-[Firebase](https://firebase.google.com/) is a cloud backend-as-a-service platform that offers a suite of tools and services. The following are the services used in this project:
+## 🎯 Overview
 
-- [Crashlytics](https://firebase.google.com/docs/crashlytics) is used for crash reporting in Android, iOS and Shared module
-- [Test Lab](https://firebase.google.com/docs/test-lab) is used for running Android App UI and integration tests before release
+Firebase provides a comprehensive suite of tools for mobile app development, including analytics, crash reporting, testing, and cloud services. This integration enables cross-platform analytics tracking, automated testing, and crash monitoring for both Android and iOS apps.
 
-## Installing Firebase
+## 🔥 What is Firebase?
 
-The integration with Firebase is made through the open-source project [firebase-kotlin-sdk](https://github.com/GitLiveApp/firebase-kotlin-sdk)
+Firebase is Google's mobile and web application development platform that provides tools and infrastructure to help developers build high-quality apps. Key services include:
 
-### Create Firebase project
+- **Analytics**: User behavior and app performance insights
+- **Crashlytics**: Real-time crash reporting and analysis
+- **Test Lab**: Automated testing on real devices
+- **Cloud Messaging**: Push notifications and messaging
+- **Remote Config**: Dynamic app configuration
+- **Performance Monitoring**: App performance insights
 
-1) Navigate to the [Firebase console](https://console.firebase.google.com/u/0/) and click `Add project`
-2) Choose a name for your Firebase project and click `Continue`.
-3) In the following step, you'll be prompted to enable analytics. This is optional; you can choose based on your preference.
-4) Wait until the project is created.
+## 🏗️ Architecture
 
-### Add configuration for Android
+### **Multiplatform Integration**
 
-Now, add the configuration parameters for your Android app.
-1) After clicking on the Android icon, you'll be taken to a registration screen for your app. Ensure that you provide the correct package name and then click `Register`.
-2) As a naming convention, add the suffix `Android` to your project nickname for clarity. This helps distinguish between different projects
-3) On the next step, make sure to download the generated `google-services.json` file.
-4) Proceed to add it to your `:composeApp` module. Eg: `composeApp/google-services.json`.
-5) Make sure to not commit the `google-services.json` file to git.
+The Firebase integration follows a layered architecture pattern:
 
-### Add configuration for iOS
-
-1) The process for iOS configuration is similar to Android. Begin by adding your Apple target.
-2) As a naming convention, add the suffix `iOS` to your project nickname for clarity. This helps distinguish between different projects
-3) Ensure that your `BUNDLE_ID`, which can be found in your `iosApp/Configuration/Config.xconfig`, is correctly added in the configuration file.
-4) In the next step, download the generated `GoogleService-Info.plist` file.
-5) Copy the `GoogleService-Info.plist` to the iosApp folder. Eg: `iosApp/Template/GoogleService-Info.plist`.
-6) Make sure to not commit the `GoogleService-Info.plist` file to git.
-7) In Xcode, navigate to File > Add package dependencies.
-8) Make sure to add the Firebase SPM dependency from [https://github.com/firebase/firebase-ios-sdk](https://github.com/firebase/firebase-ios-sdk)
-9) Choose the Firebase components you want to use from the repository. In this example, we'll use analytics and crashlytics. Then, click `Add Packages`
-10) Due to an [issue](https://github.com/JetBrains/compose-multiplatform/issues/4026) where the Frameworks, Libraries, and Embedded Content section is missing when creating a KMP project, you may need to add it manually from the Build phases tab in Xcode and restart Xcode a few times.
-11) Go to `Targets > Template > Build Phases` tab and ensure to add all necessary components from Firebase that you'll be using in your project in the `Link Binary With Libraries` section.
-
-### Setting up the Firebase SDK
-
-In the `libs.versions.toml` project file catalog, add the following gradle dependencies:
-
-```toml
-[versions]
-firebase-gitlive-sdk = "2.1.0"
-gradlePlugins-crashlytics = "3.0.3"
-gradlePlugins-google-services = "4.4.2"
-
-[libraries]
-gitlive-firebase-crashlytics = { module = "dev.gitlive:firebase-crashlytics", version.ref = "firebase-gitlive-sdk" }
-
-[plugins]
-crashlytics = { id = "com.google.firebase.crashlytics", version.ref = "gradlePlugins-crashlytics" }
-google-services = { id = "com.google.gms.google-services", version.ref = "gradlePlugins-google-services" }
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Presentation Layer                       │
+│  ┌─────────────────┐  ┌─────────────────┐  ┌─────────────┐ │
+│  │   Android UI    │  │    iOS UI       │  │  Shared UI  │ │
+│  │  (Compose)      │  │   (SwiftUI)     │  │  (KMP)      │ │
+│  └─────────────────┘  └─────────────────┘  └─────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Business Logic Layer                     │
+│  ┌─────────────────────────────────────────────────────────┐ │
+│  │              Shared Module (Kotlin)                     │ │
+│  │  ┌─────────────────┐  ┌─────────────────┐              │ │
+│  │  │   Analytics     │  │  Crash Reporting │              │ │
+│  │  │   Interface     │  │   Interface     │              │ │
+│  │  └─────────────────┘  └─────────────────┘              │ │
+│  └─────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+┌─────────────────────────────────────────────────────────────┐
+│                    Platform Layer                          │
+│  ┌─────────────────┐  ┌─────────────────┐                  │
+│  │   Android       │  │      iOS        │                  │
+│  │  Firebase SDK   │  │   Firebase SDK  │                  │ │
+│  └─────────────────┘  └─────────────────┘                  │
+└─────────────────────────────────────────────────────────────┘
 ```
 
-In your project's root `build.gradle.kts`, include the following plugins:
+### **Key Components**
 
+1. **Shared Module**: Platform-agnostic interfaces and business logic
+2. **Platform Implementations**: Android and iOS specific Firebase SDK usage
+3. **Dependency Injection**: Koin-based service management
+4. **Analytics Abstraction**: Unified event tracking across platforms
+5. **Crash Reporting**: Centralized error monitoring
+
+## 🚀 Setup
+
+### **1. Create Firebase Project**
+
+1. **Navigate to [Firebase Console](https://console.firebase.google.com/)**
+2. **Click "Create a project"**
+3. **Enter project name** (e.g., "YourApp-Firebase")
+4. **Enable Google Analytics** (recommended)
+5. **Choose Analytics account** or create new
+6. **Click "Create project"**
+
+### **2. Add Android App**
+
+1. **Click "Add app" > Android**
+2. **Enter package name**: `com.yourcompany.yourapp`
+3. **Enter app nickname** (optional)
+4. **Click "Register app"**
+5. **Download `google-services.json`**
+6. **Place in `composeApp/` directory**
+
+### **3. Add iOS App**
+
+1. **Click "Add app" > iOS**
+2. **Enter bundle ID**: `com.yourcompany.yourapp`
+3. **Enter app nickname** (optional)
+4. **Click "Register app"**
+5. **Download `GoogleService-Info.plist`**
+6. **Place in `iosApp/Template/` directory**
+
+### **4. Enable Services**
+
+#### **Analytics**
+1. **Go to Analytics > Dashboard**
+2. **Verify data collection** is active
+3. **Set up custom events** if needed
+
+#### **Crashlytics**
+1. **Go to Crashlytics**
+2. **Click "Enable Crashlytics"**
+3. **Follow setup instructions** for each platform
+
+#### **Test Lab**
+1. **Go to Test Lab**
+2. **Enable API** if prompted
+3. **Configure test devices**
+
+## ⚙️ Configuration
+
+### **1. Dependencies**
+
+#### **Shared Module**
 ```kotlin
-plugins {
-    alias(libs.plugins.google.services) apply false
-    alias(libs.plugins.crashlytics) apply false    
-}
-```
-
-In your `:composeApp` or Android app entry point, be sure to include the following plugins:
-
-```kotlin
-plugins { 
-    alias(libs.plugins.google.services)
-    alias(libs.plugins.crashlytics)
-}
-```
-
-Ensure to add the dependencies in the `commonMain` source set of the `:shared` module's `build.gradle.kts` file:
-
-```kotlin
-commonMain.dependencies {
-    implementation(libs.gitlive.firebase.crashlytics)
-}
-```
-
-### Testing the implementation
-
-Once your setup is complete, you can run the Android app to verify the implementation.
-If everything is correct you should see a message in the Logcat similar to `FirebaseApp initialization successful`
-
-On the iOS side, you can configure the collection settings as follows. Start by adding the initialization point to your `MainApplication.swift`:
-
-```swift
-import Shared
-import SwiftUI
-
-@main
-struct MainApplication: App {
-
-    init() {
-        FirebaseHelperKt.startCrashKiOS()
-        KoinAppKt.doInitKoin()
-    }
-    
-    var body: some Scene {
-        WindowGroup {
-            RootView()
+// In shared/build.gradle.kts
+kotlin {
+    sourceSets {
+        commonMain.dependencies {
+            // Firebase Analytics
+            implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
+            
+            // Crashlytics
+            implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+        }
+        
+        androidMain.dependencies {
+            // Android-specific Firebase dependencies
+            implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
+            implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+        }
+        
+        iosMain.dependencies {
+            // iOS-specific Firebase dependencies
+            implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
+            implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
         }
     }
 }
 ```
 
-Then, within your `:shared` module inside the `iosMain` target, add the following code
-in the `FirebaseHelper.kt` file, and you can define your Kotlin logic to enable or disable collection in debug mode:
-
+#### **Android Module**
 ```kotlin
-@Suppress("unused")
-fun startCrashKiOS() {
-    if (BuildKonfig.DEBUG.not()) {
-        Firebase.initialize()    
-        setCrashlyticsUnhandledExceptionHook()
+// In composeApp/build.gradle.kts
+plugins {
+    id("com.google.gms.google-services")
+    id("com.google.firebase.crashlytics")
+}
+
+dependencies {
+    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation("com.google.firebase:firebase-analytics-ktx")
+    implementation("com.google.firebase:firebase-crashlytics-ktx")
+}
+```
+
+#### **iOS Module**
+```swift
+// In iosApp/Template.xcodeproj
+// Add Firebase pods to Podfile
+pod 'Firebase/Analytics'
+pod 'Firebase/Crashlytics'
+```
+
+### **2. Configuration Files**
+
+#### **Android Configuration**
+```json
+// composeApp/google-services.json
+{
+  "project_info": {
+    "project_number": "123456789",
+    "project_id": "your-app-firebase",
+    "storage_bucket": "your-app-firebase.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789:android:abcdef123456",
+        "android_client_info": {
+          "package_name": "com.yourcompany.yourapp"
+        }
+      }
+    }
+  ]
+}
+```
+
+#### **iOS Configuration**
+```xml
+<!-- iosApp/Template/GoogleService-Info.plist -->
+<dict>
+    <key>CLIENT_ID</key>
+    <string>123456789-abcdef123456.apps.googleusercontent.com</string>
+    <key>REVERSED_CLIENT_ID</key>
+    <string>com.googleusercontent.apps.123456789-abcdef123456</string>
+    <key>API_KEY</key>
+    <string>AIzaSyC1234567890abcdefghijklmnopqrstuvwxyz</string>
+    <key>GCM_SENDER_ID</key>
+    <string>123456789</string>
+    <key>PLIST_VERSION</key>
+    <string>1</string>
+    <key>BUNDLE_ID</key>
+    <string>com.yourcompany.yourapp</string>
+</dict>
+```
+
+### **3. GitHub Secrets**
+
+Configure these secrets in your GitHub repository:
+
+```yaml
+# Required Firebase secrets
+GOOGLE_SERVICES_JSON: "base64_encoded_google_services_json"
+GOOGLE_PROJECT_ID: "your-firebase-project-id"
+GOOGLE_SERVICE_ACCOUNT: "base64_encoded_service_account_json"
+```
+
+#### **Convert Configuration Files to Base64**
+```bash
+# Android configuration
+base64 -i composeApp/google-services.json -o google_services_base64.txt
+
+# iOS configuration
+base64 -i iosApp/Template/GoogleService-Info.plist -o google_service_info_base64.txt
+
+# Service account key
+base64 -i service-account-key.json -o service_account_base64.txt
+```
+
+## 📊 Analytics
+
+### **1. Analytics Interface**
+
+#### **Shared Analytics Interface**
+```kotlin
+// In shared/src/commonMain/kotlin/com/yourcompany/yourapp/analytics/Analytics.kt
+interface Analytics {
+    fun trackEvent(event: AnalyticsEvent)
+    fun setUserProperty(key: String, value: String)
+    fun setUserId(userId: String)
+}
+
+data class AnalyticsEvent(
+    val name: String,
+    val parameters: Map<String, Any> = emptyMap()
+)
+```
+
+#### **Firebase Analytics Implementation**
+```kotlin
+// In shared/src/androidMain/kotlin/com/yourcompany/yourapp/analytics/FirebaseAnalyticsProvider.kt
+internal class FirebaseAnalyticsProvider : AnalyticsProvider {
+    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
+    
+    override fun track(event: AnalyticsEvent) {
+        firebaseAnalytics.logEvent(event.name, event.parameters)
+    }
+    
+    override fun setUserProperty(key: String, value: String) {
+        firebaseAnalytics.setUserProperty(key, value)
+    }
+    
+    override fun setUserId(userId: String) {
+        firebaseAnalytics.setUserId(userId)
     }
 }
 ```
 
-When you run the app through Xcode, you'll notice that Firebase has been successfully initialized
-checking the log messages in the Xcode debug area.
+### **2. Event Tracking**
 
-> Reference: https://github.com/FunkyMuse/funkymuse.github.io/blob/main/_posts/2024-04-18-kmp-firebase.md
-
-## Authorize Android App with Firebase in CI
-
-- Encode the content of the file `google-services.json` to base64 running the following command in the terminal:
-
-```shell
-base64 -i composeApp/google-services.json
+#### **Predefined Events**
+```kotlin
+// Common app events
+val events = object {
+    val appOpen = AnalyticsEvent("app_open")
+    val userLogin = AnalyticsEvent("user_login", mapOf("method" to "email"))
+    val purchase = AnalyticsEvent("purchase", mapOf("value" to 9.99, "currency" to "USD"))
+    val screenView = AnalyticsEvent("screen_view", mapOf("screen_name" to "home"))
+}
 ```
 
-- Log in to the GitHub repository of the project and [create secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) for Github Actions.
-- Create a secret with the name `GOOGLE_SERVICES_JSON` and paste the content of the file encoded in base64 format
-- Add the following step after `checkout` in each workflow which runs `gradle` commands:
+#### **Custom Event Tracking**
+```kotlin
+// Track custom events
+analytics.trackEvent(
+    AnalyticsEvent(
+        name = "feature_used",
+        parameters = mapOf(
+            "feature_name" to "search",
+            "search_term" to "kotlin multiplatform",
+            "results_count" to 42
+        )
+    )
+)
+```
 
-> **Note**: The GitHub Actions workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
+### **3. User Properties**
 
+#### **Set User Properties**
+```kotlin
+// Set user properties for segmentation
+analytics.setUserProperty("user_type", "premium")
+analytics.setUserProperty("subscription_plan", "monthly")
+analytics.setUserProperty("app_version", "1.2.3")
+```
+
+#### **Set User ID**
+```kotlin
+// Set user ID for cross-platform tracking
+analytics.setUserId("user_12345")
+```
+
+## 🚨 Crash Reporting
+
+### **1. Crashlytics Interface**
+
+#### **Shared Crash Reporting Interface**
+```kotlin
+// In shared/src/commonMain/kotlin/com/yourcompany/yourapp/crashlytics/Crashlytics.kt
+interface Crashlytics {
+    fun recordException(throwable: Throwable)
+    fun log(message: String)
+    fun setCustomKey(key: String, value: String)
+    fun setUserId(userId: String)
+}
+```
+
+#### **Firebase Crashlytics Implementation**
+```kotlin
+// In shared/src/androidMain/kotlin/com/yourcompany/yourapp/crashlytics/FirebaseCrashlyticsProvider.kt
+internal class FirebaseCrashlyticsProvider : CrashlyticsProvider {
+    private val crashlytics: FirebaseCrashlytics = Firebase.crashlytics
+    
+    override fun recordException(throwable: Throwable) {
+        crashlytics.recordException(throwable)
+    }
+    
+    override fun log(message: String) {
+        crashlytics.log(message)
+    }
+    
+    override fun setCustomKey(key: String, value: String) {
+        crashlytics.setCustomKey(key, value)
+    }
+    
+    override fun setUserId(userId: String) {
+        crashlytics.setUserId(userId)
+    }
+}
+```
+
+### **2. Error Handling**
+
+#### **Record Exceptions**
+```kotlin
+// Record exceptions automatically
+try {
+    // Risky operation
+    riskyOperation()
+} catch (e: Exception) {
+    crashlytics.recordException(e)
+    // Handle error gracefully
+}
+```
+
+#### **Custom Logging**
+```kotlin
+// Log important events
+crashlytics.log("User completed onboarding")
+crashlytics.log("Payment processing started")
+
+// Set custom keys for debugging
+crashlytics.setCustomKey("last_action", "payment_initiated")
+crashlytics.setCustomKey("user_level", "premium")
+```
+
+## 🧪 Firebase Test Lab
+
+### **1. Test Lab Configuration**
+
+#### **Workflow Configuration**
 ```yaml
+# In .github/workflows/android_deploy.yml
 env:
-  GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-
-jobs:
-  build-android-app:
-    steps:
-      - name: Load Google Service JSON file
-        run: echo $GOOGLE_SERVICES_JSON | base64 -di > composeApp/google-services.json
+  # Firebase Test Lab Configuration
+  FIREBASE_DEVICE_MODEL: "shiba"      # Pixel 4
+  FIREBASE_DEVICE_VERSION: "34"       # Android 14
+  FIREBASE_LOCALE: "en"               # English
+  FIREBASE_ORIENTATION: "portrait"    # Portrait orientation
+  FIREBASE_TIMEOUT: "30m"             # Test timeout
 ```
 
-## Authorize iOS App with Firebase in CI
-
-- Encode the content of the file `GoogleService-Info.plist` to base64 running the following command in the terminal:
-
-```shell
-base64 -i iosApp/Template/GoogleService-Info.plist
-```
-
-- Log in to the GitHub repository of the project and [create secrets](https://docs.github.com/en/actions/security-for-github-actions/security-guides/using-secrets-in-github-actions#creating-secrets-for-a-repository) for Github Actions.
-- Create a secret with the name `GOOGLE_SERVICES_PLIST` and paste the content of the file encoded in base64 format
-- Add the following step after `checkout` in each workflow which needs to build the iOS app:
-
-> **Note**: The GitHub Actions workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
-
+#### **Test Device Selection**
 ```yaml
-env:
-  GOOGLE_SERVICES_PLIST: ${{ secrets.GOOGLE_SERVICES_PLIST }}
-
-jobs:
-  build-android-app:
-    steps:
-      - name: Load Google Service PLIST file
-        run: echo $GOOGLE_SERVICES_PLIST | base64 -d > iosApp/Template/GoogleService-Info.plist
+# Available device models
+FIREBASE_DEVICE_MODEL: "shiba"        # Pixel 4
+FIREBASE_DEVICE_MODEL: "redfin"       # Pixel 5
+FIREBASE_DEVICE_MODEL: "barbet"       # Pixel 5a
+FIREBASE_DEVICE_MODEL: "oriole"       # Pixel 6
+FIREBASE_DEVICE_MODEL: "raven"        # Pixel 6 Pro
 ```
+
+### **2. Test Execution**
+
+#### **Run Tests on Test Lab**
+```bash
+# Run instrumentation tests
+gcloud firebase test android run \
+  --type instrumentation \
+  --app app-debug.apk \
+  --test app-debug-test.apk \
+  --device model=shiba,version=34,locale=en,orientation=portrait \
+  --timeout 30m
+```
+
+#### **View Test Results**
+1. **Go to Firebase Console > Test Lab**
+2. **Click on test run** to view details
+3. **Download test artifacts** (screenshots, videos, logs)
+4. **Analyze test failures** and performance metrics
+
+## 🧪 Testing
+
+### **1. Unit Testing**
+
+#### **Test Analytics Implementation**
+```kotlin
+// In shared/src/commonTest/kotlin/com/yourcompany/yourapp/analytics/AnalyticsTest.kt
+class AnalyticsTest {
+    private val mockAnalytics = mockk<Analytics>(relaxed = true)
+    
+    @Test
+    fun `track event calls analytics provider`() {
+        // Given
+        val event = AnalyticsEvent("test_event", mapOf("key" to "value"))
+        
+        // When
+        mockAnalytics.trackEvent(event)
+        
+        // Then
+        verify { mockAnalytics.trackEvent(event) }
+    }
+}
+```
+
+#### **Test Crashlytics Implementation**
+```kotlin
+// In shared/src/commonTest/kotlin/com/yourcompany/yourapp/crashlytics/CrashlyticsTest.kt
+class CrashlyticsTest {
+    private val mockCrashlytics = mockk<Crashlytics>(relaxed = true)
+    
+    @Test
+    fun `record exception calls crashlytics provider`() {
+        // Given
+        val exception = RuntimeException("Test exception")
+        
+        // When
+        mockCrashlytics.recordException(exception)
+        
+        // Then
+        verify { mockCrashlytics.recordException(exception) }
+    }
+}
+```
+
+### **2. Integration Testing**
+
+#### **Test Firebase Integration**
+```kotlin
+// In composeApp/src/androidTest/kotlin/com/yourcompany/yourapp/FirebaseIntegrationTest.kt
+@RunWith(AndroidJUnit4::class)
+class FirebaseIntegrationTest {
+    @Test
+    fun testFirebaseAnalyticsInitialization() {
+        // Verify Firebase is properly initialized
+        assertNotNull(Firebase.analytics)
+    }
+    
+    @Test
+    fun testFirebaseCrashlyticsInitialization() {
+        // Verify Crashlytics is properly initialized
+        assertNotNull(Firebase.crashlytics)
+    }
+}
+```
+
+### **3. Test Data**
+
+#### **Mock Analytics Provider**
+```kotlin
+// In shared/src/commonTest/kotlin/com/yourcompany/yourapp/analytics/TestAnalytics.kt
+class TestAnalytics : Analytics {
+    private val events = mutableListOf<AnalyticsEvent>()
+    private val userProperties = mutableMapOf<String, String>()
+    private var userId: String? = null
+    
+    override fun trackEvent(event: AnalyticsEvent) {
+        events.add(event)
+    }
+    
+    override fun setUserProperty(key: String, value: String) {
+        userProperties[key] = value
+    }
+    
+    override fun setUserId(userId: String) {
+        this.userId = userId
+    }
+    
+    fun getEvents(): List<AnalyticsEvent> = events.toList()
+    fun getUserProperties(): Map<String, String> = userProperties.toMap()
+    fun getUserId(): String? = userId
+}
+```
+
+## 🐛 Troubleshooting
+
+### **Common Issues**
+
+#### **1. Configuration File Issues**
+
+**Problem**: Firebase not initializing properly
+**Solution**:
+```bash
+# Verify configuration files exist
+ls -la composeApp/google-services.json
+ls -la iosApp/Template/GoogleService-Info.plist
+
+# Check file permissions
+chmod 644 composeApp/google-services.json
+chmod 644 iosApp/Template/GoogleService-Info.plist
+```
+
+#### **2. Dependency Issues**
+
+**Problem**: Build fails with Firebase dependencies
+**Solution**:
+```bash
+# Clean and rebuild
+./gradlew clean
+./gradlew build
+
+# Check dependency tree
+./gradlew :composeApp:dependencies --configuration implementation
+```
+
+#### **3. Analytics Not Working**
+
+**Problem**: Events not appearing in Firebase Console
+**Solution**:
+1. **Verify internet connection**
+2. **Check Firebase project configuration**
+3. **Wait 24-48 hours** for data to appear
+4. **Enable debug logging** in development
+
+#### **4. Test Lab Failures**
+
+**Problem**: Tests fail on Firebase Test Lab
+**Solution**:
+1. **Check device compatibility**
+2. **Verify test timeout settings**
+3. **Review test logs** for specific errors
+4. **Test locally first** before uploading
+
+### **Debug Mode**
+
+#### **Enable Firebase Debug Logging**
+```kotlin
+// In Android MainActivity or iOS AppDelegate
+if (BuildConfig.DEBUG) {
+    FirebaseApp.initializeApp(this)
+    FirebaseAnalytics.getInstance(this).setAnalyticsCollectionEnabled(true)
+}
+```
+
+#### **Verify Firebase Initialization**
+```kotlin
+// Check if Firebase is properly initialized
+try {
+    val analytics = Firebase.analytics
+    Log.d("Firebase", "Analytics initialized successfully")
+} catch (e: Exception) {
+    Log.e("Firebase", "Failed to initialize analytics", e)
+}
+```
+
+## 📚 Best Practices
+
+### **1. Analytics Strategy**
+- **Define clear event names** with consistent naming conventions
+- **Use meaningful parameters** for better insights
+- **Avoid tracking sensitive information** (PII)
+- **Set up conversion tracking** for business goals
+
+### **2. Crash Reporting**
+- **Record exceptions immediately** when they occur
+- **Add context information** with custom keys
+- **Group related crashes** with consistent naming
+- **Monitor crash rates** and prioritize fixes
+
+### **3. Testing Strategy**
+- **Test Firebase integration** in CI/CD pipeline
+- **Use Test Lab** for device compatibility testing
+- **Mock Firebase services** in unit tests
+- **Verify configuration** in different environments
+
+### **4. Performance Optimization**
+- **Batch analytics events** when possible
+- **Use appropriate test device** configurations
+- **Monitor API usage** and quotas
+- **Optimize test execution** time
+
+### **5. Security**
+- **Never commit** configuration files to version control
+- **Use GitHub secrets** for sensitive information
+- **Rotate service account keys** regularly
+- **Monitor access logs** for suspicious activity
+
+## 🔗 Related Documentation
+
+- [Analytics Integration](ANALYTICS_INTEGRATION.md) - Detailed analytics setup
+- [GitHub Actions](GITHUB_ACTIONS.md) - CI/CD automation
+- [Deploy Android](DEPLOY_ANDROID.md) - Android deployment
+- [Deploy iOS](DEPLOY_IOS.md) - iOS deployment
+
+## 📖 Resources
+
+- [Firebase Console](https://console.firebase.google.com/)
+- [Firebase Documentation](https://firebase.google.com/docs)
+- [Firebase Test Lab](https://firebase.google.com/docs/test-lab)
+- [Firebase Analytics](https://firebase.google.com/docs/analytics)
+- [Firebase Crashlytics](https://firebase.google.com/docs/crashlytics)
+
+## 📝 Additional Commands
+
+### **Firebase CLI Commands**
+```bash
+# Install Firebase CLI
+npm install -g firebase-tools
+
+# Login to Firebase
+firebase login
+
+# List projects
+firebase projects:list
+
+# Use specific project
+firebase use your-project-id
+
+# Deploy to Firebase
+firebase deploy
+```
+
+### **Test Lab Commands**
+```bash
+# List available devices
+gcloud firebase test android models list
+
+# List available OS versions
+gcloud firebase test android versions list
+
+# Run test on specific device
+gcloud firebase test android run \
+  --type instrumentation \
+  --app app-debug.apk \
+  --test app-debug-test.apk \
+  --device model=shiba,version=34
+```
+
+## 📋 Notes
+
+- **Firebase configuration files** should never be committed to version control
+- **Test Lab has usage quotas** - monitor your usage to avoid exceeding limits
+- **Analytics data may take 24-48 hours** to appear in the console
+- **Crashlytics requires internet connection** to upload crash reports
+- **Use appropriate test devices** based on your target audience
+
+---
+
+**Integrate Firebase seamlessly across platforms! 🔥**

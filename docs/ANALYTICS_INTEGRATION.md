@@ -1,86 +1,301 @@
 # Analytics Integration
 
-Table of Contents
------------------
+This document covers the analytics system implementation using Firebase Analytics for tracking user events across the Kotlin Multiplatform application.
+
+## 📋 Table of Contents
 
 - [Overview](#overview)
-- [Installing Firebase Analytics](#installing-firebase-analytics)
+- [What is Analytics?](#what-is-analytics)
+- [Architecture](#architecture)
+- [Setup](#setup)
 - [Usage](#usage)
-    - [Basic Usage](#basic-usage)
-    - [Common Events](#common-events)
-    - [Event Constants](#event-constants)
-- [Implementing a New Provider](#implementing-a-new-provider)
+- [Event Tracking](#event-tracking)
+- [Custom Analytics Providers](#custom-analytics-providers)
+- [Testing](#testing)
 - [Best Practices](#best-practices)
-    - [Event Naming](#event-naming)
-    - [Parameters](#parameters)
-    - [Provider Implementation](#provider-implementation)
-    - [Testing](#testing)
-- [Firebase Analytics Integration](#firebase-analytics-integration)
-- [Dependency Injection](#dependency-injection)
+- [Troubleshooting](#troubleshooting)
 
-## Overview
+## 🎯 Overview
 
-The analytics system provides a flexible way to track events across the application with support for multiple analytics providers simultaneously. The system is designed to be easy to use and extend.
+The analytics system provides a flexible way to track user events across the application with support for multiple analytics providers simultaneously. The system is designed to be easy to use, extend, and maintain across all platforms.
 
-## Installing Firebase Analytics
+## 📊 What is Analytics?
 
-Add Firebase Analytics dependency to your shared module's build.gradle.kts:
+Analytics helps you understand:
 
+- **User behavior** and interaction patterns
+- **Feature usage** and adoption rates
+- **Performance metrics** and error tracking
+- **User journey** and conversion funnels
+- **App performance** and crash reporting
+
+### **Key Benefits**
+
+- **Cross-platform consistency** with unified API
+- **Multiple provider support** for flexibility
+- **Type-safe event tracking** with predefined events
+- **Easy integration** with dependency injection
+- **Comprehensive testing** support
+
+## 🏗️ Architecture
+
+### **Analytics System Structure**
+
+```
+shared/
+├── src/
+│   ├── commonMain/
+│   │   └── kotlin/
+│   │       └── com/yourcompany/yourapp/
+│   │           └── analytics/
+│   │               ├── domain/
+│   │               │   ├── Analytics.kt           # Main analytics interface
+│   │               │   ├── AnalyticsEvent.kt      # Event data class
+│   │               │   └── AnalyticsProvider.kt   # Provider interface
+│   │               ├── data/
+│   │               │   ├── AnalyticsImpl.kt       # Main implementation
+│   │               │   └── providers/
+│   │               │       └── FirebaseAnalyticsProvider.kt
+│   │               └── events/
+│   │                   ├── CommonAnalyticsEvent.kt # Predefined events
+│   │                   └── AnalyticsEvents.kt     # Event constants
+│   ├── androidMain/
+│   │   └── kotlin/
+│   │       └── com/yourcompany/yourapp/
+│   │           └── analytics/
+│   │               └── providers/
+│   │                   └── AndroidAnalyticsProvider.kt
+│   └── iosMain/
+│       └── kotlin/
+│           └── com/yourcompany/yourapp/
+│               └── analytics/
+│                   └── providers/
+│                       └── IOSAnalyticsProvider.kt
+```
+
+### **Core Interfaces**
+
+#### Analytics Interface
 ```kotlin
-dependencies {
-    implementation("dev.gitlive:firebase-analytics:1.11.1")
+interface Analytics {
+    fun track(event: AnalyticsEvent)
+    fun track(events: List<AnalyticsEvent>)
 }
 ```
 
-## Usage
-
-### Basic Usage
-
+#### Analytics Provider Interface
 ```kotlin
-// Initialize analytics with providers through dependency injection
-class MyComponent(private val analytics: Analytics) {
-    fun onScreenVisible() {
+interface AnalyticsProvider {
+    fun track(event: AnalyticsEvent)
+}
+```
+
+#### Analytics Event Data Class
+```kotlin
+data class AnalyticsEvent(
+    val name: String,
+    val parameters: Map<String, Any>
+)
+```
+
+## ⚙️ Setup
+
+### **Dependencies**
+
+#### Add Firebase Analytics to Version Catalog
+```toml
+# In gradle/libs.versions.toml
+[versions]
+firebase-gitlive-sdk = "2.1.0"
+
+[libraries]
+gitlive-firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "firebase-gitlive-sdk" }
+```
+
+#### Add to Shared Module
+```kotlin
+// In shared/build.gradle.kts
+dependencies {
+    commonMainImplementation(libs.gitlive.firebase.analytics)
+}
+```
+
+### **Firebase Project Setup**
+
+#### 1. Create Firebase Project
+1. Navigate to [Firebase Console](https://console.firebase.google.com/)
+2. Click "Add project"
+3. Choose a project name and follow the setup wizard
+4. Enable Google Analytics (optional but recommended)
+
+#### 2. Configure Android App
+1. Click Android icon to add Android app
+2. Enter package name (e.g., `com.yourcompany.yourapp`)
+3. Add suffix "Android" to project nickname for clarity
+4. Download `google-services.json` file
+5. Place in `composeApp/google-services.json`
+6. **Important**: Don't commit this file to git
+
+#### 3. Configure iOS App
+1. Click iOS icon to add iOS app
+2. Enter bundle ID from `iosApp/Configuration/Config.xcconfig`
+3. Add suffix "iOS" to project nickname for clarity
+4. Download `GoogleService-Info.plist` file
+5. Place in `iosApp/Template/GoogleService-Info.plist`
+6. **Important**: Don't commit this file to git
+
+### **Dependency Injection Setup**
+
+#### Analytics Module
+```kotlin
+// In shared/src/commonMain/kotlin/com/yourcompany/yourapp/di/AnalyticsModule.kt
+val analyticsModule = module {
+    factoryOf(::analyticsProviders)
+    singleOf(::AnalyticsImpl) { bind<Analytics>() }
+}
+
+private fun analyticsProviders(): List<AnalyticsProvider> = listOf(
+    FirebaseAnalyticsProvider()
+)
+```
+
+## 📖 Usage
+
+### **Basic Event Tracking**
+
+#### Inject Analytics
+```kotlin
+class UserRepository(
+    private val analytics: Analytics
+) {
+    fun getUser(id: String): User? {
         analytics.track(
             CommonAnalyticsEvent.ScreenView(
-                screenName = "MyScreen",
-                screenClass = "MyComponent"
+                screenName = "UserProfile",
+                screenClass = "UserRepository"
+            )
+        )
+        
+        return try {
+            // Fetch user logic
+            analytics.track(CommonAnalyticsEvent.ButtonClick("FetchUser"))
+            user
+        } catch (e: Exception) {
+            analytics.track(
+                CommonAnalyticsEvent.Error("Failed to fetch user: $id")
+            )
+            null
+        }
+    }
+}
+```
+
+#### Use in Composables (Android)
+```kotlin
+@Composable
+fun UserScreen(
+    viewModel: UserViewModel = koinViewModel()
+) {
+    val analytics: Analytics = koinInject()
+    
+    LaunchedEffect(Unit) {
+        analytics.track(
+            CommonAnalyticsEvent.ScreenView(
+                screenName = "UserScreen",
+                screenClass = "UserScreen"
             )
         )
     }
+    
+    // UI implementation
+}
+```
 
-    fun onButtonClick() {
-        analytics.track(CommonAnalyticsEvent.ButtonClick("LoginButton"))
+#### Use in SwiftUI Views (iOS)
+```swift
+struct UserView: View {
+    @StateObject private var viewModel = UserViewModel()
+    private let analytics: Analytics = KoinHelper.shared.analytics
+    
+    var body: some View {
+        VStack {
+            // UI implementation
+        }
+        .onAppear {
+            analytics.track(event: CommonAnalyticsEvent.ScreenView(
+                screenName: "UserView",
+                screenClass: "UserView"
+            ))
+        }
     }
 }
 ```
 
-### Common Events
+## 🎯 Event Tracking
 
-The system provides several predefined common events:
+### **Predefined Common Events**
 
-- `ScreenView`: Track when a screen is viewed
-    - Parameters:
-        - `screen_name`: Name of the screen
-        - `screen_class`: Class name of the screen component
-- `ButtonClick`: Track button clicks
-    - Parameters: `button_name`
-- `ElementTap`: Track when any UI element is tapped
-    - Parameters: `element_name`
-- `SelectContent`: Track when content is selected
-    - Parameters:
-        - `item_id`: ID of the selected item
-        - `content_type`: Type of content ("video", "category", "banner")
-- `SelectItem`: Track when an item is selected from a list
-    - Parameters:
-        - `item_list_id`: ID of the selected item
-        - `item_list_name`: Name of the selected item
-- `Error`: Track errors
-    - Parameters: `error_message`
+The system provides several predefined events for consistent tracking:
 
-### Event Constants
+#### Screen View Events
+```kotlin
+// Track when a screen is viewed
+analytics.track(
+    CommonAnalyticsEvent.ScreenView(
+        screenName = "HomeScreen",
+        screenClass = "HomeComponent"
+    )
+)
+```
 
-All event names and parameter keys are defined as constants to ensure consistency:
+#### Button Click Events
+```kotlin
+// Track button clicks
+analytics.track(CommonAnalyticsEvent.ButtonClick("LoginButton"))
+analytics.track(CommonAnalyticsEvent.ButtonClick("SignUpButton"))
+```
 
+#### Content Selection Events
+```kotlin
+// Track content selection
+analytics.track(
+    CommonAnalyticsEvent.SelectContent(
+        itemId = "video123",
+        contentType = "video"
+    )
+)
+
+// Track item selection from lists
+analytics.track(
+    CommonAnalyticsEvent.SelectItem(
+        itemListId = "category_list",
+        itemListName = "Technology"
+    )
+)
+```
+
+#### Error Tracking Events
+```kotlin
+// Track errors with context
+analytics.track(
+    CommonAnalyticsEvent.Error("Network request failed")
+)
+
+// Track errors with throwable
+try {
+    // Risky operation
+} catch (e: Exception) {
+    analytics.track(
+        CommonAnalyticsEvent.Error("Operation failed: ${e.message}")
+    )
+}
+```
+
+### **Event Constants**
+
+All event names and parameter keys are defined as constants:
+
+#### Event Names
 ```kotlin
 object AnalyticsEvents {
     const val SCREEN_VIEW = "screen_view"
@@ -90,7 +305,10 @@ object AnalyticsEvents {
     const val ERROR = "error"
     const val ELEMENT_TAP = "element_tap"
 }
+```
 
+#### Parameter Keys
+```kotlin
 object AnalyticsParam {
     const val CONTENT_TYPE = "content_type"
     const val SCREEN_NAME = "screen_name"
@@ -104,12 +322,42 @@ object AnalyticsParam {
 }
 ```
 
-## Implementing a New Provider
+### **Custom Events**
 
-To add a new analytics provider:
+#### Create Custom Event
+```kotlin
+// Define custom event
+data class CustomAnalyticsEvent(
+    val action: String,
+    val category: String,
+    val label: String? = null,
+    val value: Int? = null
+) : AnalyticsEvent {
+    override val name: String = "custom_event"
+    override val parameters: Map<String, Any> = buildMap {
+        put("action", action)
+        put("category", category)
+        label?.let { put("label", it) }
+        value?.let { put("value", it) }
+    }
+}
 
-1. Create a new class that implements the `AnalyticsProvider` interface:
+// Use custom event
+analytics.track(
+    CustomAnalyticsEvent(
+        action = "purchase",
+        category = "ecommerce",
+        label = "premium_subscription",
+        value = 999
+    )
+)
+```
 
+## 🔌 Custom Analytics Providers
+
+### **Implementing a New Provider**
+
+#### 1. Create Provider Class
 ```kotlin
 class MyCustomProvider : AnalyticsProvider {
     override fun track(event: AnalyticsEvent) {
@@ -123,47 +371,40 @@ class MyCustomProvider : AnalyticsProvider {
 }
 ```
 
-2. Add your provider to the analytics providers list in the DI module:
-
+#### 2. Add to Dependency Injection
 ```kotlin
-internal val analyticsModule = module {
-    factoryOf(::analyticsProviders)
-    singleOf(::AnalyticsImpl) { bind<Analytics>() }
-}
-
 private fun analyticsProviders(): List<AnalyticsProvider> = listOf(
     FirebaseAnalyticsProvider(),
-    MyCustomProvider()
+    MyCustomProvider()  // Add your custom provider
 )
 ```
 
-## Best Practices
+#### 3. Platform-Specific Providers
+```kotlin
+// Android-specific provider
+class AndroidAnalyticsProvider : AnalyticsProvider {
+    override fun track(event: AnalyticsEvent) {
+        // Use Android-specific analytics (e.g., Google Analytics)
+        androidAnalytics.logEvent(event.name, event.parameters)
+    }
+}
 
-### Event Naming
+// iOS-specific provider
+class IOSAnalyticsProvider : AnalyticsProvider {
+    override fun track(event: AnalyticsEvent) {
+        // Use iOS-specific analytics (e.g., Firebase Analytics)
+        iosAnalytics.logEvent(event.name, event.parameters)
+    }
+}
+```
 
-- Use snake_case for event names
-- Be descriptive but concise
-- Use predefined constants from `AnalyticsEvents`
-- Be consistent across the app
+## 🧪 Testing
 
-### Parameters
-
-- Use predefined parameter constants from `AnalyticsParam`
-- Keep parameter names consistent across events
-- Document custom parameters
-- Use appropriate parameter types (String, Int, Long, etc.)
-
-### Provider Implementation
-
-- Handle errors gracefully
-- Consider adding logging for debugging
-- Document any provider-specific limitations
-- Keep providers independent and focused
-
-### Testing
+### **Test Analytics Implementation**
 
 The project includes a `TestAnalytics` implementation for testing:
 
+#### Test Analytics Class
 ```kotlin
 class TestAnalytics : Analytics {
     private val _events = mutableListOf<AnalyticsEvent>()
@@ -184,55 +425,139 @@ class TestAnalytics : Analytics {
 }
 ```
 
-Use it in your tests to verify analytics events:
-
+#### Using Test Analytics
 ```kotlin
-val testAnalytics = TestAnalytics()
-
-@Test
-fun shouldTrackScreenView() {
-    val component = MyComponent(testAnalytics)
+class UserRepositoryTest {
+    private val testAnalytics = TestAnalytics()
+    private val repository = UserRepository(testAnalytics)
     
-    component.onScreenVisible()
+    @Test
+    fun `should track screen view when fetching user`() {
+        // When
+        repository.getUser("user123")
+        
+        // Then
+        testAnalytics.events shouldHaveSize 1
+        testAnalytics.lastTrackEvent.name shouldBe "screen_view"
+        testAnalytics.lastTrackEvent.parameters["screen_name"] shouldBe "UserProfile"
+    }
     
-    testAnalytics.lastTrackEvent.name shouldBeEqual "screen_view"
-    testAnalytics.lastTrackEvent.parameters shouldContain ("screen_name" to "MyScreen")
-}
-```
-
-## Firebase Analytics Integration
-
-The `FirebaseAnalyticsProvider` uses the Kotlin Multiplatform Firebase SDK:
-
-```kotlin
-internal class FirebaseAnalyticsProvider : AnalyticsProvider {
-    private val firebaseAnalytics: FirebaseAnalytics = Firebase.analytics
-
-    override fun track(event: AnalyticsEvent) {
-        firebaseAnalytics.logEvent(event.name, event.parameters)
+    @Test
+    fun `should track error when user fetch fails`() {
+        // Given
+        // Mock failure scenario
+        
+        // When
+        val result = repository.getUser("nonexistent")
+        
+        // Then
+        result shouldBe null
+        testAnalytics.events.any { it.name == "error" } shouldBe true
     }
 }
 ```
 
-## Dependency Injection
+## 📚 Best Practices
 
-The analytics system is set up using Koin for dependency injection:
+### **1. Event Naming**
+- **Use snake_case** for event names
+- **Be descriptive but concise**
+- **Use predefined constants** from `AnalyticsEvents`
+- **Maintain consistency** across the app
 
+### **2. Parameter Usage**
+- **Use predefined parameter constants** from `AnalyticsParam`
+- **Keep parameter names consistent** across events
+- **Document custom parameters** clearly
+- **Use appropriate parameter types** (String, Int, Long, etc.)
+
+### **3. Provider Implementation**
+- **Handle errors gracefully** without breaking the app
+- **Add logging for debugging** when needed
+- **Document provider-specific limitations**
+- **Keep providers independent** and focused
+
+### **4. Event Tracking Strategy**
+- **Track important user actions** (clicks, selections, errors)
+- **Include relevant context** in parameters
+- **Avoid tracking sensitive information**
+- **Use consistent event patterns** across similar actions
+
+### **5. Performance Considerations**
+- **Batch events** when possible for efficiency
+- **Use appropriate log levels** for different environments
+- **Avoid expensive operations** in tracking code
+- **Consider offline event queuing** for poor network conditions
+
+## 🐛 Troubleshooting
+
+### **Common Issues**
+
+#### 1. **Events Not Appearing in Firebase**
 ```kotlin
-internal val analyticsModule = module {
-    factoryOf(::analyticsProviders)
-    singleOf(::AnalyticsImpl) { bind<Analytics>() }
-}
-
-private fun analyticsProviders(): List<AnalyticsProvider> = listOf(FirebaseAnalyticsProvider())
+// Check Firebase configuration
+// Verify google-services.json and GoogleService-Info.plist are correct
+// Check Firebase project settings and app configuration
+// Verify internet connectivity and Firebase service status
 ```
 
-To use analytics in your components, inject it through the constructor:
-
+#### 2. **Analytics Not Initialized**
 ```kotlin
-class MyComponent(
-    componentContext: ComponentContext,
-    private val analytics: Analytics
-) : ComponentContext by componentContext {
-    // Use analytics here
-} 
+// Check dependency injection setup
+val analytics: Analytics = koinInject()
+analytics.track(CommonAnalyticsEvent.ButtonClick("TestButton"))
+
+// Verify Koin module is included in app initialization
+```
+
+#### 3. **Custom Provider Not Working**
+```kotlin
+// Check provider is added to analyticsProviders list
+// Verify provider implementation handles errors gracefully
+// Check provider-specific configuration and credentials
+```
+
+### **Debug Mode**
+
+#### Enable Analytics Debugging
+```kotlin
+// Add debug logging to custom providers
+class DebugAnalyticsProvider : AnalyticsProvider {
+    override fun track(event: AnalyticsEvent) {
+        println("Analytics Event: ${event.name}")
+        println("Parameters: ${event.parameters}")
+        
+        // Forward to actual provider
+        actualProvider.track(event)
+    }
+}
+```
+
+#### Check Event Flow
+```kotlin
+// Verify events are being tracked
+val testAnalytics = TestAnalytics()
+val component = MyComponent(testAnalytics)
+
+component.performAction()
+
+println("Tracked events: ${testAnalytics.events}")
+```
+
+## 🔗 Related Documentation
+
+- [Firebase Integration](FIREBASE_INTEGRATION.md) - Firebase setup and configuration
+- [Unit Tests Shared](UNIT_TESTS_SHARED.md) - Testing analytics implementations
+- [GitHub Actions Workflows](GITHUB_ACTIONS.md) - CI/CD analytics configuration
+- [Logging Multiplatform](LOGGING_MULTIPLATFORM.md) - Cross-platform logging
+
+## 📖 Resources
+
+- [Firebase Analytics Documentation](https://firebase.google.com/docs/analytics)
+- [Firebase Kotlin SDK](https://github.com/GitLiveApp/firebase-kotlin-sdk)
+- [Analytics Best Practices](https://support.google.com/analytics/answer/1009614)
+- [Mobile Analytics Guide](https://firebase.google.com/docs/analytics/guides)
+
+---
+
+**Track user behavior and app performance with comprehensive analytics! 🚀** 
