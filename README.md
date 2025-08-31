@@ -75,6 +75,14 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md)
 - [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md)
 - [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md)
+- [Pull Request Checks](docs/PR_DANGER_CHECKS.md)
+- [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md)
+- [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md)
+- [Supabase Integration](docs/SUPABASE_INTEGRATION.md)
+- [Firebase Integration](docs/FIREBASE_INTEGRATION.md)
+- [Analytics Integration](docs/ANALYTICS_INTEGRATION.md)
+- [Deploy Android Version](docs/DEPLOY_ANDROID.md)
+- [Deploy iOS Version](docs/DEPLOY_IOS.md)
 - [Logging Multiplatform](docs/LOGGING_MULTIPLATFORM.md)
 
 ## 🛠️ Tech Stack & Libraries
