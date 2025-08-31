@@ -73,8 +73,10 @@ RELEASE_NOTES_DIR: "app/release/whatsNew"  # Update path to match your structure
 
 ## 🚀 Quick Migration Guide
 
-### **Step 1: Copy Workflows**
-Copy the three workflow files from `.github/workflows/` to your new project.
+### **Step 1: Copy Workflows and Configuration**
+Copy the following files to your new project:
+- Three workflow files from `.github/workflows/`
+- `config/Dangerfile.df.kts` for PR automation
 
 ### **Step 2: Update Project Variables**
 Update the configuration variables at the top of each workflow file:
@@ -88,13 +90,26 @@ ANDROID_APP_MODULE: "composeApp" → "app"  # If different module name
 IOS_APP_FOLDER: "Template" → "MyApp"      # If different folder name
 ```
 
-### **Step 3: Update File Paths**
+### **Step 3: Update File Paths and Dangerfile**
 Ensure file paths match your project structure:
 
 ```yaml
 # Update these if your project has different structure
 GRADLE_PATH: "app/build.gradle.kts"        # Instead of "composeApp/build.gradle.kts"
 RELEASE_NOTES_DIR: "app/release/whatsNew"  # Instead of "composeApp/release/whatsNew"
+```
+
+**Update Dangerfile Configuration:**
+```kotlin
+// Project Configuration
+val PROJECT_NAME = "YourProjectName"                    // Your project name
+val PROJECT_OWNER = "yourusername"                      // GitHub username/organization
+val PROJECT_REPO = "your-repo-name"                     // Repository name
+
+// Module Paths - Update these to match your project structure
+val SHARED_MODULE_PATH = "shared/src/commonMain/"       // Path to shared module
+val ANDROID_MODULE_PATH = "app/src/main/"               // Path to Android module
+val IOS_MODULE_PATH = "iosApp/YourApp/"                 // Path to iOS module
 ```
 
 ### **Step 4: Set Required Secrets**
@@ -131,6 +146,15 @@ Configure the following secrets in your GitHub repository:
 2. **Kotlin Static Analysis** - Code formatting and Detekt analysis
 3. **Swift Static Analysis** - SwiftFormat and SwiftLint checks
 4. **Unit Tests** - Konsist tests and shared module tests
+
+**Danger Configuration:**
+The Danger checks are powered by a configurable `config/Dangerfile.df.kts` that automatically:
+- Validates PR descriptions and size
+- Suggests appropriate labels based on modified files
+- Checks release notes requirements
+- Provides helpful feedback to contributors
+
+See [Pull Request Checks](PR_DANGER_CHECKS.md) for detailed configuration options.
 
 **Key Features:**
 - Automatic code quality checks on every PR
@@ -183,6 +207,21 @@ FIREBASE_LOCALE: "en-US"                  # US English
 ```yaml
 # Support multiple iOS targets
 IOS_TARGET_NAMES: "App,AppTests,AppUITests"
+```
+
+### **Custom Danger Rules**
+```kotlin
+// Add new language support in Dangerfile.df.kts
+val RELEASE_NOTES_LANGUAGES = mapOf(
+    "en-US" to "whatsnew-en-US",                        // English (US)
+    "es-419" to "whatsnew-es-419",                      // Spanish (Latin America)
+    "pt-BR" to "whatsnew-pt-BR",                        // Portuguese (Brazil)
+    "fr-FR" to "whatsnew-fr-FR"                         // French (France)
+)
+
+// Disable specific checks
+val ENABLE_PR_SIZE_WARNING = false                       // Disable PR size warnings
+val ENABLE_LABEL_CHECKS = false                          // Disable label requirement checks
 ```
 
 ## 🐛 Troubleshooting

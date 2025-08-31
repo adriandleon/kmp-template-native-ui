@@ -252,7 +252,13 @@ The project includes fully configurable GitHub Actions workflows that automatica
 - **Android Deploy** - Build, test, and deploy to Play Store
 - **iOS Deploy** - Build, test, and deploy to TestFlight
 
-For detailed information and customization, see [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md).
+**Automated PR Reviews:**
+- **Danger Kotlin** - Configurable PR validation and quality checks
+- **Automatic label suggestions** based on modified files
+- **Release notes validation** for Android deployments
+- **PR size and description** quality enforcement
+
+For detailed information and customization, see [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) and [Pull Request Checks](docs/PR_DANGER_CHECKS.md).
 
 ## 📦 Building
 
