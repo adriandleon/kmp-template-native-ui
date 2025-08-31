@@ -67,6 +67,11 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
    - Customize workflow variables for your project
    - See [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) for detailed setup
 
+6. **Configure MCP Servers** (Optional)
+   - Set up environment variables for API keys
+   - Configure GitHub and Context7 MCP servers
+   - See [MCP Servers Configuration](docs/MCP_SERVERS.md) for setup instructions
+
 ### Customization
 
 1. **Update package names**
@@ -85,6 +90,7 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
 ## 📚 Project Documentation
 
 - [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) - Configurable CI/CD workflows
+- [MCP Servers Configuration](docs/MCP_SERVERS.md) - AI assistance setup and configuration
 - [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md)
 - [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md)
 - [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md)
@@ -136,6 +142,11 @@ cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI l
 - **[GitHub Actions](https://github.com/features/actions)** - Configurable CI/CD workflows for testing, building, and deployment
 - **[Danger](https://github.com/danger/danger)** - Automated PR review and quality checks
 - **[Codecov](https://about.codecov.io/)** - Code coverage reporting and analysis
+
+### AI Development Assistance
+- **[MCP Servers](https://modelcontextprotocol.io/)** - Model Context Protocol servers for enhanced AI assistance
+- **[GitHub MCP Server](https://github.com/modelcontextprotocol/server-github)** - GitHub integration for AI-powered development
+- **[Context7 MCP Server](https://mcp.context7.com/)** - Library documentation and code examples access
 
 ### Logging & Monitoring
 - **[Kermit](https://github.com/touchlab/Kermit)** (2.0.8) - Multiplatform logging
@@ -259,6 +270,14 @@ The project includes fully configurable GitHub Actions workflows that automatica
 - **PR size and description** quality enforcement
 
 For detailed information and customization, see [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) and [Pull Request Checks](docs/PR_DANGER_CHECKS.md).
+
+### AI-Powered Development
+The project includes MCP (Model Context Protocol) servers that enhance AI assistance:
+- **GitHub Integration** - Access repository information, issues, and workflows
+- **Library Documentation** - Quick access to library docs and code examples
+- **Enhanced AI Context** - Better understanding of project structure and dependencies
+
+For setup and configuration, see [MCP Servers Configuration](docs/MCP_SERVERS.md).
 
 ## 📦 Building
 

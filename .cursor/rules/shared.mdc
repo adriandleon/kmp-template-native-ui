@@ -1,0 +1,231 @@
+---
+description: "Shared Module - Core Kotlin Multiplatform Business Logic Rules"
+globs: ["shared/**/*"]
+alwaysApply: true
+---
+
+# Shared Module Rules
+
+## Module Overview
+The `shared` module is the core Kotlin Multiplatform module that contains platform-agnostic business logic, data models, and interfaces. This module must remain pure Kotlin with no platform-specific dependencies.
+
+## File Structure
+```
+shared/
+├── src/
+│   ├── commonMain/           # Common code for all platforms
+│   │   └── kotlin/          # Pure Kotlin source code
+│   ├── androidMain/          # Android-specific implementations
+│   │   └── kotlin/          # expect/actual implementations
+│   ├── iosMain/             # iOS-specific implementations
+│   │   └── kotlin/          # expect/actual implementations
+│   └── commonTest/           # Shared unit tests
+└── build.gradle.kts         # Module build configuration
+```
+
+## Architecture Patterns
+
+### 1. Clean Architecture with Feature Modules
+- Each feature follows a layered architecture: `data`, `domain`, `presentation`
+- Use `*Module.kt` files for feature-specific dependency injection
+- Follow the naming convention: `{FeatureName}Module.kt`
+
+### 2. Dependency Injection with Koin
+- Use `module { }` blocks for dependency definitions
+- Prefer `factoryOf(::Constructor)` for factory dependencies
+- Use `singleOf(::Constructor)` for singleton dependencies
+- Bind interfaces to implementations using `bind<Interface>()`
+
+### 3. State Management with MVIKotlin
+- Create `*Store.kt` interfaces defining `State`, `Intent`, `Message`, and `Action`
+- Use sealed interfaces for type-safe state management
+- Follow the pattern: `Intent` → `Store` → `Message` → `State`
+
+### 4. Component Architecture with Decompose
+- Create `*Component.kt` interfaces for UI components
+- Implement `Default*Component.kt` classes
+- Use `ComponentContext` for lifecycle management
+- Expose `Value<Model>` for reactive state
+
+### 5. Data Layer Patterns
+- Use `*Entity.kt` for domain models
+- Create `*DataSource.kt` for data sources
+- Implement `*Repository.kt` interfaces
+- Use `*Mapper.kt` for data transformations
+- Follow repository pattern with data sources
+
+## Code Style and Conventions
+
+### 1. Package Structure
+```
+com.yourcompany.yourapp.{feature}/
+├── data/
+│   ├── datasource/
+│   ├── mapper/
+│   └── repository/
+├── domain/
+│   ├── entity/
+│   ├── repository/
+│   └── usecase/
+└── presentation/
+    ├── component/
+    ├── mapper/
+    └── store/
+```
+
+> **Note**: Replace `com.yourcompany.yourapp` with your actual package name when using this template.
+
+### 2. Naming Conventions
+- **Entities**: `*Entity.kt` (e.g., `VideoEntity.kt`)
+- **Data Sources**: `*DataSource.kt` (e.g., `VideoDataSource.kt`)
+- **Repositories**: `*Repository.kt` (e.g., `VideoRepository.kt`)
+- **Use Cases**: `*UseCase.kt` (e.g., `GetVideosByCategoryUseCase.kt`)
+- **Components**: `*Component.kt` (e.g., `HomeComponent.kt`)
+- **Stores**: `*Store.kt` (e.g., `HomeStore.kt`)
+- **Mappers**: `*Mapper.kt` (e.g., `VideoMapper.kt`)
+
+### 3. Kotlin Multiplatform Specifics
+- Use `expect/actual` for platform-specific implementations
+- Place common code in `commonMain`
+- Use `androidMain` for Android-specific code
+- Use `iosMain` for iOS-specific code
+- Export shared dependencies in iOS framework configuration
+
+## Testing Patterns
+
+### 1. Unit Testing
+- Use Kotest framework for testing
+- Use `@Test` annotations with descriptive names
+- **Unit Tests**: Place in `commonTest` directory
+- **Mocking**: Mock dependencies using Mokkery
+- **Test Coverage**: Aim for high test coverage
+- **Platform Tests**: Test expect/actual implementations separately
+
+## Configuration and Build
+
+### 1. Gradle Configuration
+- Use version catalogs in `libs.versions.toml`
+- Configure KMP targets: `iosX64`, `iosArm64`, `iosSimulatorArm64`
+- Use BuildKonfig for build-time configuration
+- Configure platform-specific dependencies
+
+### 2. Code Quality
+- Use Detekt for static analysis
+- Configure Ktfmt for code formatting
+- Use Kover for code coverage (minimum 90%)
+- Exclude generated code from coverage
+
+## Database and Networking
+
+### 1. Supabase Integration
+- Use PostgREST client for database operations
+- Configure client with environment-specific URLs
+- Handle authentication and authorization
+- Use proper error handling
+
+### 2. HTTP Client
+- Use Ktor client with platform-specific engines
+- Configure OkHttp for Android
+- Configure Darwin for iOS
+
+## Feature Flags and Analytics
+
+### 1. Feature Management
+- Use ConfigCat for feature flags
+- Implement feature flag checks in UI components
+- Use `FeatureView` wrapper for conditional rendering
+
+### 2. Analytics and Monitoring
+- Use Firebase Analytics and Crashlytics
+- Implement crash reporting with Crashkios
+- Use Kermit for logging with Koin integration
+
+## Best Practices
+
+### 1. Error Handling
+- Use sealed interfaces for error types
+- Implement proper error propagation
+- Use logging for debugging and monitoring
+
+### 2. Performance
+- Use lazy loading for lists and grids
+- Implement proper image caching with Coil
+- Use coroutines for asynchronous operations
+- **Lazy Initialization**: Use lazy initialization where appropriate
+- **Memory Management**: Consider memory usage patterns
+- **Caching**: Implement efficient caching strategies\
+
+### 3. Security
+- Store sensitive configuration in environment variables
+- Use BuildKonfig for secure configuration management
+- Implement proper authentication flows
+
+## Code Generation and Tools
+
+### 1. BuildKonfig
+- Generate build-time configuration
+- Handle environment-specific values
+- Support debug/release variants
+
+### 2. KSP and Annotations
+- Use Koin annotations for dependency injection
+- Generate code for serialization
+- Support for custom code generation
+
+## Development Guidelines
+
+### Pure Kotlin Code
+- **Language**: Use only pure Kotlin (no platform-specific imports)
+- **Targets**: Code must compile for Android, iOS, and JVM
+- **Dependencies**: Only use multiplatform-compatible libraries
+- **Platform APIs**: Never import Android or iOS specific frameworks
+
+### Platform Abstraction
+- **Expect/Actual**: Use expect/actual declarations for platform-specific code
+- **Common Interfaces**: Define interfaces in commonMain
+- **Platform Implementations**: Implement in respective platform directories
+- **Abstraction Layers**: Create platform-agnostic abstractions
+
+### Business Logic
+- **Use Cases**: Implement business logic as use cases
+- **Repository Pattern**: Define repository interfaces
+- **Data Models**: Create platform-agnostic data classes
+- **Validation**: Implement business rule validation
+- **Error Handling**: Use Kotlin Result type for error handling
+
+### Data Management
+- **Data Sources**: Abstract data access through interfaces
+- **Serialization**: Use Kotlinx Serialization for JSON
+- **Caching**: Implement platform-agnostic caching strategies
+- **Networking**: Use Ktor for HTTP requests
+- **Database**: Use SQLDelight for database operations
+
+### Concurrency
+- **Coroutines**: Use Kotlin coroutines for asynchronous operations
+- **Flow**: Use StateFlow and SharedFlow for reactive streams
+- **Dispatchers**: Use appropriate coroutine dispatchers
+- **Cancellation**: Properly handle coroutine cancellation
+
+### Code Organization
+- **Package Structure**: Organize by feature, not by layer
+- **Dependency Injection**: Use Koin or similar for DI
+- **Configuration**: Use configuration objects for settings
+- **Logging**: Use platform-agnostic logging
+
+### Documentation
+- **KDoc**: Document all public APIs
+- **Examples**: Provide usage examples in documentation
+- **Architecture**: Document architectural decisions
+- **Platform Notes**: Document platform-specific considerations
+
+### Common Patterns
+- **Repository Pattern**: For data access abstraction
+- **Use Case Pattern**: For business logic
+- **Observer Pattern**: For reactive programming
+- **Factory Pattern**: For object creation
+
+### Dependencies
+- **Multiplatform Libraries**: Use only KMP-compatible libraries
+- **Version Management**: Use version catalogs
+- **Transitive Dependencies**: Avoid platform-specific transitive deps
+- **Testing Dependencies**: Include test dependencies appropriately
