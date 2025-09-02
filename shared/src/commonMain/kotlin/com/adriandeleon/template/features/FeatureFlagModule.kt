@@ -54,7 +54,7 @@ internal val featureFlagModule = module {
 }
 
 private fun configCatClient(kermitLogger: Logger): ConfigCatClient =
-    ConfigCatClient(sdkKey = "BuildKonfig.CONFIGCAT_KEY") {
+    ConfigCatClient(sdkKey = BuildKonfig.CONFIGCAT_KEY) {
         logLevel = if (BuildKonfig.DEBUG) LogLevel.INFO else LogLevel.OFF
         pollingMode = lazyLoad { cacheRefreshInterval = 5.minutes }
         logger = kermitLogger
