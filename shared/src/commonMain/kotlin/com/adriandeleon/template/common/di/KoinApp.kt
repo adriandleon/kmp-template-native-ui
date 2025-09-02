@@ -5,6 +5,7 @@ import co.touchlab.kermit.koin.KermitKoinLogger
 import com.adriandeleon.template.BuildKonfig
 import com.adriandeleon.template.analytics.analyticsModule
 import com.adriandeleon.template.common.commonModule
+import com.adriandeleon.template.features.featureFlagModule
 import com.adriandeleon.template.logger.loggerModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
@@ -21,6 +22,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         modules(
             // Here the list of shared modules
             commonModule,
+            featureFlagModule,
             analyticsModule,
             loggerModule,
         )
