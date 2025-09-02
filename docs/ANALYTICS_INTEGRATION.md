@@ -36,6 +36,12 @@ The analytics system provides a flexible way to track user events across the app
 - Multiple provider support architecture
 - Extensible provider system
 
+✅ **Comprehensive Testing**
+- Unit tests for all analytics components
+- Property-based testing for event validation
+- Mocking with Mokkery for provider testing
+- Test utilities for easy testing integration
+
 ✅ **Developer Experience**
 - Comprehensive documentation with examples
 - Type-safe event tracking
@@ -478,11 +484,12 @@ class IOSAnalyticsProvider : AnalyticsProvider {
 
 ## 🧪 Testing
 
-### **Test Analytics Implementation**
+The analytics system includes comprehensive unit tests covering all components and event types. The testing framework uses **Kotest** with **Mokkery** for mocking and **property-based testing** for thorough validation.
 
-The project includes a `TestAnalytics` implementation for testing:
+### **Test Analytics Utility**
 
-#### Test Analytics Class
+The project includes a `TestAnalytics` implementation for comprehensive testing:
+
 ```kotlin
 class TestAnalytics : Analytics {
     private val _events = mutableListOf<AnalyticsEvent>()
@@ -503,37 +510,107 @@ class TestAnalytics : Analytics {
 }
 ```
 
-#### Using Test Analytics
+### **Test Coverage**
+
+#### **1. AnalyticsImpl Tests**
+- **Single Provider**: Tests event tracking with one provider
+- **Multiple Providers**: Tests event tracking with multiple providers
+- **Batch Events**: Tests tracking multiple events at once
+- **Provider Verification**: Ensures all providers receive events correctly
+
 ```kotlin
-class UserRepositoryTest {
-    private val testAnalytics = TestAnalytics()
-    private val repository = UserRepository(testAnalytics)
-    
-    @Test
-    fun `should track screen view when fetching user`() {
-        // When
-        repository.getUser("user123")
-        
-        // Then
-        testAnalytics.events shouldHaveSize 1
-        testAnalytics.lastTrackEvent.name shouldBe "screen_view"
-        testAnalytics.lastTrackEvent.parameters["screen_name"] shouldBe "UserProfile"
+// Example test structure
+context("with one provider") {
+    test("should track one event") {
+        val analytics = AnalyticsImpl(listOf(mockProvider))
+        analytics.track(event)
+        verify { mockProvider.track(event) }
     }
-    
-    @Test
-    fun `should track error when user fetch fails`() {
-        // Given
-        // Mock failure scenario
-        
-        // When
-        val result = repository.getUser("nonexistent")
-        
-        // Then
-        result shouldBe null
-        testAnalytics.events.any { it.name == "error" } shouldBe true
+}
+
+context("with two providers") {
+    test("should track one event") {
+        val analytics = AnalyticsImpl(listOf(firstProvider, secondProvider))
+        analytics.track(event)
+        verify { 
+            firstProvider.track(event)
+            secondProvider.track(event)
+        }
     }
 }
 ```
+
+#### **2. Common Analytics Events Tests**
+Comprehensive testing for all predefined events using **property-based testing**:
+
+- **ScreenView Event**: Tests event name, screen name, and screen class parameters
+- **ButtonClick Event**: Tests event name and button name parameters
+- **ElementTap Event**: Tests event name and element name parameters
+- **SelectItem Event**: Tests event name, item ID, and item name parameters
+- **SelectVideo Event**: Tests event name, content type, and video ID parameters
+- **SelectCategory Event**: Tests event name, content type, and category ID parameters
+- **SelectBanner Event**: Tests event name, content type, and banner ID parameters
+- **Error Event**: Tests event name and error message parameters
+
+```kotlin
+// Example property-based test
+test("should have expected property screen name key and value") {
+    checkAll<String> { screenName ->
+        val event = CommonAnalyticsEvent.ScreenView(screenName)
+        val expectedScreenName = AnalyticsParam.SCREEN_NAME to screenName
+        
+        testAnalytics.track(event)
+        testAnalytics.lastTrackEvent.parameters shouldContain expectedScreenName
+    }
+}
+```
+
+#### **3. Custom Analytics Events Tests**
+Property-based testing for custom events with different parameter types:
+
+- **Event Name**: Tests custom event names
+- **String Parameters**: Tests string key-value pairs
+- **Integer Parameters**: Tests integer key-value pairs
+- **Boolean Parameters**: Tests boolean key-value pairs
+- **Long Parameters**: Tests long key-value pairs
+- **Double Parameters**: Tests double key-value pairs
+
+```kotlin
+// Example custom event test
+test("should have expected parameters key value String") {
+    checkAll<String, String> { paramKey, paramValue ->
+        val event = CustomAnalyticsEvent(
+            name = "test_event",
+            parameters = mapOf(paramKey to paramValue)
+        )
+        val expectedParam = paramKey to paramValue
+        
+        testAnalytics.track(event)
+        testAnalytics.lastTrackEvent.parameters shouldContain expectedParam
+    }
+}
+```
+
+### **Test Features**
+
+#### **Property-Based Testing**
+- Uses Kotest's `checkAll` for comprehensive parameter validation
+- Tests with various input values to ensure robustness
+- Validates event names and parameter mappings
+
+#### **Mocking with Mokkery**
+- Mocks `AnalyticsProvider` implementations
+- Verifies provider interactions
+- Tests multiple provider scenarios
+
+#### **Test Utilities**
+- `TestAnalytics` for capturing and validating events
+- `reset()` method for test isolation
+- `lastTrackEvent` for easy assertion access
+
+### **Integration with CI/CD**
+
+The analytics tests are automatically run in the CI/CD pipeline as part of the shared module tests, ensuring code quality and preventing regressions.
 
 ## 📚 Best Practices
 
@@ -566,6 +643,13 @@ class UserRepositoryTest {
 - **Use appropriate log levels** for different environments
 - **Avoid expensive operations** in tracking code
 - **Consider offline event queuing** for poor network conditions
+
+### **6. Testing Strategy**
+- **Write unit tests** for all analytics implementations
+- **Use property-based testing** for comprehensive parameter validation
+- **Mock providers** for isolated testing
+- **Test event names and parameters** to ensure consistency
+- **Use TestAnalytics utility** for easy test setup and validation
 
 ## 🐛 Troubleshooting
 
