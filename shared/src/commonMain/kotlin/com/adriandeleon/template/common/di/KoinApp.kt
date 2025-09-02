@@ -3,6 +3,7 @@ package com.adriandeleon.template.common.di
 import co.touchlab.crashkios.crashlytics.CrashlyticsKotlin
 import co.touchlab.kermit.koin.KermitKoinLogger
 import com.adriandeleon.template.BuildKonfig
+import com.adriandeleon.template.analytics.analyticsModule
 import com.adriandeleon.template.common.commonModule
 import com.adriandeleon.template.logger.loggerModule
 import org.koin.core.context.startKoin
@@ -20,6 +21,7 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         modules(
             // Here the list of shared modules
             commonModule,
+            analyticsModule,
             loggerModule,
         )
         logger(KermitKoinLogger(koin.get()))

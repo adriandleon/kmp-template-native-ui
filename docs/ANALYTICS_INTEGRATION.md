@@ -4,20 +4,43 @@ This document covers the analytics system implementation using Firebase Analytic
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [What is Analytics?](#what-is-analytics)
-- [Architecture](#architecture)
-- [Setup](#setup)
-- [Usage](#usage)
-- [Event Tracking](#event-tracking)
-- [Custom Analytics Providers](#custom-analytics-providers)
-- [Testing](#testing)
-- [Best Practices](#best-practices)
-- [Troubleshooting](#troubleshooting)
+- [🎯 Overview](#-overview)
+- [📊 What is Analytics?](#-what-is-analytics)
+- [🏗️ Architecture](#-architecture)
+- [⚙️ Setup](#-setup)
+- [📖 Usage](#-usage)
+- [🎯 Event Tracking](#-event-tracking)
+- [🔌 Analytics Providers](#-analytics-providers)
+- [🧪 Testing](#-testing)
+- [📚 Best Practices](#-best-practices)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [🔗 Related Documentation](#-related-documentation)
+- [📖 Resources](#-resources)
 
 ## 🎯 Overview
 
 The analytics system provides a flexible way to track user events across the application with support for multiple analytics providers simultaneously. The system is designed to be easy to use, extend, and maintain across all platforms.
+
+### **Current Implementation Status**
+
+✅ **Complete Analytics Framework**
+- Core analytics interfaces and implementations
+- Firebase Analytics provider with cross-platform support
+- Comprehensive KDoc documentation for all components
+- Koin dependency injection integration
+- Type-safe event definitions and constants
+
+✅ **Production-Ready Features**
+- Error handling and graceful failure
+- Automatic parameter type conversion
+- Multiple provider support architecture
+- Extensible provider system
+
+✅ **Developer Experience**
+- Comprehensive documentation with examples
+- Type-safe event tracking
+- Easy integration with dependency injection
+- Clear separation of concerns
 
 ## 📊 What is Analytics?
 
@@ -44,33 +67,22 @@ Analytics helps you understand:
 ```
 shared/
 ├── src/
-│   ├── commonMain/
-│   │   └── kotlin/
-│   │       └── com/yourcompany/yourapp/
-│   │           └── analytics/
-│   │               ├── domain/
-│   │               │   ├── Analytics.kt           # Main analytics interface
-│   │               │   ├── AnalyticsEvent.kt      # Event data class
-│   │               │   └── AnalyticsProvider.kt   # Provider interface
-│   │               ├── data/
-│   │               │   ├── AnalyticsImpl.kt       # Main implementation
-│   │               │   └── providers/
-│   │               │       └── FirebaseAnalyticsProvider.kt
-│   │               └── events/
-│   │                   ├── CommonAnalyticsEvent.kt # Predefined events
-│   │                   └── AnalyticsEvents.kt     # Event constants
-│   ├── androidMain/
-│   │   └── kotlin/
-│   │       └── com/yourcompany/yourapp/
-│   │           └── analytics/
-│   │               └── providers/
-│   │                   └── AndroidAnalyticsProvider.kt
-│   └── iosMain/
+│   └── commonMain/
 │       └── kotlin/
-│           └── com/yourcompany/yourapp/
+│           └── com/adriandeleon/template/
 │               └── analytics/
-│                   └── providers/
-│                       └── IOSAnalyticsProvider.kt
+│                   ├── AnalyticsModule.kt         # Koin dependency injection
+│                   ├── domain/
+│                   │   ├── Analytics.kt           # Main analytics interface
+│                   │   ├── AnalyticsEvent.kt      # Event interface
+│                   │   ├── AnalyticsProvider.kt   # Provider interface
+│                   │   ├── AnalyticsConstants.kt  # Event and parameter constants
+│                   │   ├── CommonAnalyticsEvent.kt # Predefined events
+│                   │   └── CustomAnalyticsEvent.kt # Custom event implementation
+│                   └── data/
+│                       ├── AnalyticsImpl.kt       # Main implementation
+│                       └── provider/
+│                           └── FirebaseAnalyticsProvider.kt # Firebase integration
 ```
 
 ### **Core Interfaces**
@@ -90,12 +102,12 @@ interface AnalyticsProvider {
 }
 ```
 
-#### Analytics Event Data Class
+#### Analytics Event Interface
 ```kotlin
-data class AnalyticsEvent(
-    val name: String,
+interface AnalyticsEvent {
+    val name: String
     val parameters: Map<String, Any>
-)
+}
 ```
 
 ## ⚙️ Setup
@@ -148,15 +160,21 @@ dependencies {
 
 #### Analytics Module
 ```kotlin
-// In shared/src/commonMain/kotlin/com/yourcompany/yourapp/di/AnalyticsModule.kt
-val analyticsModule = module {
-    factoryOf(::analyticsProviders)
-    singleOf(::AnalyticsImpl) { bind<Analytics>() }
+// In shared/src/commonMain/kotlin/com/adriandeleon/template/analytics/AnalyticsModule.kt
+internal val analyticsModule = module {
+    factory<List<AnalyticsProvider>>(named("analyticsProviders")) {
+        listOf(
+            FirebaseAnalyticsProvider()
+            // Add more providers here as needed:
+            // CustomBackendProvider(),
+            // TestAnalyticsProvider() // for testing
+        )
+    }
+    
+    single<Analytics> { 
+        AnalyticsImpl(get(named("analyticsProviders")))
+    }
 }
-
-private fun analyticsProviders(): List<AnalyticsProvider> = listOf(
-    FirebaseAnalyticsProvider()
-)
 ```
 
 ## 📖 Usage
@@ -326,34 +344,91 @@ object AnalyticsParam {
 
 #### Create Custom Event
 ```kotlin
-// Define custom event
-data class CustomAnalyticsEvent(
-    val action: String,
-    val category: String,
-    val label: String? = null,
-    val value: Int? = null
+// Use the built-in CustomAnalyticsEvent class
+val customEvent = CustomAnalyticsEvent(
+    name = "user_preference_changed",
+    parameters = mapOf(
+        "preference_key" to "theme",
+        "old_value" to "light",
+        "new_value" to "dark"
+    )
+)
+
+// Track the custom event
+analytics.track(customEvent)
+
+// Or create a custom event class for complex scenarios
+data class PurchaseEvent(
+    val productId: String,
+    val price: Double,
+    val currency: String,
+    val paymentMethod: String
 ) : AnalyticsEvent {
-    override val name: String = "custom_event"
-    override val parameters: Map<String, Any> = buildMap {
-        put("action", action)
-        put("category", category)
-        label?.let { put("label", it) }
-        value?.let { put("value", it) }
-    }
+    override val name: String = "purchase_completed"
+    override val parameters: Map<String, Any> = mapOf(
+        "product_id" to productId,
+        "price" to price,
+        "currency" to currency,
+        "payment_method" to paymentMethod
+    )
 }
 
-// Use custom event
+// Use custom event class
 analytics.track(
-    CustomAnalyticsEvent(
-        action = "purchase",
-        category = "ecommerce",
-        label = "premium_subscription",
-        value = 999
+    PurchaseEvent(
+        productId = "premium_subscription",
+        price = 9.99,
+        currency = "USD",
+        paymentMethod = "credit_card"
     )
 )
 ```
 
-## 🔌 Custom Analytics Providers
+## 🔌 Analytics Providers
+
+### **Firebase Analytics Provider**
+
+The `FirebaseAnalyticsProvider` is the default provider included in the analytics system. It integrates with Firebase Analytics using the GitLive Firebase Kotlin SDK for cross-platform compatibility.
+
+#### **Features**
+- **Cross-platform support**: Works on both Android and iOS
+- **Automatic parameter conversion**: Handles different data types appropriately
+- **Error handling**: Graceful failure without breaking the app
+- **Real-time tracking**: Events are sent to Firebase Analytics immediately
+
+#### **Parameter Type Conversion**
+The provider automatically converts analytics parameters to Firebase-compatible types:
+- `String` → String (as-is)
+- `Int` → Long
+- `Long` → Long
+- `Double` → Double
+- `Float` → Double
+- `Boolean` → String
+- Other types → String (using toString())
+
+#### **Usage Example**
+```kotlin
+// Events are automatically sent to Firebase Analytics
+analytics.track(
+    CommonAnalyticsEvent.ScreenView(
+        screenName = "HomeScreen",
+        screenClass = "HomeComponent"
+    )
+)
+
+// Custom events work seamlessly
+analytics.track(
+    CustomAnalyticsEvent(
+        name = "user_preference_changed",
+        parameters = mapOf(
+            "preference_key" to "theme",
+            "new_value" to "dark"
+        )
+    )
+)
+```
+
+### **Custom Analytics Providers**
 
 ### **Implementing a New Provider**
 
@@ -373,10 +448,13 @@ class MyCustomProvider : AnalyticsProvider {
 
 #### 2. Add to Dependency Injection
 ```kotlin
-private fun analyticsProviders(): List<AnalyticsProvider> = listOf(
-    FirebaseAnalyticsProvider(),
-    MyCustomProvider()  // Add your custom provider
-)
+// In AnalyticsModule.kt
+factory<List<AnalyticsProvider>>(named("analyticsProviders")) {
+    listOf(
+        FirebaseAnalyticsProvider(),
+        MyCustomProvider()  // Add your custom provider
+    )
+}
 ```
 
 #### 3. Platform-Specific Providers
