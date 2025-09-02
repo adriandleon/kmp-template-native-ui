@@ -4,16 +4,16 @@ This document covers code coverage configuration, reporting, and analysis using 
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [What is Code Coverage?](#what-is-code-coverage)
-- [Kover Integration](#kover-integration)
-- [Configuration](#configuration)
-- [Running Coverage](#running-coverage)
-- [Coverage Reports](#coverage-reports)
-- [Coverage Goals](#coverage-goals)
-- [CI/CD Integration](#cicd-integration)
-- [Best Practices](#best-practices)
-- [Troubleshooting](#troubleshooting)
+- [🎯 Overview](#-overview)
+- [📊 What is Code Coverage?](#-what-is-code-coverage)
+- [🔧 Kover Integration](#-kover-integration)
+- [⚙️ Configuration](#️-configuration)
+- [🏃 Running Coverage](#-running-coverage)
+- [📈 Coverage Reports](#-coverage-reports)
+- [🎯 Coverage Goals](#-coverage-goals)
+- [🔄 CI/CD Integration](#-cicd-integration)
+- [📚 Best Practices](#-best-practices)
+- [🐛 Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
 

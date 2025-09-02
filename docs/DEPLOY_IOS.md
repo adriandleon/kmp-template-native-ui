@@ -4,15 +4,15 @@ This document covers the complete iOS deployment process from development to Tes
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Environment Setup](#environment-setup)
-- [App Store Connect Setup](#app-store-connect-setup)
-- [Code Signing](#code-signing)
-- [Release Process](#release-process)
-- [Fastlane Automation](#fastlane-automation)
-- [Troubleshooting](#troubleshooting)
-- [Best Practices](#best-practices)
+- [🎯 Overview](#-overview)
+- [✅ Prerequisites](#-prerequisites)
+- [⚙️ Environment Setup](#️-environment-setup)
+- [🏪 App Store Connect Setup](#-app-store-connect-setup)
+- [🔐 Code Signing](#-code-signing)
+- [🚀 Release Process](#-release-process)
+- [⚡ Fastlane Automation](#-fastlane-automation)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Best Practices](#-best-practices)
 
 ## 🎯 Overview
 

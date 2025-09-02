@@ -4,15 +4,15 @@ This document covers the complete GitHub Actions CI/CD setup for the Kotlin Mult
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [What are GitHub Actions?](#what-are-github-actions)
-- [Available Workflows](#available-workflows)
-- [Configuration](#configuration)
-- [Workflow Details](#workflow-details)
-- [Customization](#customization)
-- [Secrets Management](#secrets-management)
-- [Troubleshooting](#troubleshooting)
-- [Best Practices](#best-practices)
+- [🎯 Overview](#-overview)
+- [⚡ What are GitHub Actions?](#-what-are-github-actions)
+- [🚀 Available Workflows](#-available-workflows)
+- [⚙️ Configuration](#️-configuration)
+- [📋 Workflow Details](#-workflow-details)
+- [🔧 Customization](#-customization)
+- [🔐 Secrets Management](#-secrets-management)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Best Practices](#-best-practices)
 
 ## 🎯 Overview
 

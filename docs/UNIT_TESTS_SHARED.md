@@ -4,15 +4,15 @@ This document covers unit testing strategies and tools used in the Kotlin Multip
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Testing Strategy](#testing-strategy)
-- [Testing Tools](#testing-tools)
-- [Test Structure](#test-structure)
-- [Writing Tests](#writing-tests)
-- [Running Tests](#running-tests)
-- [Test Coverage](#test-coverage)
-- [Best Practices](#best-practices)
-- [Troubleshooting](#troubleshooting)
+- [🎯 Overview](#-overview)
+- [🧪 Testing Strategy](#-testing-strategy)
+- [🛠️ Testing Tools](#️-testing-tools)
+- [📁 Test Structure](#-test-structure)
+- [✍️ Writing Tests](#️-writing-tests)
+- [🏃 Running Tests](#-running-tests)
+- [📊 Test Coverage](#-test-coverage)
+- [📚 Best Practices](#-best-practices)
+- [🐛 Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
 

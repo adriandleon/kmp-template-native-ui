@@ -4,18 +4,18 @@ This document covers the complete Supabase integration setup for the Kotlin Mult
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [What is Supabase?](#what-is-supabase)
-- [Architecture](#architecture)
-- [Setup](#setup)
-- [Configuration](#configuration)
-- [Local Development](#local-development)
-- [Database Management](#database-management)
-- [Authentication](#authentication)
-- [Storage](#storage)
-- [Production Deployment](#production-deployment)
-- [Troubleshooting](#troubleshooting)
-- [Best Practices](#best-practices)
+- [🎯 Overview](#-overview)
+- [🔥 What is Supabase?](#-what-is-supabase)
+- [🏗️ Architecture](#️-architecture)
+- [⚙️ Setup](#️-setup)
+- [🔧 Configuration](#-configuration)
+- [💻 Local Development](#-local-development)
+- [🗄️ Database Management](#️-database-management)
+- [🔐 Authentication](#-authentication)
+- [📁 Storage](#-storage)
+- [🚀 Production Deployment](#-production-deployment)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Best Practices](#-best-practices)
 
 ## 🎯 Overview
 

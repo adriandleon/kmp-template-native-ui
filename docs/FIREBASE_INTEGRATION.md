@@ -4,17 +4,17 @@ This document covers the complete Firebase integration setup for the Kotlin Mult
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [What is Firebase?](#what-is-firebase)
-- [Architecture](#architecture)
-- [Setup](#setup)
-- [Configuration](#configuration)
-- [Analytics](#analytics)
-- [Crash Reporting](#crash-reporting)
-- [Firebase Test Lab](#firebase-test-lab)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-- [Best Practices](#best-practices)
+- [🎯 Overview](#-overview)
+- [🔥 What is Firebase?](#-what-is-firebase)
+- [🏗️ Architecture](#️-architecture)
+- [⚙️ Setup](#️-setup)
+- [🔧 Configuration](#-configuration)
+- [📊 Analytics](#-analytics)
+- [💥 Crash Reporting](#-crash-reporting)
+- [🧪 Firebase Test Lab](#-firebase-test-lab)
+- [✅ Testing](#-testing)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Best Practices](#-best-practices)
 
 ## 🎯 Overview
 
@@ -175,46 +175,14 @@ pod 'Firebase/Crashlytics'
 
 ### **2. Configuration Files**
 
+
 #### **Android Configuration**
-```json
-// composeApp/google-services.json
-{
-  "project_info": {
-    "project_number": "123456789",
-    "project_id": "your-app-firebase",
-    "storage_bucket": "your-app-firebase.appspot.com"
-  },
-  "client": [
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:123456789:android:abcdef123456",
-        "android_client_info": {
-          "package_name": "com.yourcompany.yourapp"
-        }
-      }
-    }
-  ]
-}
-```
+
+The android configuration file should be placed in `composeApp/google-services.json`
 
 #### **iOS Configuration**
-```xml
-<!-- iosApp/Template/GoogleService-Info.plist -->
-<dict>
-    <key>CLIENT_ID</key>
-    <string>123456789-abcdef123456.apps.googleusercontent.com</string>
-    <key>REVERSED_CLIENT_ID</key>
-    <string>com.googleusercontent.apps.123456789-abcdef123456</string>
-    <key>API_KEY</key>
-    <string>AIzaSyC1234567890abcdefghijklmnopqrstuvwxyz</string>
-    <key>GCM_SENDER_ID</key>
-    <string>123456789</string>
-    <key>PLIST_VERSION</key>
-    <string>1</string>
-    <key>BUNDLE_ID</key>
-    <string>com.yourcompany.yourapp</string>
-</dict>
-```
+
+The iOS configuration file should be placed in `iosApp/Template/GoogleService-Info.plist`
 
 ### **3. GitHub Secrets**
 

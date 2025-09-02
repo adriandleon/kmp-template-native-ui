@@ -4,16 +4,16 @@ This document covers the complete Android deployment process from development to
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Prerequisites](#prerequisites)
-- [Environment Setup](#environment-setup)
-- [Google Play Console Setup](#google-play-console-setup)
-- [Code Signing](#code-signing)
-- [Release Process](#release-process)
-- [CI/CD Automation](#cicd-automation)
-- [Testing](#testing)
-- [Troubleshooting](#troubleshooting)
-- [Best Practices](#best-practices)
+- [🎯 Overview](#-overview)
+- [✅ Prerequisites](#-prerequisites)
+- [⚙️ Environment Setup](#️-environment-setup)
+- [🏪 Google Play Console Setup](#-google-play-console-setup)
+- [🔐 Code Signing](#-code-signing)
+- [🚀 Release Process](#-release-process)
+- [🔄 CI/CD Automation](#-cicd-automation)
+- [🧪 Testing](#-testing)
+- [🐛 Troubleshooting](#-troubleshooting)
+- [📚 Best Practices](#-best-practices)
 
 ## 🎯 Overview
 

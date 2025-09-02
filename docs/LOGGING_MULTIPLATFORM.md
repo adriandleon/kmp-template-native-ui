@@ -4,15 +4,15 @@ This document covers the multiplatform logging setup using Kermit for consistent
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [What is Kermit?](#what-is-kermit)
-- [Architecture](#architecture)
-- [Setup](#setup)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Platform-Specific Logging](#platform-specific-logging)
-- [Best Practices](#best-practices)
-- [Troubleshooting](#troubleshooting)
+- [🎯 Overview](#-overview)
+- [🚀 What is Kermit?](#-what-is-kermit)
+- [🏗️ Architecture](#️-architecture)
+- [⚙️ Setup](#️-setup)
+- [📖 Usage](#-usage)
+- [🔧 Configuration](#-configuration)
+- [📱 Platform-Specific Logging](#-platform-specific-logging)
+- [📚 Best Practices](#-best-practices)
+- [🐛 Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
 

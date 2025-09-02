@@ -4,13 +4,13 @@ This document covers the Swift code quality tools used in this project: **SwiftF
 
 ## 📋 Table of Contents
 
-- [Overview](#overview)
-- [Code Formatting with SwiftFormat](#code-formatting-with-swiftformat)
-- [Static Analysis with SwiftLint](#static-analysis-with-swiftlint)
-- [Pre-commit Hooks](#pre-commit-hooks)
-- [CI/CD Integration](#cicd-integration)
-- [Configuration](#configuration)
-- [Troubleshooting](#troubleshooting)
+- [🎯 Overview](#-overview)
+- [✨ Code Formatting with SwiftFormat](#-code-formatting-with-swiftformat)
+- [🔍 Static Analysis with SwiftLint](#-static-analysis-with-swiftlint)
+- [🪝 Pre-commit Hooks](#-pre-commit-hooks)
+- [🔄 CI/CD Integration](#-cicd-integration)
+- [⚙️ Configuration](#️-configuration)
+- [🐛 Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
 
