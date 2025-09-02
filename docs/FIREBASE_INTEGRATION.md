@@ -6,8 +6,8 @@ This document covers the complete Firebase integration setup for the Kotlin Mult
 
 - [🎯 Overview](#-overview)
 - [🔥 What is Firebase?](#-what-is-firebase)
-- [🏗️ Architecture](#️-architecture)
-- [⚙️ Setup](#️-setup)
+- [🏗️ Architecture](#-architecture)
+- [⚙️ Setup](#-setup)
 - [🔧 Configuration](#-configuration)
 - [📊 Analytics](#-analytics)
 - [💥 Crash Reporting](#-crash-reporting)

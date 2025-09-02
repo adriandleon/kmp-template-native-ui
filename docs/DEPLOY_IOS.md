@@ -6,7 +6,7 @@ This document covers the complete iOS deployment process from development to Tes
 
 - [🎯 Overview](#-overview)
 - [✅ Prerequisites](#-prerequisites)
-- [⚙️ Environment Setup](#️-environment-setup)
+- [⚙️ Environment Setup](#-environment-setup)
 - [🏪 App Store Connect Setup](#-app-store-connect-setup)
 - [🔐 Code Signing](#-code-signing)
 - [🚀 Release Process](#-release-process)

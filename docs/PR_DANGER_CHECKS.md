@@ -12,6 +12,15 @@ there is a job `danger` with a step named `Danger Checks` that runs danger-kotli
 
 > **Note**: This workflow is fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
 
+## 📋 Table of Contents
+
+- [🚀 Quick Setup](#-quick-setup)
+- [🔧 Configuration Options](#-configuration-options)
+- [🎯 Danger Checks](#-danger-checks)
+- [🎨 Customization Examples](#-customization-examples)
+- [🔗 Related Documentation](#-related-documentation)
+- [📚 Best Practices](#-best-practices)
+
 ## 🚀 Quick Setup
 
 ### **Step 1: Copy Dangerfile**

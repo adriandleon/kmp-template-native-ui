@@ -15,8 +15,8 @@ import dev.gitlive.firebase.analytics.analytics
  *
  * **Features:**
  * - Cross-platform Firebase Analytics integration
- * - Automatic event parameter conversion
- * - Error handling and graceful failure
+ * - Direct event forwarding with minimal overhead
+ * - Built-in Firebase parameter handling
  * - Real-time event tracking
  *
  * **Prerequisites:**
@@ -65,18 +65,15 @@ internal class FirebaseAnalyticsProvider : AnalyticsProvider {
     /**
      * Tracks an analytics event through Firebase Analytics.
      *
-     * This method converts the generic [AnalyticsEvent] to Firebase Analytics format and sends it
-     * to Firebase. The event parameters are automatically converted to the appropriate Firebase
-     * Analytics parameter types.
+     * This method sends the analytics event directly to Firebase Analytics using the GitLive
+     * Firebase SDK. The event parameters are passed through as-is, relying on Firebase's built-in
+     * parameter handling and type conversion.
      *
-     * **Parameter Conversion:**
-     * - String values are sent as-is
-     * - Numeric values (Int, Long, Double, Float) are converted to appropriate types
-     * - Boolean values are converted to strings
-     * - Other types are converted to strings using toString()
-     *
-     * **Error Handling:** This method handles errors gracefully and does not propagate exceptions
-     * to avoid breaking the main application flow.
+     * **Implementation Notes:**
+     * - Event parameters are passed directly to Firebase Analytics
+     * - Firebase handles parameter type conversion internally
+     * - No additional error handling is performed at this level
+     * - The GitLive SDK provides cross-platform compatibility
      *
      * @param event The analytics event to track. Must not be null.
      * @example
@@ -88,26 +85,6 @@ internal class FirebaseAnalyticsProvider : AnalyticsProvider {
      * ```
      */
     override fun track(event: AnalyticsEvent) {
-        try {
-            // Convert parameters to Firebase Analytics format
-            val firebaseParameters =
-                event.parameters.mapValues { (_, value) ->
-                    when (value) {
-                        is String -> value
-                        is Int -> value.toLong()
-                        is Long -> value
-                        is Double -> value
-                        is Float -> value.toDouble()
-                        is Boolean -> value.toString()
-                        else -> value.toString()
-                    }
-                }
-
-            firebaseAnalytics.logEvent(event.name, firebaseParameters)
-        } catch (e: Exception) {
-            // Log error but don't propagate to avoid breaking the app
-            // In a production app, you might want to use a proper logging framework
-            println("Firebase Analytics failed to track event: ${event.name}, error: ${e.message}")
-        }
+        firebaseAnalytics.logEvent(event.name, event.parameters)
     }
 }

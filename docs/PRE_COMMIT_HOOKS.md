@@ -8,7 +8,7 @@ This document covers the pre-commit hooks setup that automatically ensures code 
 - [🔧 What are Pre-commit Hooks?](#-what-are-pre-commit-hooks)
 - [🚀 Setup](#-setup)
 - [🪝 Available Hooks](#-available-hooks)
-- [⚙️ Configuration](#️-configuration)
+- [⚙️ Configuration](#-configuration)
 - [📖 Usage](#-usage)
 - [🐛 Troubleshooting](#-troubleshooting)
 

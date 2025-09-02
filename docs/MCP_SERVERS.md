@@ -2,6 +2,19 @@
 
 This project includes Model Context Protocol (MCP) server configurations for enhanced AI assistance in Cursor. MCP servers provide additional capabilities and context for AI-powered development.
 
+## 📋 Table of Contents
+
+- [🚀 What are MCP Servers?](#-what-are-mcp-servers)
+- [📋 Available MCP Servers](#-available-mcp-servers)
+- [⚙️ Installation & Setup](#-installation--setup)
+- [🔧 Configuration Details](#-configuration-details)
+- [🎯 Usage Examples](#-usage-examples)
+- [🛠️ Troubleshooting](#-troubleshooting)
+- [🔒 Security Considerations](#-security-considerations)
+- [📚 Advanced Configuration](#-advanced-configuration)
+- [🔗 Related Documentation](#-related-documentation)
+- [📝 Best Practices](#-best-practices)
+
 ## 🚀 What are MCP Servers?
 
 Model Context Protocol (MCP) servers are external services that provide additional context and capabilities to AI assistants. They enable AI to:

@@ -9,7 +9,7 @@ This document covers the Swift code quality tools used in this project: **SwiftF
 - [🔍 Static Analysis with SwiftLint](#-static-analysis-with-swiftlint)
 - [🪝 Pre-commit Hooks](#-pre-commit-hooks)
 - [🔄 CI/CD Integration](#-cicd-integration)
-- [⚙️ Configuration](#️-configuration)
+- [⚙️ Configuration](#-configuration)
 - [🐛 Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview

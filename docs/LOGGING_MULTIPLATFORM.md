@@ -6,8 +6,8 @@ This document covers the multiplatform logging setup using Kermit for consistent
 
 - [🎯 Overview](#-overview)
 - [🚀 What is Kermit?](#-what-is-kermit)
-- [🏗️ Architecture](#️-architecture)
-- [⚙️ Setup](#️-setup)
+- [🏗️ Architecture](#-architecture)
+- [⚙️ Setup](#-setup)
 - [📖 Usage](#-usage)
 - [🔧 Configuration](#-configuration)
 - [📱 Platform-Specific Logging](#-platform-specific-logging)

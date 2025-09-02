@@ -6,7 +6,7 @@ This document covers the complete Android deployment process from development to
 
 - [🎯 Overview](#-overview)
 - [✅ Prerequisites](#-prerequisites)
-- [⚙️ Environment Setup](#️-environment-setup)
+- [⚙️ Environment Setup](#-environment-setup)
 - [🏪 Google Play Console Setup](#-google-play-console-setup)
 - [🔐 Code Signing](#-code-signing)
 - [🚀 Release Process](#-release-process)

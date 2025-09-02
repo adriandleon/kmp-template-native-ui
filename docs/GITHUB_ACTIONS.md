@@ -7,7 +7,7 @@ This document covers the complete GitHub Actions CI/CD setup for the Kotlin Mult
 - [🎯 Overview](#-overview)
 - [⚡ What are GitHub Actions?](#-what-are-github-actions)
 - [🚀 Available Workflows](#-available-workflows)
-- [⚙️ Configuration](#️-configuration)
+- [⚙️ Configuration](#-configuration)
 - [📋 Workflow Details](#-workflow-details)
 - [🔧 Customization](#-customization)
 - [🔐 Secrets Management](#-secrets-management)

@@ -7,7 +7,7 @@ This document covers code coverage configuration, reporting, and analysis using 
 - [🎯 Overview](#-overview)
 - [📊 What is Code Coverage?](#-what-is-code-coverage)
 - [🔧 Kover Integration](#-kover-integration)
-- [⚙️ Configuration](#️-configuration)
+- [⚙️ Configuration](#-configuration)
 - [🏃 Running Coverage](#-running-coverage)
 - [📈 Coverage Reports](#-coverage-reports)
 - [🎯 Coverage Goals](#-coverage-goals)

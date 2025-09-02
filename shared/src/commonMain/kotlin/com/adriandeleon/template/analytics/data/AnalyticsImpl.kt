@@ -21,7 +21,7 @@ import com.adriandeleon.template.analytics.domain.AnalyticsProvider
  * - **Extensible**: Easy to add new providers
  *
  * @param providers The list of analytics providers to use. Each provider will receive all events.
- *   The list should not be empty and providers should handle errors gracefully.
+ *   Providers should handle errors gracefully internally.
  * @see Analytics for the interface contract
  * @see AnalyticsProvider for provider implementations
  * @example
@@ -53,46 +53,27 @@ internal class AnalyticsImpl(private val providers: List<AnalyticsProvider>) : A
      * Tracks a single analytics event by forwarding it to all configured providers.
      *
      * This method iterates through all providers and calls their [AnalyticsProvider.track] method.
-     * If a provider fails, it should handle the error internally and not propagate it to avoid
-     * affecting other providers or the main application.
+     * The implementation is simplified to provide minimal overhead - providers are responsible for
+     * handling errors internally and should not propagate exceptions to avoid affecting other
+     * providers or the main application.
      *
      * @param event The analytics event to track. Must not be null.
-     * @throws IllegalArgumentException if providers list is empty
      */
     override fun track(event: AnalyticsEvent) {
-        require(providers.isNotEmpty()) { "At least one analytics provider must be configured" }
-
-        providers.forEach { provider ->
-            try {
-                provider.track(event)
-            } catch (e: Exception) {
-                // Log error but don't propagate to avoid breaking the app
-                // In a real implementation, you might want to use a logger here
-                println(
-                    "Analytics provider failed to track event: ${event.name}, error: ${e.message}"
-                )
-            }
-        }
+        providers.forEach { provider -> provider.track(event) }
     }
 
     /**
      * Tracks multiple analytics events efficiently by forwarding each event to all providers.
      *
-     * This method processes events in sequence, sending each event to all providers. For better
-     * performance with large batches, consider implementing batch processing in individual
-     * providers.
+     * This method processes events in sequence, sending each event to all providers. The
+     * implementation is optimized for simplicity and performance. For better performance with large
+     * batches, consider implementing batch processing in individual providers.
      *
      * @param events The list of analytics events to track. Must not be null. Empty lists are
      *   allowed and will be ignored.
-     * @throws IllegalArgumentException if providers list is empty
      */
     override fun track(events: List<AnalyticsEvent>) {
-        require(providers.isNotEmpty()) { "At least one analytics provider must be configured" }
-
-        if (events.isEmpty()) {
-            return // Nothing to track
-        }
-
         events.forEach { event -> track(event) }
     }
 }

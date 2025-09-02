@@ -9,7 +9,7 @@ This document covers the Kotlin code quality tools used in this project: **Ktfmt
 - [🔍 Static Analysis with Detekt](#-static-analysis-with-detekt)
 - [🪝 Pre-commit Hooks](#-pre-commit-hooks)
 - [🔄 CI/CD Integration](#-cicd-integration)
-- [⚙️ Configuration](#️-configuration)
+- [⚙️ Configuration](#-configuration)
 - [🐛 Troubleshooting](#-troubleshooting)
 
 ## 🎯 Overview
