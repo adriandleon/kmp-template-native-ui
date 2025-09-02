@@ -18,7 +18,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - **Networking** with Ktor
 - **Testing** with Kotest
 - **Logging** with Kermit
-- **Configuration Management** with ConfigCat
+- **Feature Flags** with ConfigCat and Firebase Remote Config
 - **Database** with Supabase
 - **Modern Android** (API 24+, Compile SDK 36)
 
@@ -95,6 +95,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - [Pull Request Checks](docs/PR_DANGER_CHECKS.md) - Automated PR validation
 - [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md) - Testing strategies and tools
 - [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md) - Coverage configuration and reporting
+- [Feature Flags Integration](docs/FEATURE_FLAGS_INTEGRATION.md) - Feature toggles and configuration management
 - [Supabase Integration](docs/SUPABASE_INTEGRATION.md) - Backend-as-a-Service setup
 - [Firebase Integration](docs/FIREBASE_INTEGRATION.md) - Analytics and crash reporting
 - [Analytics Integration](docs/ANALYTICS_INTEGRATION.md) - User analytics and tracking
@@ -146,9 +147,12 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - **[GitHub MCP Server](https://github.com/modelcontextprotocol/server-github)** - GitHub integration for AI-powered development
 - **[Context7 MCP Server](https://mcp.context7.com/)** - Library documentation and code examples access
 
+### Feature Flags & Configuration
+- **[ConfigCat](https://configcat.com/)** (5.1.0) - Feature flags and configuration management
+- **[Firebase Remote Config](https://firebase.google.com/products/remote-config)** (2.3.0) - Remote configuration and feature flags
+
 ### Logging & Monitoring
 - **[Kermit](https://github.com/touchlab/Kermit)** (2.0.8) - Multiplatform logging
-- **[ConfigCat](https://configcat.com/)** (5.1.0) - Feature flags and configuration
 
 ### Utilities
 - **[Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines)** (1.10.2) - Asynchronous programming
