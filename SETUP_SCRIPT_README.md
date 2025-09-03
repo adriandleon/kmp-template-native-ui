@@ -144,8 +144,9 @@ The script validates all inputs to ensure they follow proper conventions:
 - Example: `MyAwesomeApp`
 
 ### Bundle Identifier Generation
-- **Auto-generated**: Automatically created from package name + project name
-- **Format**: `packageName.projectName` (e.g., `com.yourcompany.yourapp.MyAwesomeApp`)
+- **Auto-generated**: Uses the same identifier as Android package name (standard practice)
+- **Format**: `packageName` (e.g., `com.yourcompany.yourapp`)
+- **Consistency**: iOS and Android use the same identifier for easier management
 - **Customizable**: Option to override with custom bundle identifier if needed
 - **Validation**: Must follow iOS bundle identifier conventions
 
@@ -153,28 +154,30 @@ The script validates all inputs to ensure they follow proper conventions:
 
 ### Input
 ```
-Package Name: com.acme.awesomeapp
-Project Name: AwesomeApp
-Bundle ID: com.acme.awesomeapp.AwesomeApp (auto-generated)
+Package Name: org.example.project
+Project Name: MyApp
+Bundle ID: org.example.project (auto-generated, same as package name)
+Domain: project.example.org (auto-generated from package name)
 ```
 
 ### Output
 ```
 Directory Structure:
-├── shared/src/commonMain/kotlin/com/acme/awesomeapp/
-├── shared/src/androidMain/kotlin/com/acme/awesomeapp/
-├── shared/src/iosMain/kotlin/com/acme/awesomeapp/
-├── shared/src/commonTest/kotlin/com/acme/awesomeapp/
-├── composeApp/src/androidMain/kotlin/com/acme/awesomeapp/
-├── iosApp/AwesomeApp/
-└── iosApp/AwesomeApp.xcodeproj/
+├── shared/src/commonMain/kotlin/org/example/project/
+├── shared/src/androidMain/kotlin/org/example/project/
+├── shared/src/iosMain/kotlin/org/example/project/
+├── shared/src/commonTest/kotlin/org/example/project/
+├── composeApp/src/androidMain/kotlin/org/example/project/
+├── iosApp/MyApp/
+└── iosApp/MyApp.xcodeproj/
 
 Updated Files:
-- All .kt files now use package com.acme.awesomeapp
-- All .swift files now reference AwesomeApp
-- All build files use com.acme.awesomeapp
-- All documentation references AwesomeApp
-- iOS bundle identifier: com.acme.awesomeapp.AwesomeApp
+- All .kt files now use package org.example.project
+- All .swift files now reference MyApp
+- All build files use org.example.project
+- All documentation references MyApp
+- iOS bundle identifier: org.example.project (same as Android package)
+- Domain: project.example.org (reversed from package name)
 ```
 
 ## 🛡️ Safety Features
@@ -207,8 +210,8 @@ The script provides colored, informative output:
 ## 🚀 Improved User Experience
 
 ### Smart Bundle Identifier Generation
-- **Automatic**: Bundle identifier is auto-generated from package name + project name
-- **Consistent**: Follows iOS naming conventions automatically
+- **Automatic**: Bundle identifier matches the Android package name (standard practice)
+- **Consistent**: iOS and Android use the same identifier for easier management
 - **Flexible**: Option to customize if needed for special cases
 - **Reduced Input**: No need to manually type the same identifier twice
 
@@ -220,9 +223,10 @@ The script provides colored, informative output:
 
 ### Example Flow
 ```
-Enter your package name: com.example.myapp
+Enter your package name: org.example.project
 Enter your project name: MyApp
-Generated bundle identifier: com.example.myapp.MyApp
+Generated bundle identifier: org.example.project
+Note: iOS bundle identifier matches Android package name (standard practice)
 Do you want to customize the bundle identifier? (y/N): N
 ```
 
