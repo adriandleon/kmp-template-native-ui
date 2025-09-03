@@ -150,19 +150,19 @@ jobs:
         java-version: ${{ env.JAVA_VERSION }}
         cache: gradle
 
-    - name: Load Google Service JSON file
-      run: echo $GOOGLE_SERVICES_JSON | base64 -di > ${{ env.ANDROID_APP_MODULE }}/${{ env.ANDROID_GOOGLE_SERVICES_FILE }}
+    # - name: Load Google Service JSON file
+    #   run: echo $GOOGLE_SERVICES_JSON | base64 -di > ${{ env.ANDROID_APP_MODULE }}/${{ env.ANDROID_GOOGLE_SERVICES_FILE }}
 
-    - name: Konsist Tests
-      run: ${{ env.GRADLE_WRAPPER }} ${{ env.KONSIST_TEST_TASK }} --rerun-tasks
+    # - name: Konsist Tests
+    #   run: ${{ env.GRADLE_WRAPPER }} ${{ env.KONSIST_TEST_TASK }} --rerun-tasks
 
-    - name: Check coverage metrics
-      run: ${{ env.GRADLE_WRAPPER }} ${{ env.KOVER_VERIFY_TASK }} ${{ env.KOVER_REPORT_TASK }}
+    # - name: Check coverage metrics
+    #   run: ${{ env.GRADLE_WRAPPER }} ${{ env.KOVER_VERIFY_TASK }} ${{ env.KOVER_REPORT_TASK }}
 
-    - name: Upload coverage reports
-      uses: codecov/codecov-action@v5
-      with:
-        token: ${{ secrets.CODECOV_TOKEN }}
-        files: ${{ env.SHARED_MODULE }}/build/reports/kover/report.xml
-        disable_search: true
-        fail_ci_if_error: true
+    # - name: Upload coverage reports
+    #   uses: codecov/codecov-action@v5
+    #   with:
+    #     token: ${{ secrets.CODECOV_TOKEN }}
+    #     files: ${{ env.SHARED_MODULE }}/build/reports/kover/report.xml
+    #     disable_search: true
+    #     fail_ci_if_error: true

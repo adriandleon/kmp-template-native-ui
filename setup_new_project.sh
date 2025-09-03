@@ -69,9 +69,10 @@ to_bundle_id() {
     echo "$1" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9.]//g' | sed 's/\.\.*/\./g' | sed 's/^\.\|\.$//g'
 }
 
-# Function to get domain from package name
+# Function to get domain from package name (reversed domain)
+# Converts: org.example.project -> project.example.org
 get_domain() {
-    echo "$1" | cut -d'.' -f1-2
+    echo "$1" | tr '.' '\n' | tail -r | tr '\n' '.' | sed 's/\.$//'
 }
 
 # Function to get app name from package name
@@ -563,16 +564,6 @@ main() {
     echo -e "${CYAN}Please provide the following information for your new project:${NC}"
     echo ""
     
-    # Get package name
-    while true; do
-        read -p "Enter your package name (e.g., com.yourcompany.yourapp): " NEW_PACKAGE_RAW
-        NEW_PACKAGE=$(to_package_name "$NEW_PACKAGE_RAW")
-        
-        if validate_input "$NEW_PACKAGE" "^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)*$" "Invalid package name. Must be in format: com.yourcompany.yourapp"; then
-            break
-        fi
-    done
-    
     # Get project name
     while true; do
         read -p "Enter your project name (e.g., MyAwesomeApp): " NEW_PROJECT_NAME_RAW
@@ -582,35 +573,45 @@ main() {
             break
         fi
     done
+
+    # Get package name
+    while true; do
+        read -p "Enter your package name (e.g., org.example.project): " NEW_PACKAGE_RAW
+        NEW_PACKAGE=$(to_package_name "$NEW_PACKAGE_RAW")
+        
+        if validate_input "$NEW_PACKAGE" "^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)*$" "Invalid package name. Must be in format: com.yourcompany.yourapp"; then
+            break
+        fi
+    done
     
-    # Generate bundle identifier from package name and project name
-    NEW_BUNDLE_ID="$NEW_PACKAGE.$NEW_PROJECT_NAME"
+    # Use package name as bundle identifier (standard practice)
+    NEW_BUNDLE_ID="$NEW_PACKAGE"
     
-    echo -e "${CYAN}Generated bundle identifier: $NEW_BUNDLE_ID${NC}"
-    echo -e "${YELLOW}Note: iOS bundle identifier format is: packageName.projectName${NC}"
-    echo ""
+    # echo -e "${CYAN}Generated bundle identifier: $NEW_BUNDLE_ID${NC}"
+    # echo -e "${YELLOW}Note: iOS bundle identifier matches Android package name (standard practice)${NC}"
+    # echo ""
     
     # Ask if user wants to customize the bundle identifier
-    read -p "Do you want to customize the bundle identifier? (y/N): " customize_bundle
-    if [[ $customize_bundle =~ ^[Yy]$ ]]; then
-        while true; do
-            read -p "Enter your custom bundle identifier (e.g., com.yourcompany.yourapp): " NEW_BUNDLE_ID_RAW
-            NEW_BUNDLE_ID=$(to_bundle_id "$NEW_BUNDLE_ID_RAW")
+    # read -p "Do you want to customize the bundle identifier? (y/N): " customize_bundle
+    # if [[ $customize_bundle =~ ^[Yy]$ ]]; then
+    #     while true; do
+    #         read -p "Enter your custom bundle identifier (e.g., com.yourcompany.yourapp): " NEW_BUNDLE_ID_RAW
+    #         NEW_BUNDLE_ID=$(to_bundle_id "$NEW_BUNDLE_ID_RAW")
             
-            if validate_input "$NEW_BUNDLE_ID" "^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)*$" "Invalid bundle identifier. Must be in format: com.yourcompany.yourapp"; then
-                break
-            fi
-        done
-    fi
+    #         if validate_input "$NEW_BUNDLE_ID" "^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)*$" "Invalid bundle identifier. Must be in format: com.yourcompany.yourapp"; then
+    #             break
+    #         fi
+    #     done
+    # fi
     
     # Extract domain from package name
     NEW_DOMAIN=$(get_domain "$NEW_PACKAGE")
     
     echo ""
     echo -e "${CYAN}📋 Configuration Summary:${NC}"
-    echo "   Package Name: $NEW_PACKAGE"
     echo "   Project Name: $NEW_PROJECT_NAME"
-    echo "   Bundle ID: $NEW_BUNDLE_ID"
+    echo "   Package Name: $NEW_PACKAGE"
+    echo "   Bundle ID: $NEW_BUNDLE_ID.$NEW_PROJECT_NAME"
     echo "   Domain: $NEW_DOMAIN"
     echo ""
     
