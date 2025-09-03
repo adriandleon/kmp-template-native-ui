@@ -445,6 +445,170 @@ update_other_configs() {
     print_success "Updated other configuration files"
 }
 
+# Function to create Firebase configuration files
+create_firebase_configs() {
+    local new_package="$1"
+    local new_project_name="$2"
+    local new_bundle_id="$3"
+    
+    print_step "Creating Firebase configuration files..."
+    
+    # Create google-services.json template
+    create_google_services_json "$new_package"
+    
+    # Create GoogleService-Info.plist template
+    create_google_service_info_plist "$new_bundle_id" "$new_project_name"
+    
+    print_success "Created Firebase configuration files"
+}
+
+# Function to create local.properties with API key placeholders
+create_local_properties() {
+    print_step "Creating local.properties with API key placeholders..."
+    
+    # Check if local.properties already exists
+    if [ -f "local.properties" ]; then
+        # Check if the placeholders are already added
+        if ! grep -q "SUPABASE_URL_DEV_AND" "local.properties"; then
+            # Append the placeholders to existing file
+            cat >> "local.properties" << 'EOF'
+
+###############################
+
+# Supabase Development Credentials
+SUPABASE_URL_DEV_AND=supabase-url-placeholder
+SUPABASE_URL_DEV_IOS=supabase-url-placeholder
+SUPABASE_KEY_DEV=supabase-key-placeholder
+
+# Supabase Production Credentials
+SUPABASE_URL_PROD=supabase-url-placeholder
+SUPABASE_KEY_PROD=supabse-key-placeholder
+
+# ConfigCat SDK Keys
+CONFIGCAT_IOS_LIVE_KEY=configcat-key-placeholder
+CONFIGCAT_IOS_TEST_KEY=configcat-key-placeholder
+CONFIGCAT_AND_LIVE_KEY=configcat-key-placeholder
+CONFIGCAT_AND_TEST_KEY=configcat-key-placeholder
+EOF
+            print_success "Added API key placeholders to existing local.properties"
+        else
+            print_success "API key placeholders already exist in local.properties"
+        fi
+    else
+        # Create new local.properties file with placeholders
+        cat > "local.properties" << 'EOF'
+###############################
+
+# Supabase Development Credentials
+SUPABASE_URL_DEV_AND=supabase-url-placeholder
+SUPABASE_URL_DEV_IOS=supabase-url-placeholder
+SUPABASE_KEY_DEV=supabase-key-placeholder
+
+# Supabase Production Credentials
+SUPABASE_URL_PROD=supabase-url-placeholder
+SUPABASE_KEY_PROD=supabse-key-placeholder
+
+# ConfigCat SDK Keys
+CONFIGCAT_IOS_LIVE_KEY=configcat-key-placeholder
+CONFIGCAT_IOS_TEST_KEY=configcat-key-placeholder
+CONFIGCAT_AND_LIVE_KEY=configcat-key-placeholder
+CONFIGCAT_AND_TEST_KEY=configcat-key-placeholder
+EOF
+        print_success "Created local.properties with API key placeholders"
+    fi
+}
+
+# Function to create google-services.json template
+create_google_services_json() {
+    local package_name="$1"
+    
+    local google_services_content='{
+  "project_info": {
+    "project_number": "123456789012",
+    "firebase_url": "https://your-project-id.firebaseio.com",
+    "project_id": "your-project-id",
+    "storage_bucket": "your-project-id.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:123456789012:android:abcdef1234567890",
+        "android_client_info": {
+          "package_name": "'"$package_name"'"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "123456789012-yourclientid.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "A-replace-this-string-with-your-api-key"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 2
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 1
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}'
+    
+    echo "$google_services_content" > "composeApp/google-services.json"
+    print_success "Created google-services.json with package name: $package_name"
+}
+
+# Function to create GoogleService-Info.plist template
+create_google_service_info_plist() {
+    local bundle_id="$1"
+    local project_name="$2"
+    
+    local plist_content='<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>API_KEY</key>
+	<string>A-replace-this-string-with-your-api-key</string>
+	<key>GCM_SENDER_ID</key>
+	<string>123456789012</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>'"$bundle_id"."$project_name"'</string>
+	<key>PROJECT_ID</key>
+	<string>your-project-id</string>
+	<key>STORAGE_BUCKET</key>
+	<string>your-project-id.firebasestorage.app</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:123456789012:ios:abcdef1234567890</string>
+</dict>
+</plist>'
+    
+    echo "$plist_content" > "iosApp/$project_name/GoogleService-Info.plist"
+    print_success "Created GoogleService-Info.plist with bundle ID: $bundle_id.$project_name"
+}
+
 # Function to clean up backup files
 cleanup_backups() {
     print_step "Cleaning up backup files..."
@@ -525,9 +689,10 @@ show_final_instructions() {
     echo "   - Open the new Xcode project: iosApp/$new_project_name.xcodeproj"
     echo ""
     echo -e "${YELLOW}2. Update configuration files:${NC}"
-    echo "   - Update google-services.json with your Firebase project"
-    echo "   - Update GoogleService-Info.plist with your Firebase project"
-    echo "   - Update local.properties with your API keys"
+    echo "   - Replace composeApp/google-services.json with your actual Firebase config"
+    echo "   - Replace iosApp/$new_project_name/GoogleService-Info.plist with your actual Firebase config"
+    echo "   - Update local.properties with your actual API keys (placeholders were added)"
+    echo "   - Note: Template files were created with correct package names and bundle IDs"
     echo ""
     echo -e "${YELLOW}3. Update GitHub repository:${NC}"
     echo "   - Update repository secrets in GitHub Settings"
@@ -637,6 +802,12 @@ main() {
     
     # Update Xcode project (must be done after other updates)
     update_xcode_project "$OLD_PROJECT_NAME" "$NEW_PROJECT_NAME" "$OLD_BUNDLE_ID" "$NEW_BUNDLE_ID"
+    
+    # Create Firebase configuration files
+    create_firebase_configs "$NEW_PACKAGE" "$NEW_PROJECT_NAME" "$NEW_BUNDLE_ID"
+    
+    # Create local.properties with API key placeholders
+    create_local_properties
     
     # Remove old directories
     remove_old_directories "$OLD_PACKAGE"
