@@ -109,6 +109,13 @@ The script updates the following types of files:
 - GitHub Actions workflows in `.github/workflows/`
 - `config/Dangerfile.df.kts`
 
+#### **Firebase Configuration Files**
+- `composeApp/google-services.json` - Android Firebase configuration with correct package name
+- `iosApp/YourApp/GoogleService-Info.plist` - iOS Firebase configuration with correct bundle ID
+
+#### **API Key Configuration Files**
+- `local.properties` - API key placeholders for Supabase and ConfigCat services
+
 ### 3. Package Name Updates
 
 The script replaces all occurrences of:
@@ -121,7 +128,24 @@ The script replaces all occurrences of:
 Updates iOS bundle identifiers:
 - `com.adriandeleon.template.Template` → `com.yourcompany.yourapp.MyAwesomeApp`
 
-### 5. Directory Cleanup
+### 5. Firebase Configuration Creation
+
+The script automatically creates template Firebase configuration files with the correct identifiers:
+- **google-services.json**: Created with the correct Android package name
+- **GoogleService-Info.plist**: Created with the correct iOS bundle identifier
+- **Valid format**: Uses properly formatted API keys that meet Firebase requirements (39 characters, starts with 'A')
+- **Template values**: All other values are placeholders that need to be replaced with real Firebase project data
+- **Ready to use**: Files are created in the correct locations and can be replaced with actual Firebase configs
+
+### 6. API Key Configuration Creation
+
+The script automatically creates or updates `local.properties` with API key placeholders:
+- **Supabase credentials**: Development and production URLs and keys
+- **ConfigCat SDK keys**: iOS and Android live and test keys
+- **Safe appending**: Adds placeholders to existing file without overwriting existing content
+- **Duplicate prevention**: Checks if placeholders already exist before adding them
+
+### 7. Directory Cleanup
 
 The script performs comprehensive cleanup to remove all old directory structures:
 - **Removes old package directories**: Deletes the entire old package structure
@@ -178,6 +202,8 @@ Updated Files:
 - All documentation references MyApp
 - iOS bundle identifier: org.example.project (same as Android package)
 - Domain: project.example.org (reversed from package name)
+- Firebase configs created with correct package names and bundle IDs
+- local.properties created with API key placeholders for Supabase and ConfigCat
 ```
 
 ## 🛡️ Safety Features
@@ -221,6 +247,21 @@ The script provides colored, informative output:
 - **Consistent Structure**: Maintains the same package structure across all source sets
 - **Complete Cleanup**: Removes old directories from all source sets
 
+### Firebase Configuration Templates
+- **Automatic Creation**: Creates template Firebase configuration files with correct identifiers
+- **Correct Package Names**: `google-services.json` uses the exact Android package name
+- **Correct Bundle IDs**: `GoogleService-Info.plist` uses the exact iOS bundle identifier
+- **Valid API Keys**: Uses properly formatted API keys that meet Firebase requirements (39 characters, starts with 'A')
+- **Ready for Replacement**: Template files can be directly replaced with real Firebase configs
+- **No Manual Editing**: No need to manually update package names in Firebase configs
+
+### API Key Configuration Templates
+- **Automatic Creation**: Creates or updates `local.properties` with API key placeholders
+- **Safe Appending**: Adds placeholders to existing file without overwriting content
+- **Complete Coverage**: Includes Supabase and ConfigCat API key placeholders
+- **Duplicate Prevention**: Checks if placeholders already exist before adding them
+- **Ready for Configuration**: Users can replace placeholders with actual API keys
+
 ### Example Flow
 ```
 Enter your package name: org.example.project
@@ -240,9 +281,10 @@ After running the script, you'll need to:
 - Open the new Xcode project: `iosApp/YourApp.xcodeproj`
 
 ### 2. Update Configuration Files
-- Update `google-services.json` with your Firebase project
-- Update `GoogleService-Info.plist` with your Firebase project
-- Update `local.properties` with your API keys
+- Replace `composeApp/google-services.json` with your actual Firebase configuration
+- Replace `iosApp/YourApp/GoogleService-Info.plist` with your actual Firebase configuration
+- Update `local.properties` with your actual API keys (placeholders were added)
+- Note: Template files were created with correct package names and bundle IDs
 
 ### 3. Update GitHub Repository
 - Update repository secrets in GitHub Settings
@@ -281,6 +323,23 @@ chmod +x setup_new_project.sh
 #### Gradle Sync Issues
 - Clean and rebuild the project: `./gradlew clean build`
 - Invalidate caches in Android Studio
+
+#### Firebase Configuration Issues
+- **Template files created**: The script creates template Firebase config files with correct package names
+- **Valid API keys**: Template files use properly formatted API keys that meet Firebase requirements
+- **Replace with real configs**: Download actual Firebase configuration files from Firebase Console
+- **Package name must match**: Ensure the package name in Firebase Console matches your project's package name
+- **Bundle ID must match**: Ensure the bundle ID in Firebase Console matches your project's bundle ID
+- **File locations**: 
+  - Android: `composeApp/google-services.json`
+  - iOS: `iosApp/YourApp/GoogleService-Info.plist`
+
+#### API Key Configuration Issues
+- **Placeholders added**: The script automatically adds API key placeholders to `local.properties`
+- **Replace placeholders**: Update the placeholder values with your actual API keys
+- **Supabase keys**: Get your Supabase URL and API key from your Supabase project dashboard
+- **ConfigCat keys**: Get your ConfigCat SDK keys from your ConfigCat dashboard
+- **File location**: `local.properties` (in project root)
 
 #### Empty Directories Left Behind
 If you notice empty directories from the old package structure:
