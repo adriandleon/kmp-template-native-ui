@@ -1,6 +1,7 @@
 import com.adarshr.gradle.testlogger.theme.ThemeType
 import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
+import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -135,6 +136,30 @@ buildkonfig {
             nullable = false,
             const = true,
         )
+
+        buildConfigField(
+            type = STRING,
+            name = "SUPABASE_KEY",
+            value = getSecret("SUPABASE_KEY_DEV"),
+            nullable = false,
+            const = true,
+        )
+
+        buildConfigField(
+            type = STRING,
+            name = "SUPABASE_URL",
+            value = getSecret("SUPABASE_URL_DEV_AND"),
+            nullable = false,
+            const = true,
+        )
+
+        buildConfigField(
+            type = STRING,
+            name = "CONFIGCAT_KEY",
+            value = getSecret("CONFIGCAT_AND_TEST_KEY"),
+            nullable = false,
+            const = true,
+        )
     }
 
     // Flavored DefaultConfig
@@ -146,6 +171,108 @@ buildkonfig {
             nullable = false,
             const = true,
         )
+
+        buildConfigField(
+            type = STRING,
+            name = "SUPABASE_KEY",
+            value = getSecret("SUPABASE_KEY_PROD"),
+            nullable = false,
+            const = true,
+        )
+
+        buildConfigField(
+            type = STRING,
+            name = "SUPABASE_URL",
+            value = getSecret("SUPABASE_URL_PROD"),
+            nullable = false,
+            const = true,
+        )
+
+        buildConfigField(
+            type = STRING,
+            name = "CONFIGCAT_KEY",
+            value = getSecret("CONFIGCAT_AND_LIVE_KEY"),
+            nullable = false,
+            const = true,
+        )
+    }
+
+    // TargetConfig
+    targetConfigs {
+        create("iosArm64") {
+            buildConfigField(
+                type = STRING,
+                name = "SUPABASE_URL",
+                value = getSecret("SUPABASE_URL_DEV_IOS"),
+                nullable = false,
+                const = true,
+            )
+
+            buildConfigField(
+                type = STRING,
+                name = "CONFIGCAT_KEY",
+                value = getSecret("CONFIGCAT_IOS_TEST_KEY"),
+                nullable = false,
+                const = true,
+            )
+        }
+
+        create("iosSimulatorArm64") {
+            buildConfigField(
+                type = STRING,
+                name = "SUPABASE_URL",
+                value = getSecret("SUPABASE_URL_DEV_IOS"),
+                nullable = false,
+                const = true,
+            )
+
+            buildConfigField(
+                type = STRING,
+                name = "CONFIGCAT_KEY",
+                value = getSecret("CONFIGCAT_IOS_TEST_KEY"),
+                nullable = false,
+                const = true,
+            )
+        }
+    }
+
+    // Flavored TargetConfig
+    targetConfigs("release") {
+        create("iosArm64") {
+            buildConfigField(
+                type = STRING,
+                name = "SUPABASE_URL",
+                value = getSecret("SUPABASE_URL_PROD"),
+                nullable = false,
+                const = true,
+            )
+
+            buildConfigField(
+                type = STRING,
+                name = "CONFIGCAT_KEY",
+                value = getSecret("CONFIGCAT_IOS_LIVE_KEY"),
+                nullable = false,
+                const = true,
+            )
+        }
+
+        create("iosSimulatorArm64") {
+            buildConfigField(
+                type = STRING,
+                name = "SUPABASE_URL",
+                value = getSecret("SUPABASE_URL_PROD"),
+                nullable = false,
+                const = true,
+            )
+
+            buildConfigField(
+                type = STRING,
+                name = "CONFIGCAT_KEY",
+                value = getSecret("CONFIGCAT_IOS_LIVE_KEY"),
+                nullable = false,
+                const = true,
+            )
+        }
     }
 }
 

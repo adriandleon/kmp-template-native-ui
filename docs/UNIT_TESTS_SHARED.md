@@ -1,196 +1,499 @@
-# Unit Tests in Shared module
+# Unit Testing in Kotlin Multiplatform
 
-Table of Contents
------------------
+This document covers unit testing strategies and tools used in the Kotlin Multiplatform project, focusing on shared module testing and platform-specific test implementations.
 
-- [Tools](#tools)
-- [Kotest Framework](#kotest-framework)
-    - [Installing Kotest Dependencies](#installing-kotest-dependencies)
-- [Konsist](#konsist)
-    - [Add Konsist Dependencies](#add-konsist-dependencies)
-    - [Creating Konsist Gradle Module](#creating-konsist-gradle-module)
-- [Gradle Test Logger](#gradle-test-logger)
-    - [Installing Gradle Test Logger](#installing-gradle-test-logger)
-- [Running Tests Locally](#running-tests-locally)
-- [Running Tests on CI](#running-tests-on-ci)
+## 📋 Table of Contents
 
-## Tools
+- [🎯 Overview](#-overview)
+- [🧪 Testing Strategy](#-testing-strategy)
+- [🛠️ Testing Tools](#-testing-tools)
+- [📁 Test Structure](#-test-structure)
+- [✍️ Writing Tests](#-writing-tests)
+- [🏃 Running Tests](#-running-tests)
+- [📊 Test Coverage](#-test-coverage)
+- [📚 Best Practices](#-best-practices)
+- [🐛 Troubleshooting](#-troubleshooting)
 
-This are the tools used for testing the multiplatform `Shared` module:
+## 🎯 Overview
 
-- Kotest
-- Kosist
-- Gradle Test Logger
+The project uses a comprehensive testing strategy that ensures code quality across all platforms:
 
-## Kotest Framework
+- **Shared Module Tests** - Common business logic testing
+- **Platform-Specific Tests** - Android and iOS specific implementations
+- **Integration Tests** - Cross-platform functionality validation
+- **Test Coverage** - Automated coverage reporting and analysis
 
-[Kotest Framework](https://kotest.io/) is used for unit tests in the multiplatform shared module,
-it's also used with the Assertions Library, the Property Testing library, and Data Driven Testing module
+## 🧪 Testing Strategy
 
-### Installing Kotest Dependencies
+### **Multi-Layer Testing Approach**
 
-Add the latest versions, the library dependencies for all used modules, and the multiplatform plugin for kotest in the `libs.versions.toml` file catalog:
+1. **Unit Tests** - Test individual functions and classes in isolation
+2. **Integration Tests** - Test interactions between components
+3. **Platform Tests** - Test platform-specific implementations
+4. **Coverage Tests** - Ensure comprehensive test coverage
 
-```toml
-[versions]
-kotest = "6.0.1"
-kotest-koin = "1.3.0"
-[libraries]
-kotest-assertions = { group = "io.kotest", name = "kotest-assertions-core", version.ref = "kotest" }
-kotest-engine = { group = "io.kotest", name = "kotest-framework-engine", version.ref = "kotest" }
-kotest-extensions-koin = { module = "io.kotest.extensions:kotest-extensions-koin", version.ref = "kotest-koin" }
-kotest-property = { group = "io.kotest", name = "kotest-property", version.ref="kotest" }
-kotest-runner-junit5 = { module = 'io.kotest:kotest-runner-junit5', version.ref = "kotest" }
-[plugins]
-kotest = { id = "io.kotest.multiplatform", version.ref = "kotest" }
+### **Test Organization**
+
+```
+shared/
+├── src/
+│   ├── commonMain/           # Shared business logic
+│   ├── commonTest/           # Shared unit tests
+│   ├── androidMain/          # Android implementations
+│   ├── androidTest/          # Android-specific tests
+│   ├── iosMain/              # iOS implementations
+│   └── iosTest/              # iOS-specific tests
 ```
 
-Include the multiplatform plugin in the shared module `build.gradle.kts` file:
+## 🛠️ Testing Tools
+
+### **Primary Testing Framework**
+
+#### Kotest
+[Kotest](https://kotest.io/) is the primary testing framework, providing:
+
+- **Multiple testing styles** (StringSpec, BehaviorSpec, FunSpec)
+- **Property-based testing** with generators
+- **Matchers** for assertions
+- **Test lifecycle hooks** for setup and teardown
+- **Parallel test execution** for performance
+
+#### Installation
+```kotlin
+// In shared/build.gradle.kts
+dependencies {
+    commonTestImplementation(libs.kotest.framework.engine)
+    commonTestImplementation(libs.kotest.assertions.core)
+    commonTestImplementation(libs.kotest.property)
+}
+```
+
+### **Mocking Framework**
+
+#### Mokkery
+[Mokkery](https://github.com/mockk/mokkery) provides mocking capabilities:
+
+- **Mock creation** for interfaces and classes
+- **Stubbing** for method calls
+- **Verification** of method invocations
+- **Argument matching** and capture
+
+#### Installation
+```kotlin
+// In shared/build.gradle.kts
+dependencies {
+    commonTestImplementation(libs.mokkery.runtime)
+}
+```
+
+### **Additional Testing Libraries**
+
+#### Coroutines Testing
+```kotlin
+dependencies {
+    commonTestImplementation(libs.kotlinx.coroutines.test)
+}
+```
+
+#### DateTime Testing
+```kotlin
+dependencies {
+    commonTestImplementation(libs.kotlinx.datetime.test)
+}
+```
+
+## 📁 Test Structure
+
+### **Shared Module Test Structure**
+
+```
+shared/src/commonTest/kotlin/
+├── com/yourcompany/yourapp/
+│   ├── domain/
+│   │   ├── entity/
+│   │   │   └── UserEntityTest.kt
+│   │   ├── repository/
+│   │   │   └── UserRepositoryTest.kt
+│   │   └── usecase/
+│   │       └── GetUserUseCaseTest.kt
+│   ├── data/
+│   │   ├── datasource/
+│   │   │   └── UserDataSourceTest.kt
+│   │   ├── mapper/
+│   │   │   └── UserMapperTest.kt
+│   │   └── repository/
+│   │       └── UserRepositoryImplTest.kt
+│   └── presentation/
+│       ├── component/
+│       │   └── HomeComponentTest.kt
+│       └── store/
+│           └── HomeStoreTest.kt
+```
+
+### **Test File Naming Convention**
+
+- **Test files**: `{ClassName}Test.kt`
+- **Test classes**: `{ClassName}Test`
+- **Test functions**: Descriptive names using backticks
+
+## ✍️ Writing Tests
+
+### **Basic Test Structure**
+
+#### Using StringSpec Style
+```kotlin
+class UserEntityTest : StringSpec({
+    "should create user with valid data" {
+        // Given
+        val id = "user123"
+        val name = "John Doe"
+        val email = "john@example.com"
+        
+        // When
+        val user = UserEntity(id = id, name = name, email = email)
+        
+        // Then
+        user.id shouldBe id
+        user.name shouldBe name
+        user.email shouldBe email
+    }
+    
+    "should validate email format" {
+        // Given
+        val validEmails = listOf(
+            "test@example.com",
+            "user.name@domain.co.uk",
+            "user+tag@example.org"
+        )
+        
+        val invalidEmails = listOf(
+            "invalid-email",
+            "@example.com",
+            "user@",
+            "user@.com"
+        )
+        
+        // When & Then
+        validEmails.forEach { email ->
+            UserEntity.isValidEmail(email) shouldBe true
+        }
+        
+        invalidEmails.forEach { email ->
+            UserEntity.isValidEmail(email) shouldBe false
+        }
+    }
+})
+```
+
+#### Using BehaviorSpec Style
+```kotlin
+class UserRepositoryTest : BehaviorSpec({
+    given("a user repository") {
+        val mockDataSource = mockk<UserDataSource>()
+        val repository = UserRepositoryImpl(mockDataSource)
+        
+        `when`("fetching a user by ID") {
+            val userId = "user123"
+            val expectedUser = UserEntity(id = userId, name = "John Doe")
+            
+            every { mockDataSource.getUser(userId) } returns expectedUser
+            
+            then("it should return the user") {
+                val result = repository.getUser(userId)
+                result shouldBe expectedUser
+            }
+            
+            then("it should call the data source") {
+                verify { mockDataSource.getUser(userId) }
+            }
+        }
+        
+        `when`("user is not found") {
+            val userId = "nonexistent"
+            
+            every { mockDataSource.getUser(userId) } throws UserNotFoundException()
+            
+            then("it should throw an exception") {
+                shouldThrow<UserNotFoundException> {
+                    repository.getUser(userId)
+                }
+            }
+        }
+    }
+})
+```
+
+### **Property-Based Testing**
 
 ```kotlin
+class UserValidationTest : PropertySpec({
+    property("valid emails should pass validation") {
+        forAll(Arb.string().filter { it.contains("@") }) { email ->
+            UserEntity.isValidEmail(email) shouldBe true
+        }
+    }
+    
+    property("user ID should be non-empty") {
+        forAll(Arb.string().filter { it.isNotEmpty() }) { id ->
+            UserEntity(id = id, name = "Test", email = "test@example.com").id shouldBe id
+        }
+    }
+})
+```
+
+### **Testing Coroutines**
+
+```kotlin
+class AsyncUserUseCaseTest : StringSpec({
+    "should execute use case successfully" {
+        runTest {
+            // Given
+            val mockRepository = mockk<UserRepository>()
+            val useCase = GetUserUseCase(mockRepository)
+            val expectedUser = UserEntity(id = "user123", name = "John Doe")
+            
+            coEvery { mockRepository.getUser("user123") } returns expectedUser
+            
+            // When
+            val result = useCase.execute("user123")
+            
+            // Then
+            result shouldBe expectedUser
+            coVerify { mockRepository.getUser("user123") }
+        }
+    }
+    
+    "should handle repository errors" {
+        runTest {
+            // Given
+            val mockRepository = mockk<UserRepository>()
+            val useCase = GetUserUseCase(mockRepository)
+            val expectedError = UserNotFoundException()
+            
+            coEvery { mockRepository.getUser("user123") } throws expectedError
+            
+            // When & Then
+            shouldThrow<UserNotFoundException> {
+                useCase.execute("user123")
+            }
+        }
+    }
+})
+```
+
+## 🚀 Running Tests
+
+### **Command Line Execution**
+
+#### Run All Tests
+```bash
+# Run all tests in the project
+./gradlew test
+
+# Run tests for specific module
+./gradlew :shared:test
+./gradlew :composeApp:test
+```
+
+#### Run Specific Tests
+```bash
+# Run tests matching a pattern
+./gradlew :shared:test --tests "*UserEntityTest*"
+
+# Run specific test class
+./gradlew :shared:test --tests "com.yourcompany.yourapp.domain.entity.UserEntityTest"
+
+# Run specific test function
+./gradlew :shared:test --tests "*should create user with valid data*"
+```
+
+#### Test Execution Options
+```bash
+# Run tests in parallel
+./gradlew :shared:test --parallel
+
+# Run tests with debug output
+./gradlew :shared:test --debug
+
+# Run tests with info logging
+./gradlew :shared:test --info
+```
+
+### **IDE Integration**
+
+#### Android Studio
+1. **Run individual tests**: Right-click on test function → Run
+2. **Run test class**: Right-click on test class → Run
+3. **Run all tests**: Right-click on test directory → Run Tests
+
+#### VS Code
+1. **Install Kotlin extension**
+2. **Use Test Explorer** for test execution
+3. **Run tests** via command palette
+
+### **Continuous Integration**
+
+Tests run automatically in GitHub Actions:
+
+```yaml
+# In .github/workflows/shared_test_lint.yml
+- name: Run Unit Tests
+  run: ./gradlew test
+```
+
+## 📊 Test Coverage
+
+### **Coverage Configuration**
+
+#### Enable Coverage
+```kotlin
+// In shared/build.gradle.kts
 plugins {
-    alias(libs.plugins.kotest)
-}
-```
-
-And add the kotest dependencies in the `commonTest` source set, and the Junit5 runner in the `androidUnitTest` source set:
-
-```kotlin
-commonTest.dependencies {
-    implementation(libs.kotest.engine)
-    implementation(libs.kotest.assertions)
-    implementation(libs.kotest.property)
-    implementation(libs.kotest.extensions.koin)
+    id("org.jetbrains.kotlinx.kover")
 }
 
-androidUnitTest.dependencies {
-    implementation(libs.kotest.runner.junit5)
-}
-```
-
-Finally enable JUnit to run the test in the android platform:
-
-```kotlin
-android {
-    testOptions.unitTests.all {
-        it.useJUnitPlatform()
+kover {
+    reports {
+        html {
+            setEnabled(true)
+        }
+        xml {
+            setEnabled(true)
+        }
     }
 }
 ```
 
-## Konsist
+#### Run Coverage
+```bash
+# Generate coverage report
+./gradlew :shared:koverHtmlReport
 
-[Konsist](https://github.com/LemonAppDev/konsist) is used to ensure certain architectural constrains
-and project structure are consistent across the whole codebase.
-
-Konsist tests are separated in a different module from the rest of the production code, as we think
-this is the best approach to consolidate all Konsist tests in a unified location.
-
-Follow this official guide to create a [Dedicated Gradle Module](https://docs.konsist.lemonappdev.com/advanced/isolate-konsist-tests#dedicated-gradle-module) for Kosist tests.
-
-### Add Konsist Dependencies
-
-Add the latest kosist version and dependency to the `libs.versions.toml` file
-
-```toml
-[versions]
-konsist = "0.16.1"
-[libraries]
-konsist = { module = "com.lemonappdev:konsist", version.ref = "konsist" }
+# View coverage in browser
+open shared/build/reports/kover/html/index.html
 ```
 
-### Creating Konsist Gradle Module
+### **Coverage Goals**
 
-At the root of the project add a new gradle `konsistTest` module. In Android Studio go to `File -> New -> New Module` and
-select `Java or Kotlin Library`, enter your project's package name and in name enter `konsistTest`
+- **Minimum coverage**: 90% for shared module
+- **Critical paths**: 100% coverage
+- **Platform-specific**: 80% minimum
 
-Create `konsistTest/src/test/kotlin` directory in the project root, and delete the main source folder `konsistTest/src/main/kotlin` or ``konsistTest/src/main/java``
-because is not necessary for this module
-
-And in the `build.grandle.kts` file of the `konsistTest` module, add the following dependencies:
+### **Coverage Exclusions**
 
 ```kotlin
-dependencies {
-    testImplementation(libs.konsist)
-    testImplementation(libs.kotest.runner.junit5)
+kover {
+    filters {
+        classes {
+            excludes += listOf(
+                "com.yourcompany.yourapp.generated.*",
+                "*MapperImpl",
+                "*ComponentImpl"
+            )
+        }
+    }
 }
 ```
 
-Then copy all the tests from other projects or add new tests. Change the base package name of your project in the `Scope.kt` file:
+## 📚 Best Practices
 
-```kotlin
-internal const val PackageName = "your.project.package"
+### **1. Test Organization**
+- **Group related tests** in the same test class
+- **Use descriptive test names** that explain the scenario
+- **Follow AAA pattern**: Arrange, Act, Assert
+- **Keep tests focused** on single responsibility
+
+### **2. Test Data Management**
+- **Use test factories** for creating test objects
+- **Create realistic test data** that represents real scenarios
+- **Avoid hardcoded values** in test logic
+- **Use builders** for complex object construction
+
+### **3. Mocking Strategy**
+- **Mock external dependencies** (APIs, databases)
+- **Don't mock simple data objects** or value classes
+- **Verify important interactions** with mocks
+- **Use appropriate mock types** (mockk, relaxed, etc.)
+
+### **4. Test Performance**
+- **Run tests in parallel** when possible
+- **Avoid slow operations** in unit tests
+- **Use test doubles** for external services
+- **Cache test data** when appropriate
+
+### **5. Platform-Specific Testing**
+- **Test expect/actual implementations** separately
+- **Verify platform behavior** matches expectations
+- **Use platform-specific test utilities** when needed
+- **Maintain consistent test structure** across platforms
+
+## 🐛 Troubleshooting
+
+### **Common Issues**
+
+#### 1. **Tests Not Running**
+```bash
+# Check if tests are discovered
+./gradlew :shared:test --info
+
+# Verify test source sets
+./gradlew :shared:sourceSets
 ```
 
-## Gradle Test Logger
+#### 2. **Mock Issues**
+```bash
+# Check mock configuration
+./gradlew :shared:test --debug
 
-To print the tests results in the console, a tool called [Gradle Test Logger Plugin](https://github.com/radarsh/gradle-test-logger-plugin)
-logs the tests on the console while running, it also is helpful to debug failing tests in CI.
-
-### Installing Gradle Test Logger
-
-Add the latest version and the gradle plugin in the gradle catalog:
-
-```toml
-[versions]
-test-logger = "4.0.0"
-[plugins]
-testLogger = { id = "com.adarshr.test-logger", version.ref = "test-logger" }
+# Verify mock setup
+every { mock.method() } returns result
 ```
 
-Add the plugin in the shared module `build.gradle.kts` file:
-
-```kotlin
-plugins {
-    alias(libs.plugins.testLogger)
+#### 3. **Coroutine Test Issues**
+```bash
+# Use runTest for coroutine tests
+runTest {
+    // Test coroutine code here
 }
+
+# Check dispatcher configuration
+Dispatchers.setMain(Dispatchers.Unconfined)
 ```
 
-At the end of the `build.gradle.kts` file, add configuration options for the logger
+### **Debug Mode**
 
-> Note: The themes and customisation options are presented working with kotest framework in local console, but in GitHub actions console it prints formatted output.
+#### Enable Verbose Logging
+```bash
+# Run with debug information
+./gradlew :shared:test --debug
 
-```kotlin
-testlogger {
-    theme = ThemeType.MOCHA
-    showFullStackTraces = false
-    slowThreshold = 2000
-    showSummary = true
-    showPassed = true
-    showSkipped = true
-}
+# Check test discovery
+./gradlew :shared:test --scan
 ```
 
-## Running Tests Locally
+#### Test Isolation
+```bash
+# Run single test
+./gradlew :shared:test --tests "*specific test name*"
 
-There are some defined gradle run configurations stored in the folder `config/.run`. These are:
-
-- `config/.run/unit_tests_shared.run.xml`: Runs all unit tests in Shared module
-- `config/.run/unit_tests_all.run.xml`: Runs all unit tests in Shared module + all Konsist tests in konsistTest module
-
-> Open these files and edit the package name with your project package name:
-
-```xml
-<option value="'your.project.package.*'" />
+# Run with specific JVM options
+./gradlew :shared:test -Dkotest.framework.parallelism=1
 ```
 
-## Running Tests on CI
+## 🔗 Related Documentation
 
-The unit tests in the multiplatform `Shared` module runs on CI on every Pull Request push, these
-are define as two jobs in the workflow `.github/workflows/shared_test_lint.yml`
+- [Code Coverage Reports](CODE_COVERAGE_REPORTS.md) - Coverage configuration and reporting
+- [GitHub Actions Workflows](GITHUB_ACTIONS.md) - CI/CD test execution
+- [Kotlin Format & Lint](KOTLIN_FORMAT_LINT.md) - Code quality tools
+- [Pre-Commit Hooks](PRE_COMMIT_HOOKS.md) - Local test automation
 
-> **Note**: This workflow is fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
+## 📖 Resources
 
-The first step runs the Konsist tests located in the konsistTest module:
+- [Kotest Documentation](https://kotest.io/)
+- [Mokkery Documentation](https://github.com/mockk/mokkery)
+- [Kotlin Testing Guide](https://kotlinlang.org/docs/testing.html)
+- [Kover Coverage Tool](https://github.com/Kotlin/kotlinx-kover)
 
-```yaml
-- name: Konsist Tests
-  run: ./gradlew konsistTest:test --rerun-tasks
-```
+---
 
-The second step runs all the unit tests inside the `Shared` module:
-
-```yaml
-- name: Run Unit Tests
-  run: ./gradlew :shared:cleanTestDebugUnitTest :shared:testDebugUnitTest --tests 'your.project.package.*'
-```
+**Write comprehensive tests for reliable code! 🚀**

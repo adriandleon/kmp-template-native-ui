@@ -1,122 +1,496 @@
 # Code Coverage Reports
 
-Table of Contents
------------------
+This document covers code coverage configuration, reporting, and analysis using Kover for Kotlin Multiplatform projects.
 
-- [Code Coverage in Shared module](#code-coverage-in-shared-module)
-    - [Failing Coverage Threshold](#failing-coverage-threshold)
-    - [Generating local reports](#generating-local-reports)
-    - [Generating CI coverage reports](#generating-ci-coverage-reports)
-    - [Codecov Configuration file](#codecov-configuration-file)
-- [Code Coverage in Android module](#code-coverage-in-android-module)
-- [Code Coverage in iOS module](#code-coverage-in-ios-module)
+## 📋 Table of Contents
 
-## Code Coverage in Shared module
+- [🎯 Overview](#-overview)
+- [📊 What is Code Coverage?](#-what-is-code-coverage)
+- [🔧 Kover Integration](#-kover-integration)
+- [⚙️ Configuration](#-configuration)
+- [🏃 Running Coverage](#-running-coverage)
+- [📈 Coverage Reports](#-coverage-reports)
+- [🎯 Coverage Goals](#-coverage-goals)
+- [🔄 CI/CD Integration](#-cicd-integration)
+- [📚 Best Practices](#-best-practices)
+- [🐛 Troubleshooting](#-troubleshooting)
 
-For the shared module, we use the [kotlinx-kover](https://github.com/Kotlin/kotlinx-kover) plugin to generate code coverage reports.
-We add the following block in the root project's `build.gradle.kts` file.
+## 🎯 Overview
 
+Code coverage is a metric that measures how much of your source code is executed during testing. This project uses **Kover** to generate comprehensive coverage reports for Kotlin Multiplatform modules.
+
+## 📊 What is Code Coverage?
+
+Code coverage helps you understand:
+
+- **How much code** is tested by your test suite
+- **Which parts** of your code need more testing
+- **Quality metrics** for your test coverage
+- **Gaps** in your testing strategy
+
+### **Coverage Types**
+
+- **Line Coverage** - Percentage of code lines executed
+- **Branch Coverage** - Percentage of conditional branches executed
+- **Function Coverage** - Percentage of functions called
+- **Class Coverage** - Percentage of classes instantiated
+
+## 🚀 Kover Integration
+
+### **What is Kover?**
+
+[Kover](https://github.com/Kotlin/kotlinx-kover) is a Kotlin Multiplatform code coverage tool that:
+
+- **Integrates seamlessly** with Kotlin projects
+- **Supports all KMP targets** (Android, iOS, JVM, JS, Native)
+- **Generates multiple report formats** (HTML, XML, JSON)
+- **Integrates with CI/CD** pipelines
+- **Provides detailed coverage analysis**
+
+### **Installation**
+
+#### Add Kover Plugin
 ```kotlin
+// In shared/build.gradle.kts
 plugins {
-    alias(libs.plugins.kover) apply false
+    id("org.jetbrains.kotlinx.kover")
 }
 ```
 
-And to integrate the Kover plugin into the shared module, we add the following block in the shared module's `build.gradle.kts` file.
-
-```kotlin 
-plugins {
-    alias(libs.plugins.kover)
+#### Add Dependencies
+```kotlin
+dependencies {
+    // Kover is included with the plugin
+    // No additional dependencies needed
 }
 ```
 
-### Failing Coverage Threshold
+## ⚙️ Configuration
 
-We set the failing coverage threshold to 90% of lines covered in the shared module's `build.gradle.kts` file.
+### **Basic Configuration**
 
 ```kotlin
-kover.reports.verify.rule {
-    minBound(90)
+// In shared/build.gradle.kts
+kover {
+    reports {
+        html {
+            setEnabled(true)
+        }
+        xml {
+            setEnabled(true)
+        }
+        json {
+            setEnabled(true)
+        }
+    }
 }
 ```
 
-To verify the coverage threshold, run the following command:
+### **Advanced Configuration**
 
-```shell
-./gradlew koverVerify
+#### Coverage Filters
+```kotlin
+kover {
+    filters {
+        classes {
+            // Include specific packages
+            includes += listOf(
+                "com.yourcompany.yourapp.domain.*",
+                "com.yourcompany.yourapp.data.*"
+            )
+            
+            // Exclude generated or test files
+            excludes += listOf(
+                "com.yourcompany.yourapp.generated.*",
+                "*MapperImpl",
+                "*ComponentImpl",
+                "*Test",
+                "*Tests"
+            )
+        }
+        
+        files {
+            // Include specific file patterns
+            includes += listOf("**/*.kt")
+            
+            // Exclude specific file patterns
+            excludes += listOf(
+                "**/generated/**",
+                "**/test/**",
+                "**/*Test.kt"
+            )
+        }
+    }
+}
 ```
 
-### Excluding files and classes from coverage
+#### Report Configuration
+```kotlin
+kover {
+    reports {
+        html {
+            setEnabled(true)
+            setTitle("Code Coverage Report")
+            setDir(layout.buildDirectory.dir("reports/kover/html"))
+        }
+        
+        xml {
+            setEnabled(true)
+            setDir(layout.buildDirectory.dir("reports/kover/xml"))
+        }
+        
+        json {
+            setEnabled(true)
+            setDir(layout.buildDirectory.dir("reports/kover/json"))
+        }
+        
+        lcov {
+            setEnabled(true)
+            setDir(layout.buildDirectory.dir("reports/kover/lcov"))
+        }
+    }
+}
+```
 
-To exclude non-testable code from the coverage report (ex. dependency injection setup files, auto-generated classes)
-this block should be added in `build.gradle.kts` file.
+#### Coverage Verification
+```kotlin
+kover {
+    verify {
+        rule {
+            bound {
+                minValue = 80.0  // Minimum coverage percentage
+            }
+        }
+    }
+}
+```
+
+## 🏃‍♂️ Running Coverage
+
+### **Command Line Execution**
+
+#### Generate Coverage Reports
+```bash
+# Generate HTML coverage report
+./gradlew :shared:koverHtmlReport
+
+# Generate XML coverage report
+./gradlew :shared:koverXmlReport
+
+# Generate JSON coverage report
+./gradlew :shared:koverJsonReport
+
+# Generate LCOV coverage report
+./gradlew :shared:koverLcovReport
+
+# Generate all coverage reports
+./gradlew :shared:koverReport
+```
+
+#### Run Tests with Coverage
+```bash
+# Run tests and generate coverage
+./gradlew :shared:testDebugUnitTest
+
+# Run specific tests with coverage
+./gradlew :shared:testDebugUnitTest --tests "*UserEntityTest*"
+```
+
+#### Coverage Verification
+```bash
+# Verify coverage meets minimum thresholds
+./gradlew :shared:koverVerify
+
+# Run tests and verify coverage
+./gradlew :shared:testDebugUnitTest koverVerify
+```
+
+### **IDE Integration**
+
+#### Android Studio
+1. **Run with Coverage**: Right-click on test → Run with Coverage
+2. **View Coverage**: View → Tool Windows → Coverage
+3. **Coverage Report**: Build → Generate Coverage Report
+
+#### VS Code
+1. **Install Kotlin extension**
+2. **Run tests with coverage** via command palette
+3. **View coverage** in output panel
+
+## 📈 Coverage Reports
+
+### **HTML Report**
+
+The HTML report provides an interactive coverage overview:
+
+#### Features
+- **File tree navigation** showing coverage by package
+- **Line-by-line coverage** highlighting covered/uncovered lines
+- **Coverage summary** with percentages and statistics
+- **Search and filter** capabilities
+- **Export options** for sharing
+
+#### Access
+```bash
+# Generate HTML report
+./gradlew :shared:koverHtmlReport
+
+# Open in browser
+open shared/build/reports/kover/html/index.html
+```
+
+### **XML Report**
+
+The XML report is useful for CI/CD integration:
+
+#### Features
+- **Machine-readable format** for automation
+- **Detailed coverage data** for analysis
+- **Integration** with coverage tools
+- **Standard format** for reporting
+
+#### Access
+```bash
+# Generate XML report
+./gradlew :shared:koverXmlReport
+
+# Location
+shared/build/reports/kover/xml/coverage.xml
+```
+
+### **JSON Report**
+
+The JSON report provides structured coverage data:
+
+#### Features
+- **Structured data format** for processing
+- **Easy integration** with custom tools
+- **Detailed metrics** and statistics
+- **API-friendly format**
+
+#### Access
+```bash
+# Generate JSON report
+./gradlew :shared:koverJsonReport
+
+# Location
+shared/build/reports/kover/json/coverage.json
+```
+
+### **LCOV Report**
+
+The LCOV report is compatible with many coverage tools:
+
+#### Features
+- **Standard LCOV format** for compatibility
+- **Integration** with coverage services
+- **Line coverage details** for analysis
+- **Widely supported** format
+
+#### Access
+```bash
+# Generate LCOV report
+./gradlew :shared:koverLcovReport
+
+# Location
+shared/build/reports/kover/lcov/lcov.info
+```
+
+## 🎯 Coverage Goals
+
+### **Recommended Coverage Targets**
+
+- **Overall Coverage**: 90% minimum
+- **Critical Business Logic**: 100% coverage
+- **Data Layer**: 95% coverage
+- **Domain Layer**: 90% coverage
+- **Presentation Layer**: 85% coverage
+- **Platform-Specific**: 80% coverage
+
+### **Coverage by Module**
+
+#### Shared Module
+- **Domain Logic**: 95% minimum
+- **Data Operations**: 90% minimum
+- **Utility Functions**: 85% minimum
+
+#### Android Module
+- **UI Components**: 80% minimum
+- **Platform Logic**: 85% minimum
+- **Integration**: 90% minimum
+
+#### iOS Module
+- **UI Components**: 80% minimum
+- **Platform Logic**: 85% minimum
+- **Integration**: 90% minimum
+
+### **Setting Coverage Thresholds**
 
 ```kotlin
-kover.filters.excludes {
-  classes("uy.jorgemarquez.misionvida.common.util.AndroidDispatcher")
-  files("*.*Module.*", "*.di.*Module*", "*.di.*")
+kover {
+    verify {
+        rule {
+            bound {
+                minValue = 90.0  // Overall minimum
+            }
+        }
+        
+        rule {
+            bound {
+                minValue = 95.0  // Domain layer minimum
+                includes = listOf("**/domain/**")
+            }
+        }
+        
+        rule {
+            bound {
+                minValue = 100.0  // Critical functions
+                includes = listOf("**/CriticalFunction.kt")
+            }
+        }
+    }
 }
 ```
 
-### Generating local reports
+## 🚀 CI/CD Integration
 
-To generate the code coverage report in HTML format, run the following command:
+### **GitHub Actions Integration**
 
-```shell
-./gradlew koverHtmlReport
-```
-
-The report is generated in the file `shared/build/reports/kover/html/index.html` which you can open in any web browser.
-
-To generate the code coverage report in XML format, run the following command:
-
-```shell
-./gradlew koverXmlReport
-```
-
-The report is generated in the file `shared/build/reports/kover/report.xml` which you can import in Android Studio/IntelliJ coverage tool tab.
-
-### Generating CI coverage reports
-
-To generate the code coverage report in CI (GitHub Actions), we include the following action step in
-the file `.github/workflows/shared_test_lint.yml` in job `tests` for Pull Request coverage reports,
-and in job `coverage_report` in the file `.github/workflows/android_deploy.yml` for Merge Pull Request
-coverage reports in main branch:
-
-> **Note**: These workflows are fully configurable with variables at the top. See [GitHub Actions Workflows](GITHUB_ACTIONS.md) for customization details.
-
+#### Coverage Job
 ```yaml
-- name: Check coverage metrics
-  run: ./gradlew koverVerify koverXmlReport
-```
+# In .github/workflows/shared_test_lint.yml
+- name: Generate Coverage Report
+  run: ./gradlew :shared:koverHtmlReport
 
-After the reports are generated, we include the following action step in the file `.github/workflows/shared_test_lint.yml`
-in job `tests`, and also in job `coverage_report` in the file `.github/workflows/android_deploy.yml` for Merge Pull Request
-coverage reports in main branch:
-
-```yaml
-- name: Upload coverage reports
-  uses: codecov/codecov-action@v5
+- name: Upload Coverage Report
+  uses: actions/upload-artifact@v3
   with:
-    token: ${{ secrets.CODECOV_TOKEN }}
-    files: shared/build/reports/kover/report.xml
-    disable_search: true
-    fail_ci_if_error: true
+    name: coverage-report
+    path: shared/build/reports/kover/html/
 ```
 
-This step uploads the coverage report to [Codecov](https://about.codecov.io/) where you can see the coverage reports.
-It is important to set the `CODECOV_TOKEN` secret in the repository settings in GitHub.
+#### Coverage Verification
+```yaml
+- name: Verify Coverage
+  run: ./gradlew :shared:koverVerify
+```
 
-### Codecov Configuration file
+### **Coverage Badges**
 
-Codecov uses a YAML-style configuration file, it is located in `.github/codecov.yml`
+#### Codecov Integration
+```yaml
+- name: Upload to Codecov
+  uses: codecov/codecov-action@v3
+  with:
+    file: shared/build/reports/kover/xml/coverage.xml
+    format: cobertura
+```
 
-Check the official [documentation](https://docs.codecov.com/docs/codecov-yaml) for more information.
+#### Custom Badge Generation
+```yaml
+- name: Generate Coverage Badge
+  run: |
+    COVERAGE=$(./gradlew :shared:koverVerify --quiet | grep -o '[0-9.]*%' | head -1)
+    echo "Coverage: $COVERAGE"
+```
 
-## Code Coverage in Android module
+## 📚 Best Practices
 
-TODO
+### **1. Coverage Strategy**
+- **Focus on business logic** rather than generated code
+- **Test critical paths** with 100% coverage
+- **Accept lower coverage** for UI components
+- **Set realistic targets** based on project complexity
 
-## Code Coverage in iOS module
+### **2. Test Organization**
+- **Group related tests** for better coverage analysis
+- **Use descriptive test names** that explain coverage
+- **Maintain test data** that exercises all code paths
+- **Regular coverage reviews** to identify gaps
 
-TODO
+### **3. Coverage Analysis**
+- **Review uncovered lines** to understand why
+- **Identify dead code** that can be removed
+- **Focus on high-impact areas** for improvement
+- **Use coverage trends** to track progress
+
+### **4. CI/CD Integration**
+- **Automate coverage generation** on every build
+- **Set coverage thresholds** to prevent regression
+- **Generate coverage reports** for review
+- **Track coverage trends** over time
+
+### **5. Team Collaboration**
+- **Share coverage reports** with the team
+- **Set team coverage goals** and track progress
+- **Review coverage gaps** during code reviews
+- **Celebrate coverage improvements** and milestones
+
+## 🐛 Troubleshooting
+
+### **Common Issues**
+
+#### 1. **Coverage Not Generated**
+```bash
+# Check if tests ran successfully
+./gradlew :shared:test --info
+
+# Verify Kover plugin is applied
+./gradlew :shared:plugins
+```
+
+#### 2. **Coverage Reports Empty**
+```bash
+# Check test execution
+./gradlew :shared:testDebugUnitTest --info
+
+# Verify source sets
+./gradlew :shared:sourceSets
+```
+
+#### 3. **Coverage Verification Failed**
+```bash
+# Check current coverage
+./gradlew :shared:koverHtmlReport
+
+# Review coverage report
+open shared/build/reports/kover/html/index.html
+```
+
+### **Debug Mode**
+
+#### Enable Verbose Logging
+```bash
+# Run with debug information
+./gradlew :shared:koverHtmlReport --debug
+
+# Check Kover configuration
+./gradlew :shared:koverHtmlReport --scan
+```
+
+#### Coverage Analysis
+```bash
+# Generate detailed coverage
+./gradlew :shared:koverReport
+
+# Check coverage filters
+./gradlew :shared:koverHtmlReport --info
+```
+
+## 🔗 Related Documentation
+
+- [Unit Tests Shared](UNIT_TESTS_SHARED.md) - Testing strategies and tools
+- [GitHub Actions Workflows](GITHUB_ACTIONS.md) - CI/CD integration
+- [Kotlin Format & Lint](KOTLIN_FORMAT_LINT.md) - Code quality tools
+- [Pre-Commit Hooks](PRE_COMMIT_HOOKS.md) - Local automation
+
+## 📖 Resources
+
+- [Kover Documentation](https://github.com/Kotlin/kotlinx-kover)
+- [Kotlin Testing Guide](https://kotlinlang.org/docs/testing.html)
+- [Code Coverage Best Practices](https://martinfowler.com/bliki/TestCoverage.html)
+- [Coverage Tools Comparison](https://en.wikipedia.org/wiki/Code_coverage)
+
+---
+
+**Track and improve your code quality with comprehensive coverage! 🚀**

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		EF5AF9E72E668CE300C68598 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = EF5AF9E62E668CE300C68598 /* FirebaseRemoteConfig */; };
 		EFCA44362E63CD0D0037ABE5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EFCA44352E63CD0D0037ABE5 /* FirebaseAnalytics */; };
 		EFCA44382E63CD0D0037ABE5 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = EFCA44372E63CD0D0037ABE5 /* FirebaseCrashlytics */; };
 /* End PBXBuildFile section */
@@ -46,6 +47,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				EF5AF9E72E668CE300C68598 /* FirebaseRemoteConfig in Frameworks */,
 				EFCA44362E63CD0D0037ABE5 /* FirebaseAnalytics in Frameworks */,
 				EFCA44382E63CD0D0037ABE5 /* FirebaseCrashlytics in Frameworks */,
 			);
@@ -94,6 +96,7 @@
 			packageProductDependencies = (
 				EFCA44352E63CD0D0037ABE5 /* FirebaseAnalytics */,
 				EFCA44372E63CD0D0037ABE5 /* FirebaseCrashlytics */,
+				EF5AF9E62E668CE300C68598 /* FirebaseRemoteConfig */,
 			);
 			productName = Template;
 			productReference = B9DA97B12DC1472C00A4DA20 /* Template.app */;
@@ -402,6 +405,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		EF5AF9E62E668CE300C68598 /* FirebaseRemoteConfig */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EFCA44342E63CD0D0037ABE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseRemoteConfig;
+		};
 		EFCA44352E63CD0D0037ABE5 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = EFCA44342E63CD0D0037ABE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
