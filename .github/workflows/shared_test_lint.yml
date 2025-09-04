@@ -156,6 +156,10 @@ jobs:
     # - name: Konsist Tests
     #   run: ${{ env.GRADLE_WRAPPER }} ${{ env.KONSIST_TEST_TASK }} --rerun-tasks
 
+    # Unit tests run when the gradle task koverVerify run.
+    - name: Run Unit Tests
+      run: ./gradlew :shared:cleanTestDebugUnitTest :shared:testDebugUnitTest --tests '${{ env.ANDROID_PACKAGE_NAME }}.*'
+
     # - name: Check coverage metrics
     #   run: ${{ env.GRADLE_WRAPPER }} ${{ env.KOVER_VERIFY_TASK }} ${{ env.KOVER_REPORT_TASK }}
 
