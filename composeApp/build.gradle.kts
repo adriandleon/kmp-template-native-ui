@@ -1,3 +1,4 @@
+import com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy.COMPLETE
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -90,7 +91,7 @@ android {
     ktfmt {
         kotlinLangStyle()
         removeUnusedImports = true
-        manageTrailingCommas = true
+        trailingCommaManagementStrategy = COMPLETE
     }
 
     detekt {
