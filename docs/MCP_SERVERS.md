@@ -25,20 +25,7 @@ Model Context Protocol (MCP) servers are external services that provide addition
 
 ## 📋 Available MCP Servers
 
-### 1. **GitHub MCP Server**
-- **Purpose**: Access GitHub repositories, issues, pull requests, and workflows
-- **Capabilities**: 
-  - Repository management
-  - Issue and PR operations
-  - Workflow management
-  - Code search and analysis
-- **Use Cases**: 
-  - Automated PR reviews
-  - Repository analysis
-  - Workflow automation
-  - Code quality checks
-
-### 2. **Context7 MCP Server**
+### 1. **Context7 MCP Server**
 - **Purpose**: Access comprehensive library documentation and code examples
 - **Capabilities**:
   - Library documentation search
@@ -55,18 +42,11 @@ Model Context Protocol (MCP) servers are external services that provide addition
 
 ### **Prerequisites**
 - [Cursor](https://cursor.sh/) editor installed
-- Node.js (for GitHub MCP server)
 - Valid API keys for the services
 
 ### **Step 1: Install MCP Servers**
 
 The MCP servers are configured in `.cursor/mcp.json` and will be automatically installed when you open the project in Cursor.
-
-#### **GitHub MCP Server**
-```bash
-# The server will be automatically installed via npx
-# No manual installation required
-```
 
 #### **Context7 MCP Server**
 ```bash
@@ -79,23 +59,9 @@ The MCP servers are configured in `.cursor/mcp.json` and will be automatically i
 Create a `.env` file in your project root or set these environment variables in your system:
 
 ```bash
-# GitHub API Token
-PERSONAL_GITHUB_API_KEY=ghp_your_github_token_here
-
 # Context7 API Key
 PERSONAL_CONTEXT7_API_KEY=your_context7_api_key_here
 ```
-
-#### **GitHub API Token Setup**
-1. Go to [GitHub Settings > Developer settings > Personal access tokens](https://github.com/settings/tokens)
-2. Click "Generate new token (classic)"
-3. Select the following scopes:
-   - `repo` - Full control of private repositories
-   - `workflow` - Update GitHub Action workflows
-   - `write:packages` - Upload packages to GitHub Package Registry
-   - `delete:packages` - Delete packages from GitHub Package Registry
-4. Copy the generated token
-5. Set as `PERSONAL_GITHUB_API_KEY` environment variable
 
 #### **Context7 API Key Setup**
 1. Visit [Context7](https://mcp.context7.com/)
@@ -117,13 +83,6 @@ The MCP servers should automatically connect when you open the project in Cursor
 ```json
 {
   "mcpServers": {
-    "github": {
-      "command": "npx",
-      "args": ["-y", "@modelcontextprotocol/server-github"],
-      "env": {
-        "GITHUB_TOKEN": "${env.PERSONAL_GITHUB_API_KEY}"
-      }
-    },
     "context7": {
       "url": "https://mcp.context7.com/mcp",
       "headers": {
@@ -135,36 +94,9 @@ The MCP servers should automatically connect when you open the project in Cursor
 ```
 
 ### **Environment Variable Mapping**
-- `PERSONAL_GITHUB_API_KEY` → `GITHUB_TOKEN` (for GitHub MCP server)
 - `PERSONAL_CONTEXT7_API_KEY` → `CONTEXT7_API_KEY` (for Context7 MCP server)
 
 ## 🎯 Usage Examples
-
-### **GitHub MCP Server Usage**
-
-#### **Repository Operations**
-```
-"Show me the latest pull requests in this repository"
-"Create a new issue for the bug I found"
-"List all open issues with the 'bug' label"
-"Show me the workflow runs for the last 7 days"
-```
-
-#### **Code Analysis**
-```
-"Analyze the code coverage in this repository"
-"Show me all files that contain 'TODO' comments"
-"Find all usages of the UserRepository class"
-"Check for any security vulnerabilities in dependencies"
-```
-
-#### **Workflow Management**
-```
-"Show me the GitHub Actions workflow configuration"
-"Trigger a workflow run for the main branch"
-"View the logs for the last failed workflow"
-"Update the workflow to use the latest Node.js version"
-```
 
 ### **Context7 MCP Server Usage**
 
@@ -191,12 +123,10 @@ The MCP servers should automatically connect when you open the project in Cursor
 #### **MCP Server Not Connecting**
 1. **Check Environment Variables**
    ```bash
-   echo $PERSONAL_GITHUB_API_KEY
    echo $PERSONAL_CONTEXT7_API_KEY
    ```
 
 2. **Verify API Keys**
-   - GitHub: Test with `curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/user`
    - Context7: Check your account dashboard
 
 3. **Restart Cursor**
@@ -204,12 +134,7 @@ The MCP servers should automatically connect when you open the project in Cursor
    - Check the MCP server status in the bottom bar
 
 #### **Permission Errors**
-1. **GitHub Token Scopes**
-   - Ensure your token has the required permissions
-   - Check if the token has expired
-   - Verify the token has access to the repository
-
-2. **Context7 API Key**
+1. **Context7 API Key**
    - Verify your account is active
    - Check if you've reached API limits
    - Ensure the key is correctly set
@@ -261,7 +186,6 @@ You can add additional MCP servers by extending the configuration:
 ```json
 {
   "mcpServers": {
-    "github": { /* existing config */ },
     "context7": { /* existing config */ },
     "custom-server": {
       "command": "path/to/your/server",
@@ -275,21 +199,6 @@ You can add additional MCP servers by extending the configuration:
 ```
 
 ### **Server-Specific Options**
-
-#### **GitHub MCP Server Options**
-```json
-{
-  "github": {
-    "command": "npx",
-    "args": ["-y", "@modelcontextprotocol/server-github"],
-    "env": {
-      "GITHUB_TOKEN": "${env.PERSONAL_GITHUB_API_KEY}",
-      "GITHUB_API_URL": "https://api.github.com",
-      "GITHUB_GRAPHQL_URL": "https://api.github.com/graphql"
-    }
-  }
-}
-```
 
 #### **Context7 MCP Server Options**
 ```json
@@ -307,7 +216,6 @@ You can add additional MCP servers by extending the configuration:
 
 ## 🔗 Related Documentation
 
-- [GitHub MCP Server](https://github.com/modelcontextprotocol/server-github) - Official GitHub MCP server
 - [Context7 MCP Server](https://mcp.context7.com/) - Context7 MCP server documentation
 - [Model Context Protocol](https://modelcontextprotocol.io/) - MCP specification and documentation
 - [Cursor MCP Integration](https://cursor.sh/docs/mcp) - Cursor's MCP documentation
