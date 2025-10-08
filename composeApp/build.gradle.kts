@@ -43,11 +43,11 @@ kotlin {
 }
 
 android {
-    namespace = "com.adriandeleon.template"
+    namespace = "com.adriandeleon.kmp.template"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
 
     defaultConfig {
-        applicationId = "com.adriandeleon.template"
+        applicationId = "com.adriandeleon.kmp.template"
         minSdk = libs.versions.android.minSdk.get().toInt()
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1

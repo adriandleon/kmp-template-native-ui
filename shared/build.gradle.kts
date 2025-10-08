@@ -82,7 +82,7 @@ kotlin {
 }
 
 android {
-    namespace = "com.adriandeleon.template.shared"
+    namespace = "com.adriandeleon.kmp.template.shared"
     compileSdk = libs.versions.android.compileSdk.get().toInt()
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
@@ -111,7 +111,7 @@ kover.reports {
     verify.rule { minBound(90) }
 
     filters.excludes {
-        classes("com.adriandeleon.template.common.util.AndroidDispatcher")
+        classes("com.adriandeleon.kmp.template.common.util.AndroidDispatcher")
         files("*.*Module.*", "*.di.*Module*", "*.di.*")
     }
 }
@@ -126,7 +126,7 @@ testlogger {
 }
 
 buildkonfig {
-    packageName = "com.adriandeleon.template"
+    packageName = "com.adriandeleon.kmp.template"
 
     // DefaultConfig
     defaultConfigs {

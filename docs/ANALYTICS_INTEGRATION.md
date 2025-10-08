@@ -159,7 +159,7 @@ dependencies {
 2. Enter bundle ID from `iosApp/Configuration/Config.xcconfig`
 3. Add suffix "iOS" to project nickname for clarity
 4. Download `GoogleService-Info.plist` file
-5. Place in `iosApp/Template/GoogleService-Info.plist`
+5. Place in `iosApp/KMP-Template/GoogleService-Info.plist`
 6. **Important**: Don't commit this file to git
 
 ### **Dependency Injection Setup**

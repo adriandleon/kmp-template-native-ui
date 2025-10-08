@@ -133,10 +133,10 @@ composeApp/
 │       │   └── components/
 │       └── common/
 iosApp/
-├── Template/           # iOS SwiftUI views
+├── KMP-Template/       # iOS SwiftUI views
 │   ├── Assets.xcassets/
 │   ├── ContentView.swift
-│   ├── TemplateApp.swift
+│   ├── KMPTemplateApp.swift
 │   └── Info.plist
 ```
 
@@ -200,7 +200,7 @@ class HomeStoreTest : FunSpec({
 ./gradlew :shared:assembleXCFramework
 
 # Then open in Xcode
-open iosApp/Template.xcodeproj
+open iosApp/KMP-Template.xcodeproj
 ```
 
 ### CI/CD Pipeline

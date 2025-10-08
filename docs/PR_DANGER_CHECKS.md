@@ -56,7 +56,7 @@ val RELEASE_NOTES_ENABLED = false                       // Disable if not using 
 
 ### **Project Configuration**
 ```kotlin
-val PROJECT_NAME = "Template"                           // Your project name
+val PROJECT_NAME = "KMP-Template"                      // Your project name
 val PROJECT_OWNER = "adriandleon"                       // GitHub username/organization
 val PROJECT_REPO = "kmp-template-native-ui"             // Repository name
 ```
@@ -65,7 +65,7 @@ val PROJECT_REPO = "kmp-template-native-ui"             // Repository name
 ```kotlin
 val SHARED_MODULE_PATH = "shared/src/commonMain/"       // Path to shared module common code
 val ANDROID_MODULE_PATH = "composeApp/src/androidMain/" // Path to Android module code
-val IOS_MODULE_PATH = "iosApp/Template/"                // Path to iOS module code
+val IOS_MODULE_PATH = "iosApp/KMP-Template/"            // Path to iOS module code
 ```
 
 ### **Release Notes Configuration**

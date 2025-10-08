@@ -188,8 +188,8 @@ If you encounter issues with certificates:
 The build number is automatically incremented during the release process. The version number should be updated in the Xcode project settings if needed.
 
 **Manual version update in Xcode:**
-1. Open `iosApp/Template.xcodeproj`
-2. Select the Template target
+1. Open `iosApp/KMP-Template.xcodeproj`
+2. Select the KMP-Template target
 3. Go to General tab
 4. Update Version and Build numbers as needed
 
@@ -241,7 +241,7 @@ fastlane ios release
 After uploading:
 
 1. **Log in to [App Store Connect](https://appstoreconnect.apple.com)**
-2. **Navigate to the Template app**
+2. **Navigate to the KMP-Template app**
 3. **Go to TestFlight tab**
 4. **Wait for the build to process** (usually takes 15-30 minutes)
 5. **Once processed, distribute the build** to testers
@@ -464,17 +464,17 @@ fastlane lanes
 ### **Manual Xcode Commands**
 ```bash
 # Build for device
-xcodebuild -project Template.xcodeproj -scheme Template -destination 'generic/platform=iOS' build
+xcodebuild -project KMP-Template.xcodeproj -scheme KMP-Template -destination 'generic/platform=iOS' build
 
 # Archive for distribution
-xcodebuild -project Template.xcodeproj -scheme Template -destination 'generic/platform=iOS' archive -archivePath Template.xcarchive
+xcodebuild -project KMP-Template.xcodeproj -scheme KMP-Template -destination 'generic/platform=iOS' archive -archivePath KMP-Template.xcarchive
 ```
 
 ## 📋 Notes
 
 - **Release process uses fastlane match** for code signing
 - **Certificates are stored** in a private repository
-- **App identifier**: `com.adriandeleon.Template`
+- **App identifier**: `com.adriandeleon.kmp.template.KMPTemplate`
 - **Apple Developer account**: `invjapsystem@gmail.com`
 - **Build numbers are automatically incremented** during release
 - **Changelog is read from** the release notes directory

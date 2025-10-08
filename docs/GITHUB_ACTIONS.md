@@ -292,7 +292,7 @@ env:
 2. **Load Configuration**
    ```yaml
    - name: Load Google Services PLIST
-     run: echo ${{ secrets.GOOGLE_SERVICES_PLIST }} | base64 -di > ${{ env.IOS_APP_MODULE_PATH }}/Template/GoogleService-Info.plist
+     run: echo ${{ secrets.GOOGLE_SERVICES_PLIST }} | base64 -di > ${{ env.IOS_APP_MODULE_PATH }}/KMP-Template/GoogleService-Info.plist
    ```
 
 3. **Setup Code Signing**
@@ -308,8 +308,8 @@ env:
    ```yaml
    - name: Build and Test
      run: |
-       xcodebuild -workspace ${{ env.IOS_APP_MODULE_PATH }}/Template.xcworkspace \
-         -scheme Template \
+       xcodebuild -workspace ${{ env.IOS_APP_MODULE_PATH }}/KMP-Template.xcworkspace \
+         -scheme KMP-Template \
          -configuration Release \
          -destination 'platform=iOS Simulator,name=iPhone 16,OS=latest' \
          clean build test
@@ -321,7 +321,7 @@ env:
      run: |
        xcrun altool --upload-app \
          --type ios \
-         --file ${{ env.IOS_APP_MODULE_PATH }}/build/Template.ipa \
+         --file ${{ env.IOS_APP_MODULE_PATH }}/build/KMP-Template.ipa \
          --username ${{ secrets.APPLE_ID }} \
          --password ${{ secrets.APP_SPECIFIC_PASSWORD }}
    ```
@@ -620,7 +620,7 @@ gh run download <run-id>
 ./gradlew assembleRelease
 
 # Test iOS build
-xcodebuild -workspace iosApp/Template.xcworkspace -scheme Template -configuration Release
+xcodebuild -workspace iosApp/KMP-Template.xcworkspace -scheme KMP-Template -configuration Release
 
 # Run tests locally
 ./gradlew test

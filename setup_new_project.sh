@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # =============================================================================
-# Kotlin Multiplatform Template Project Setup Script
+# Kotlin Multiplatform KMP-Template Project Setup Script
 # =============================================================================
 # This script transforms the template project into a new project with custom
 # names, package identifiers, and folder structure.
@@ -210,7 +210,7 @@ update_xcode_project() {
         update_file_contents "iosApp/$old_project_name.xcodeproj/project.pbxproj" \
             "com.adriandeleon.template" "$new_bundle_id" \
             "$old_project_name" "$new_project_name" \
-            "com.adriandeleon.template.Template" "$new_bundle_id.$new_project_name" \
+            "com.adriandeleon.kmp.template.KMPTemplate" "$new_bundle_id.$new_project_name" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
         
         # Rename Xcode project directory
@@ -223,7 +223,7 @@ update_xcode_project() {
         update_file_contents "iosApp/Configuration/Config.xcconfig" \
             "com.adriandeleon.template" "$new_bundle_id" \
             "$old_project_name" "$new_project_name" \
-            "com.adriandeleon.template.Template" "$new_bundle_id.$new_project_name" \
+            "com.adriandeleon.kmp.template.KMPTemplate" "$new_bundle_id.$new_project_name" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
     fi
     
@@ -238,7 +238,7 @@ update_xcode_project() {
         update_file_contents "$file" \
             "com.adriandeleon.template" "$new_bundle_id" \
             "$old_project_name" "$new_project_name" \
-            "com.adriandeleon.template.Template" "$new_bundle_id.$new_project_name" \
+            "com.adriandeleon.kmp.template.KMPTemplate" "$new_bundle_id.$new_project_name" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
     done
 }
@@ -692,7 +692,7 @@ show_final_instructions() {
     echo "   - Replace composeApp/google-services.json with your actual Firebase config"
     echo "   - Replace iosApp/$new_project_name/GoogleService-Info.plist with your actual Firebase config"
     echo "   - Update local.properties with your actual API keys (placeholders were added)"
-    echo "   - Note: Template files were created with correct package names and bundle IDs"
+    echo "   - Note: KMP-Template files were created with correct package names and bundle IDs"
     echo ""
     echo -e "${YELLOW}3. Update GitHub repository:${NC}"
     echo "   - Update repository secrets in GitHub Settings"
@@ -715,14 +715,14 @@ show_final_instructions() {
 # Main function
 main() {
     echo -e "${PURPLE}=============================================================================${NC}"
-    echo -e "${PURPLE}    Kotlin Multiplatform Template Project Setup Script${NC}"
+    echo -e "${PURPLE}    Kotlin Multiplatform KMP-Template Project Setup Script${NC}"
     echo -e "${PURPLE}=============================================================================${NC}"
     echo ""
     
     # Current template values
-    local OLD_PACKAGE="com.adriandeleon.template"
-    local OLD_PROJECT_NAME="Template"
-    local OLD_BUNDLE_ID="com.adriandeleon.template.Template"
+    local OLD_PACKAGE="com.adriandeleon.kmp.template"
+    local OLD_PROJECT_NAME="KMP-Template"
+    local OLD_BUNDLE_ID="com.adriandeleon.kmp.template.KMPTemplate"
     local OLD_DOMAIN="adriandeleon"
     
     # Get user input

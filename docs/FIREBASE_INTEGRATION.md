@@ -99,7 +99,7 @@ The Firebase integration follows a layered architecture pattern:
 3. **Enter app nickname** (optional)
 4. **Click "Register app"**
 5. **Download `GoogleService-Info.plist`**
-6. **Place in `iosApp/Template/` directory**
+6. **Place in `iosApp/KMP-Template/` directory**
 
 ### **4. Enable Services**
 
@@ -167,7 +167,7 @@ dependencies {
 
 #### **iOS Module**
 ```swift
-// In iosApp/Template.xcodeproj
+// In iosApp/KMP-Template.xcodeproj
 // Add Firebase pods to Podfile
 pod 'Firebase/Analytics'
 pod 'Firebase/Crashlytics'
@@ -182,7 +182,7 @@ The android configuration file should be placed in `composeApp/google-services.j
 
 #### **iOS Configuration**
 
-The iOS configuration file should be placed in `iosApp/Template/GoogleService-Info.plist`
+The iOS configuration file should be placed in `iosApp/KMP-Template/GoogleService-Info.plist`
 
 ### **3. GitHub Secrets**
 
@@ -201,7 +201,7 @@ GOOGLE_SERVICE_ACCOUNT: "base64_encoded_service_account_json"
 base64 -i composeApp/google-services.json -o google_services_base64.txt
 
 # iOS configuration
-base64 -i iosApp/Template/GoogleService-Info.plist -o google_service_info_base64.txt
+base64 -i iosApp/KMP-Template/GoogleService-Info.plist -o google_service_info_base64.txt
 
 # Service account key
 base64 -i service-account-key.json -o service_account_base64.txt
@@ -503,11 +503,11 @@ class TestAnalytics : Analytics {
 ```bash
 # Verify configuration files exist
 ls -la composeApp/google-services.json
-ls -la iosApp/Template/GoogleService-Info.plist
+ls -la iosApp/KMP-Template/GoogleService-Info.plist
 
 # Check file permissions
 chmod 644 composeApp/google-services.json
-chmod 644 iosApp/Template/GoogleService-Info.plist
+chmod 644 iosApp/KMP-Template/GoogleService-Info.plist
 ```
 
 #### **2. Dependency Issues**

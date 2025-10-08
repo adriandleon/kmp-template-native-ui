@@ -1,4 +1,4 @@
-# Kotlin Multiplatform Template
+# Kotlin Multiplatform KMP-Template
 
 ![Static Badge](https://img.shields.io/badge/Compose-327CF3?style=flat&logo=android&logoColor=white)
 ![Static Badge](https://img.shields.io/badge/SwiftUI-FA7343?style=flat&logo=swift&logoColor=white)
@@ -43,7 +43,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 1. **Clone the repository**
    ```bash
    git clone <your-repo-url>
-   cd Template
+   cd KMP-Template
    ```
 
 2. **Open in Android Studio**
@@ -56,7 +56,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
    - Click the "Run" button or press `Shift + F10`
 
 4. **Run on iOS**
-   - Open `iosApp/Template.xcodeproj` in Xcode
+   - Open `iosApp/KMP-Template.xcodeproj` in Xcode
    - Select an iOS simulator or device
    - Press `Cmd + R` to build and run
 
@@ -76,14 +76,14 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
    - Replace `com.adriandeleon.template` with your package name
    - Update in `composeApp/build.gradle.kts`
    - Update in `shared/build.gradle.kts`
-   - Update in `iosApp/Template/Info.plist`
+   - Update in `iosApp/KMP-Template/Info.plist`
 
 2. **Update app name**
    - Android: Update `app_name` in `composeApp/src/androidMain/res/values/strings.xml`
-   - iOS: Update `CFBundleDisplayName` in `iosApp/Template/Info.plist`
+   - iOS: Update `CFBundleDisplayName` in `iosApp/KMP-Template/Info.plist`
 
 3. **Update bundle identifier**
-   - iOS: Update `CFBundleIdentifier` in `iosApp/Template/Info.plist`
+   - iOS: Update `CFBundleIdentifier` in `iosApp/KMP-Template/Info.plist`
 
 ## 📚 Project Documentation
 
@@ -293,7 +293,7 @@ For setup and configuration, see [MCP Servers Configuration](docs/MCP_SERVERS.md
 ```
 
 ### iOS Build
-- Open `iosApp/Template.xcodeproj` in Xcode
+- Open `iosApp/KMP-Template.xcodeproj` in Xcode
 - Select target device/simulator
 - Build using `Cmd + B` or Product → Build
 
