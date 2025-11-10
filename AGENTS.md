@@ -15,7 +15,7 @@ This is a **Kotlin Multiplatform** project with **native UI** targeting Android 
 ## Setup Commands
 
 ### Prerequisites
-- **Android Studio Hedgehog** (2023.1.1+) or **IntelliJ IDEA**
+- **Android Studio** or **IntelliJ IDEA** (latest stable version)
 - **Xcode 16.0+** (for iOS development)
 - **Java 17+**
 - **Gradle 8.0+**
@@ -68,7 +68,7 @@ pre-commit install
 ## Code Style & Conventions
 
 ### Kotlin Code Style (Shared Module)
-- **Language**: Kotlin 2.2.10 with strict mode
+- **Language**: Kotlin 2.2.21 with strict mode
 - **Formatting**: Use `ktfmt` with Kotlin style guide
 - **Linting**: Detekt with Compose rules
 - **Imports**: Single quotes, trailing commas, remove unused imports

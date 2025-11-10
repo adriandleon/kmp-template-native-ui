@@ -87,7 +87,7 @@ The feature flags system is already configured in the project. The following dep
 implementation("com.configcat:configcat-kotlin-client:5.1.0")
 
 // Firebase Remote Config
-implementation("dev.gitlive:firebase-config:2.3.0")
+implementation("dev.gitlive:firebase-config:2.4.0")
 ```
 
 ### **Module Registration**

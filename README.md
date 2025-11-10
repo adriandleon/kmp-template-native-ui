@@ -9,7 +9,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ## 🚀 Features
 
-- **Kotlin Multiplatform** with Kotlin 2.2.10
+- **Kotlin Multiplatform** with Kotlin 2.2.21
 - **Compose Multiplatform** for Android UI
 - **SwiftUI** for iOS UI
 - **Decompose** for navigation and component lifecycle management
@@ -20,11 +20,11 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - **Logging** with Kermit
 - **Feature Flags** with ConfigCat and Firebase Remote Config
 - **Database** with Supabase
-- **Modern Android** (API 24+, Compile SDK 36)
+- **Modern Android** (API 26+, Compile SDK 36)
 
 ## 📱 Supported Platforms
 
-- **Android**: API 24+ (Android 7.0+)
+- **Android**: API 26+ (Android 8.0+)
 - **iOS**: iOS 18.2+
 - **Shared**: Common Kotlin code
 
@@ -34,7 +34,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 - **Android Studio Hedgehog** (2023.1.1) or later
 - **Xcode 16.0** or later (for iOS development)
-- **Kotlin 2.2.10** or later
+- **Kotlin 2.2.21** or later
 - **Java 17** or later
 - **Gradle 8.0** or later
 
@@ -106,31 +106,31 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 ## 🛠️ Tech Stack & Libraries
 
 ### Architecture & Navigation
-- **[Decompose](https://github.com/arkivanov/Decompose)** (3.3.0) - Navigation and component lifecycle
+- **[Decompose](https://github.com/arkivanov/Decompose)** (3.4.0) - Navigation and component lifecycle
 - **[MVIKotlin](https://github.com/arkivanov/MVIKotlin)** (4.3.0) - MVI architecture implementation
 - **[Essenty](https://github.com/arkivanov/Essenty)** (2.5.0) - Lifecycle management
 
 ### Dependency Injection
-- **[Koin](https://insert-koin.io/)** (4.1.0) - Dependency injection framework
+- **[Koin](https://insert-koin.io/)** (4.1.1) - Dependency injection framework
 
 ### UI Framework
-- **[Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)** (1.8.2) - Declarative UI toolkit
+- **[Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)** (1.9.3) - Declarative UI toolkit
 - **Compose Compiler** - Kotlin compiler plugin for Compose
 
 ### Networking
-- **[Ktor](https://ktor.io/)** (3.2.3) - HTTP client for networking
+- **[Ktor](https://ktor.io/)** (3.3.2) - HTTP client for networking
   - `ktor-client-okhttp` for Android
   - `ktor-client-darwin` for iOS
 
 ### Data & Storage
-- **[Supabase](https://supabase.com/)** (3.2.2) - Backend-as-a-Service
+- **[Supabase](https://supabase.com/)** (3.2.6) - Backend-as-a-Service
 - **[DataStore](https://developer.android.com/jetpack/compose/datastore)** (1.1.7) - Local data storage
 - **[Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)** (1.9.0) - JSON serialization
 - **[Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime)** (0.7.1) - Date and time utilities
 
 ### Testing
-- **[Kotest](https://kotest.io/)** (6.0.1) - Testing framework
-- **[Mokkery](https://github.com/mockk/mokkery)** (2.9.0) - Mocking library
+- **[Kotest](https://kotest.io/)** (6.0.4) - Testing framework
+- **[Mokkery](https://github.com/mockk/mokkery)** (2.10.2) - Mocking library
 
 ### Code Quality & Formatting
 - **[Ktfmt](https://github.com/facebook/ktfmt)** - Kotlin code formatter following official style guide
@@ -149,7 +149,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ### Feature Flags & Configuration
 - **[ConfigCat](https://configcat.com/)** (5.1.0) - Feature flags and configuration management
-- **[Firebase Remote Config](https://firebase.google.com/products/remote-config)** (2.3.0) - Remote configuration and feature flags
+- **[Firebase Remote Config](https://firebase.google.com/products/remote-config)** (2.4.0) - Remote configuration and feature flags
 
 ### Logging & Monitoring
 - **[Kermit](https://github.com/touchlab/Kermit)** (2.0.8) - Multiplatform logging
@@ -182,7 +182,7 @@ This template follows a clean, scalable architecture:
 ## 🔧 Configuration
 
 ### Android Configuration
-- **Minimum SDK**: 24 (Android 7.0)
+- **Minimum SDK**: 26 (Android 8.0)
 - **Target SDK**: 36 (Android 14)
 - **Compile SDK**: 36
 - **Java Version**: 17
@@ -194,7 +194,7 @@ This template follows a clean, scalable architecture:
 - **Xcode Version**: 16.0+
 
 ### Shared Configuration
-- **Kotlin Version**: 2.2.10
+- **Kotlin Version**: 2.2.21
 - **Compose Compiler**: Latest
 - **Coroutines**: 1.10.2
 
