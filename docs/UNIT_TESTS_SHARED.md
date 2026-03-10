@@ -292,7 +292,7 @@ class AsyncUserUseCaseTest : StringSpec({
 
 # Run tests for specific module
 ./gradlew :shared:test
-./gradlew :composeApp:test
+./gradlew :androidApp:test
 ```
 
 #### Run Specific Tests

@@ -52,10 +52,10 @@ The setup script automates the process of customizing the template project by:
 **Before** (Template):
 ```
 shared/src/commonMain/kotlin/com/adriandeleon/template/
-shared/src/androidMain/kotlin/com/adriandeleon/template/
+shared/src/main/kotlin/com/adriandeleon/template/
 shared/src/iosMain/kotlin/com/adriandeleon/template/
 shared/src/commonTest/kotlin/com/adriandeleon/template/
-composeApp/src/androidMain/kotlin/com/adriandeleon/template/
+androidApp/src/main/kotlin/com/adriandeleon/template/
 iosApp/Template/
 iosApp/Template.xcodeproj/
 ```
@@ -63,15 +63,15 @@ iosApp/Template.xcodeproj/
 **After** (Your Project):
 ```
 shared/src/commonMain/kotlin/com/yourcompany/yourapp/
-shared/src/androidMain/kotlin/com/yourcompany/yourapp/
+shared/src/main/kotlin/com/yourcompany/yourapp/
 shared/src/iosMain/kotlin/com/yourcompany/yourapp/
 shared/src/commonTest/kotlin/com/yourcompany/yourapp/
-composeApp/src/androidMain/kotlin/com/yourcompany/yourapp/
+androidApp/src/main/kotlin/com/yourcompany/yourapp/
 iosApp/MyAwesomeApp/
 iosApp/MyAwesomeApp.xcodeproj/
 ```
 
-**Complete Coverage**: The script handles all source sets (`commonMain`, `androidMain`, `iosMain`, `commonTest`) ensuring complete package migration.
+**Complete Coverage**: The script handles all source sets (`commonMain`, `main`, `iosMain`, `commonTest`) ensuring complete package migration.
 
 **Cleanup**: The script automatically removes all old empty directories, ensuring no leftover folder structure remains from the template.
 
@@ -87,9 +87,9 @@ The script updates the following types of files:
 - `buildServer.json`
 
 #### **Android Files**
-- `composeApp/src/androidMain/AndroidManifest.xml`
-- All Kotlin source files in `composeApp/src/androidMain/kotlin/`
-- All test files in `composeApp/src/androidUnitTest/kotlin/`
+- `androidApp/src/main/AndroidManifest.xml`
+- All Kotlin source files in `androidApp/src/main/kotlin/`
+- All test files in `androidApp/src/test/kotlin/`
 
 #### **iOS Files**
 - `iosApp/Configuration/Config.xcconfig`
@@ -110,7 +110,7 @@ The script updates the following types of files:
 - `config/Dangerfile.df.kts`
 
 #### **Firebase Configuration Files**
-- `composeApp/google-services.json` - Android Firebase configuration with correct package name
+- `androidApp/google-services.json` - Android Firebase configuration with correct package name
 - `iosApp/YourApp/GoogleService-Info.plist` - iOS Firebase configuration with correct bundle ID
 
 #### **API Key Configuration Files**
@@ -188,10 +188,10 @@ Domain: project.example.org (auto-generated from package name)
 ```
 Directory Structure:
 ├── shared/src/commonMain/kotlin/org/example/project/
-├── shared/src/androidMain/kotlin/org/example/project/
+├── shared/src/main/kotlin/org/example/project/
 ├── shared/src/iosMain/kotlin/org/example/project/
 ├── shared/src/commonTest/kotlin/org/example/project/
-├── composeApp/src/androidMain/kotlin/org/example/project/
+├── androidApp/src/main/kotlin/org/example/project/
 ├── iosApp/MyApp/
 └── iosApp/MyApp.xcodeproj/
 
@@ -242,7 +242,7 @@ The script provides colored, informative output:
 - **Reduced Input**: No need to manually type the same identifier twice
 
 ### Complete Source Set Coverage
-- **All Source Sets**: Handles `commonMain`, `androidMain`, `iosMain`, and `commonTest`
+- **All Source Sets**: Handles `commonMain`, `main`, `iosMain`, and `commonTest`
 - **No Missing Files**: Ensures all Kotlin files are properly migrated
 - **Consistent Structure**: Maintains the same package structure across all source sets
 - **Complete Cleanup**: Removes old directories from all source sets
@@ -281,7 +281,7 @@ After running the script, you'll need to:
 - Open the new Xcode project: `iosApp/YourApp.xcodeproj`
 
 ### 2. Update Configuration Files
-- Replace `composeApp/google-services.json` with your actual Firebase configuration
+- Replace `androidApp/google-services.json` with your actual Firebase configuration
 - Replace `iosApp/YourApp/GoogleService-Info.plist` with your actual Firebase configuration
 - Update `local.properties` with your actual API keys (placeholders were added)
 - Note: Template files were created with correct package names and bundle IDs
@@ -297,7 +297,7 @@ After running the script, you'll need to:
 ./gradlew test
 
 # Test Android build
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # Test iOS build in Xcode
 ```
@@ -331,7 +331,7 @@ chmod +x setup_new_project.sh
 - **Package name must match**: Ensure the package name in Firebase Console matches your project's package name
 - **Bundle ID must match**: Ensure the bundle ID in Firebase Console matches your project's bundle ID
 - **File locations**: 
-  - Android: `composeApp/google-services.json`
+  - Android: `androidApp/google-services.json`
   - iOS: `iosApp/YourApp/GoogleService-Info.plist`
 
 #### API Key Configuration Issues

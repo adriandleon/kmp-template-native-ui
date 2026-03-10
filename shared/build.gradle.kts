@@ -6,7 +6,7 @@ import com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy.COMPLETE
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
-    alias(libs.plugins.android.library)
+    alias(libs.plugins.android.multiplatform.library)
     alias(libs.plugins.buildkonfig)
     alias(libs.plugins.detekt)
     alias(libs.plugins.kotest)
@@ -20,9 +20,14 @@ plugins {
 }
 
 kotlin {
-    jvmToolchain(17)
+    jvmToolchain(21)
 
-    androidTarget { compilerOptions.jvmTarget.set(JvmTarget.JVM_17) }
+    android {
+        namespace = "com.adriandeleon.kmp.template.shared"
+        compileSdk = libs.versions.android.compileSdk.get().toInt()
+        minSdk = libs.versions.android.minSdk.get().toInt()
+        compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
+    }
 
     listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
         iosTarget.binaries.framework {
@@ -64,6 +69,7 @@ kotlin {
         androidMain.dependencies {
             api(libs.koin.android)
             implementation(libs.ktor.client.okhttp)
+            implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.9.0"))
         }
 
         iosMain.dependencies { implementation(libs.ktor.client.darwin) }
@@ -79,18 +85,6 @@ kotlin {
             implementation(libs.ktor.client.mock)
         }
     }
-}
-
-android {
-    namespace = "com.adriandeleon.kmp.template.shared"
-    compileSdk = libs.versions.android.compileSdk.get().toInt()
-    compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
-    }
-    defaultConfig { minSdk = libs.versions.android.minSdk.get().toInt() }
-
-    testOptions.unitTests.all { it.useJUnitPlatform() }
 }
 
 dependencies { detektPlugins(libs.detekt.compose) }

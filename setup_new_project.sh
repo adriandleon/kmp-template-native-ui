@@ -99,18 +99,18 @@ create_directory_structure() {
         fi
     done
     
-    # Create new directory structure for composeApp module
-    if [ -d "composeApp/src/androidMain/kotlin/$old_path" ]; then
-        mkdir -p "composeApp/src/androidMain/kotlin/$new_path"
-        cp -r "composeApp/src/androidMain/kotlin/$old_path"/* "composeApp/src/androidMain/kotlin/$new_path/" 2>/dev/null || true
-        print_success "Created composeApp module directory structure: $new_path"
+    # Create new directory structure for androidApp module
+    if [ -d "androidApp/src/main/kotlin/$old_path" ]; then
+        mkdir -p "androidApp/src/main/kotlin/$new_path"
+        cp -r "androidApp/src/main/kotlin/$old_path"/* "androidApp/src/main/kotlin/$new_path/" 2>/dev/null || true
+        print_success "Created androidApp module directory structure: $new_path"
     fi
     
-    # Create new directory structure for androidUnitTest
-    if [ -d "composeApp/src/androidUnitTest/kotlin/$old_path" ]; then
-        mkdir -p "composeApp/src/androidUnitTest/kotlin/$new_path"
-        cp -r "composeApp/src/androidUnitTest/kotlin/$old_path"/* "composeApp/src/androidUnitTest/kotlin/$new_path/" 2>/dev/null || true
-        print_success "Created androidUnitTest directory structure: $new_path"
+    # Create new directory structure for androidApp test
+    if [ -d "androidApp/src/test/kotlin/$old_path" ]; then
+        mkdir -p "androidApp/src/test/kotlin/$new_path"
+        cp -r "androidApp/src/test/kotlin/$old_path"/* "androidApp/src/test/kotlin/$new_path/" 2>/dev/null || true
+        print_success "Created androidApp test directory structure: $new_path"
     fi
 }
 
@@ -127,16 +127,16 @@ remove_old_directories() {
         rm -rf "shared/src/$source_set/kotlin/$old_path" 2>/dev/null || true
     done
     
-    # Remove old directories from composeApp module
-    rm -rf "composeApp/src/androidMain/kotlin/$old_path" 2>/dev/null || true
-    rm -rf "composeApp/src/androidUnitTest/kotlin/$old_path" 2>/dev/null || true
+    # Remove old directories from androidApp module
+    rm -rf "androidApp/src/main/kotlin/$old_path" 2>/dev/null || true
+    rm -rf "androidApp/src/test/kotlin/$old_path" 2>/dev/null || true
     
     # Clean up empty parent directories
     for source_set in "${shared_source_sets[@]}"; do
         cleanup_empty_directories "shared/src/$source_set/kotlin"
     done
-    cleanup_empty_directories "composeApp/src/androidMain/kotlin"
-    cleanup_empty_directories "composeApp/src/androidUnitTest/kotlin"
+    cleanup_empty_directories "androidApp/src/main/kotlin"
+    cleanup_empty_directories "androidApp/src/test/kotlin"
     
     print_success "Removed old directory structure: $old_path"
 }
@@ -303,7 +303,7 @@ update_config_files() {
         "$old_bundle_id" "$new_bundle_id" \
         "$old_domain" "$new_domain"
     
-    update_file_contents "composeApp/build.gradle.kts" \
+    update_file_contents "androidApp/build.gradle.kts" \
         "$old_package" "$new_package" \
         "$old_project_name" "$new_project_name" \
         "$old_bundle_id" "$new_bundle_id" \
@@ -316,8 +316,8 @@ update_config_files() {
         "$old_domain" "$new_domain"
     
     # Update Android manifest
-    if [ -f "composeApp/src/androidMain/AndroidManifest.xml" ]; then
-        update_file_contents "composeApp/src/androidMain/AndroidManifest.xml" \
+    if [ -f "androidApp/src/main/AndroidManifest.xml" ]; then
+        update_file_contents "androidApp/src/main/AndroidManifest.xml" \
             "$old_package" "$new_package" \
             "$old_project_name" "$new_project_name" \
             "$old_bundle_id" "$new_bundle_id" \
@@ -565,7 +565,7 @@ create_google_services_json() {
   "configuration_version": "1"
 }'
     
-    echo "$google_services_content" > "composeApp/google-services.json"
+    echo "$google_services_content" > "androidApp/google-services.json"
     print_success "Created google-services.json with package name: $package_name"
 }
 
@@ -642,10 +642,10 @@ validate_transformation() {
     done
     
     # Check composeApp directories
-    if [ -d "composeApp/src/androidMain/kotlin/$new_path" ]; then
-        print_success "New composeApp directory structure created successfully"
+    if [ -d "androidApp/src/main/kotlin/$new_path" ]; then
+        print_success "New androidApp directory structure created successfully"
     else
-        print_error "New composeApp directory structure not found"
+        print_error "New androidApp directory structure not found"
         all_dirs_exist=false
     fi
     
@@ -689,7 +689,7 @@ show_final_instructions() {
     echo "   - Open the new Xcode project: iosApp/$new_project_name.xcodeproj"
     echo ""
     echo -e "${YELLOW}2. Update configuration files:${NC}"
-    echo "   - Replace composeApp/google-services.json with your actual Firebase config"
+    echo "   - Replace androidApp/google-services.json with your actual Firebase config"
     echo "   - Replace iosApp/$new_project_name/GoogleService-Info.plist with your actual Firebase config"
     echo "   - Update local.properties with your actual API keys (placeholders were added)"
     echo "   - Note: KMP-Template files were created with correct package names and bundle IDs"
@@ -701,7 +701,7 @@ show_final_instructions() {
     echo ""
     echo -e "${YELLOW}4. Test your setup:${NC}"
     echo "   - Run: ./gradlew clean build"
-    echo "   - Test Android build: ./gradlew :composeApp:assembleDebug"
+    echo "   - Test Android build: ./gradlew :androidApp:assembleDebug"
     echo "   - Test iOS build in Xcode"
     echo ""
     echo -e "${CYAN}📊 Project Details:${NC}"

@@ -132,7 +132,7 @@ The main configuration is in `config/detekt.yml`. Key configurations include:
 
 # Run on specific module
 ./gradlew :shared:detekt
-./gradlew :composeApp:detekt
+./gradlew :androidApp:detekt
 ```
 
 #### IDE Integration

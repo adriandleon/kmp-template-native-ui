@@ -87,7 +87,7 @@ All workflows are fully configurable with variables at the top of each file:
 env:
   # Project Configuration
   PROJECT_NAME: "YourProjectName"
-  ANDROID_APP_MODULE: "composeApp"
+  ANDROID_APP_MODULE: "androidApp"
   IOS_APP_MODULE: "iosApp"
   
   # Android Configuration
@@ -109,7 +109,7 @@ env:
   
   # Deployment Configuration
   PLAY_STORE_TRACK: "internal"
-  RELEASE_NOTES_DIR: "composeApp/release/whatsNew"
+  RELEASE_NOTES_DIR: "androidApp/release/whatsNew"
 ```
 
 ### **Quick Migration Guide**
@@ -184,7 +184,7 @@ env:
   
   # Project Paths
   SHARED_MODULE_PATH: "shared"
-  COMPOSE_APP_MODULE_PATH: "composeApp"
+  COMPOSE_APP_MODULE_PATH: "androidApp"
   IOS_APP_MODULE_PATH: "iosApp"
 ```
 
@@ -255,7 +255,7 @@ env:
 env:
   # Project Configuration
   PROJECT_NAME: "YourProjectName"
-  ANDROID_APP_MODULE: "composeApp"
+  ANDROID_APP_MODULE: "androidApp"
   
   # Android Configuration
   ANDROID_PACKAGE_NAME: "com.yourcompany.yourapp"
@@ -274,7 +274,7 @@ env:
   
   # Play Store
   PLAY_STORE_TRACK: "internal"
-  RELEASE_NOTES_DIR: "composeApp/release/whatsNew"
+  RELEASE_NOTES_DIR: "androidApp/release/whatsNew"
 ```
 
 ### **iOS App Deployment**

@@ -90,7 +90,7 @@ The Firebase integration follows a layered architecture pattern:
 3. **Enter app nickname** (optional)
 4. **Click "Register app"**
 5. **Download `google-services.json`**
-6. **Place in `composeApp/` directory**
+6. **Place in `androidApp/` directory**
 
 ### **3. Add iOS App**
 
@@ -152,7 +152,7 @@ kotlin {
 
 #### **Android Module**
 ```kotlin
-// In composeApp/build.gradle.kts
+// In androidApp/build.gradle.kts
 plugins {
     id("com.google.gms.google-services")
     id("com.google.firebase.crashlytics")
@@ -178,7 +178,7 @@ pod 'Firebase/Crashlytics'
 
 #### **Android Configuration**
 
-The android configuration file should be placed in `composeApp/google-services.json`
+The android configuration file should be placed in `androidApp/google-services.json`
 
 #### **iOS Configuration**
 
@@ -198,7 +198,7 @@ GOOGLE_SERVICE_ACCOUNT: "base64_encoded_service_account_json"
 #### **Convert Configuration Files to Base64**
 ```bash
 # Android configuration
-base64 -i composeApp/google-services.json -o google_services_base64.txt
+base64 -i androidApp/google-services.json -o google_services_base64.txt
 
 # iOS configuration
 base64 -i iosApp/KMP-Template/GoogleService-Info.plist -o google_service_info_base64.txt
@@ -447,7 +447,7 @@ class CrashlyticsTest {
 
 #### **Test Firebase Integration**
 ```kotlin
-// In composeApp/src/androidTest/kotlin/com/yourcompany/yourapp/FirebaseIntegrationTest.kt
+// In androidApp/src/androidTest/kotlin/com/yourcompany/yourapp/FirebaseIntegrationTest.kt
 @RunWith(AndroidJUnit4::class)
 class FirebaseIntegrationTest {
     @Test
@@ -502,11 +502,11 @@ class TestAnalytics : Analytics {
 **Solution**:
 ```bash
 # Verify configuration files exist
-ls -la composeApp/google-services.json
+ls -la androidApp/google-services.json
 ls -la iosApp/KMP-Template/GoogleService-Info.plist
 
 # Check file permissions
-chmod 644 composeApp/google-services.json
+chmod 644 androidApp/google-services.json
 chmod 644 iosApp/KMP-Template/GoogleService-Info.plist
 ```
 
@@ -520,7 +520,7 @@ chmod 644 iosApp/KMP-Template/GoogleService-Info.plist
 ./gradlew build
 
 # Check dependency tree
-./gradlew :composeApp:dependencies --configuration implementation
+./gradlew :androidApp:dependencies --configuration implementation
 ```
 
 #### **3. Analytics Not Working**

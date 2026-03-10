@@ -6,7 +6,7 @@ name: iOS App Deploy
 env:
   # Project Configuration
   PROJECT_NAME: KMP-Template
-  ANDROID_APP_MODULE: composeApp
+  ANDROID_APP_MODULE: androidApp
   IOS_APP_MODULE: iosApp
   SHARED_MODULE: shared
 

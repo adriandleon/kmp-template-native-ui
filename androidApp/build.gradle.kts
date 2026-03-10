@@ -9,38 +9,10 @@ plugins {
     alias(libs.plugins.detekt)
     alias(libs.plugins.google.services)
     alias(libs.plugins.ktfmt.gradle)
-    alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.lumo)
 }
 
-kotlin {
-    androidTarget { compilerOptions.jvmTarget.set(JvmTarget.JVM_17) }
-
-    sourceSets {
-        androidMain.dependencies {
-            implementation(compose.preview)
-            implementation(libs.androidx.activity.compose)
-            implementation(libs.splashscreen)
-        }
-        commonMain.dependencies {
-            implementation(projects.shared)
-            implementation(compose.components.resources)
-            implementation(compose.components.uiToolingPreview)
-            implementation(compose.foundation)
-            implementation(compose.material3)
-            implementation(compose.runtime)
-            implementation(compose.ui)
-            implementation(libs.decompose)
-            implementation(libs.decompose.extensions)
-            implementation(libs.coil.compose)
-            implementation(libs.coil.network.okhttp)
-            implementation(libs.koin.compose)
-            implementation(libs.lifecycle.runtime.compose)
-            implementation(libs.lifecycle.viewmodel.compose)
-        }
-        commonTest.dependencies { implementation(libs.kotlin.test) }
-    }
-}
+kotlin { compilerOptions { jvmTarget.set(JvmTarget.JVM_21) } }
 
 android {
     namespace = "com.adriandeleon.kmp.template"
@@ -52,6 +24,7 @@ android {
         targetSdk = libs.versions.android.targetSdk.get().toInt()
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
     packaging.resources {
         excludes += "/META-INF/{AL2.0,LGPL2.1}"
@@ -77,16 +50,16 @@ android {
             ndk.debugSymbolLevel = "FULL"
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
-                getDefaultProguardFile("proguard-android.txt"),
                 "proguard-rules.pro",
             )
         }
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
+
 
     ktfmt {
         kotlinLangStyle()
@@ -102,6 +75,28 @@ android {
 }
 
 dependencies {
+    implementation(projects.shared)
+    
+    implementation(compose.preview)
+    implementation(libs.androidx.activity.compose)
+    implementation(libs.splashscreen)
+    
+    implementation(compose.components.resources)
+    implementation(compose.components.uiToolingPreview)
+    implementation(compose.foundation)
+    implementation(compose.material3)
+    implementation(compose.runtime)
+    implementation(compose.ui)
+    implementation(libs.decompose)
+    implementation(libs.decompose.extensions)
+    implementation(libs.coil.compose)
+    implementation(libs.coil.network.okhttp)
+    implementation(libs.koin.compose)
+    implementation(libs.lifecycle.runtime.compose)
+    implementation(libs.lifecycle.viewmodel.compose)
+    
+    testImplementation(libs.kotlin.test)
+    
     debugImplementation(compose.uiTooling)
     detektPlugins(libs.detekt.compose)
 }

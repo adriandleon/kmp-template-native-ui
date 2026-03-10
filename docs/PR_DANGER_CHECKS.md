@@ -64,7 +64,7 @@ val PROJECT_REPO = "kmp-template-native-ui"             // Repository name
 ### **Module Paths**
 ```kotlin
 val SHARED_MODULE_PATH = "shared/src/commonMain/"       // Path to shared module common code
-val ANDROID_MODULE_PATH = "composeApp/src/androidMain/" // Path to Android module code
+val ANDROID_MODULE_PATH = "androidApp/src/main/" // Path to Android module code
 val IOS_MODULE_PATH = "iosApp/KMP-Template/"            // Path to iOS module code
 ```
 

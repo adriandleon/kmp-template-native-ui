@@ -151,7 +151,7 @@ dependencies {
 2. Enter package name (e.g., `com.yourcompany.yourapp`)
 3. Add suffix "Android" to project nickname for clarity
 4. Download `google-services.json` file
-5. Place in `composeApp/google-services.json`
+5. Place in `androidApp/google-services.json`
 6. **Important**: Don't commit this file to git
 
 #### 3. Configure iOS App

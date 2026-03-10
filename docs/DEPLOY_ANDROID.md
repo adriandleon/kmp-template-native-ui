@@ -34,7 +34,7 @@ Before starting the deployment process, ensure you have:
 
 ### **1. Verify Project Configuration**
 
-Check your `composeApp/build.gradle.kts` file has the correct configuration:
+Check your `androidApp/build.gradle.kts` file has the correct configuration:
 
 ```kotlin
 android {
@@ -120,7 +120,7 @@ keytool -genkey -v -keystore my-release-key.keystore -alias my-key-alias -keyalg
 
 #### **Add Signing Config**
 ```kotlin
-// In composeApp/build.gradle.kts
+// In androidApp/build.gradle.kts
 android {
     signingConfigs {
         create("release") {
@@ -143,7 +143,7 @@ keyPassword = "your-key-password" # pragma: allowlist secret
 
 #### **Use Environment Variables (Recommended)**
 ```kotlin
-// In composeApp/build.gradle.kts
+// In androidApp/build.gradle.kts
 android {
     signingConfigs {
         create("release") {
@@ -249,7 +249,7 @@ The workflow is fully configurable with variables at the top:
 env:
   # Project Configuration
   PROJECT_NAME: "YourProjectName"
-  ANDROID_APP_MODULE: "composeApp"
+  ANDROID_APP_MODULE: "androidApp"
   
   # Android Configuration
   ANDROID_PACKAGE_NAME: "com.yourcompany.yourapp"
@@ -265,7 +265,7 @@ env:
   
   # Play Store
   PLAY_STORE_TRACK: "internal"
-  RELEASE_NOTES_DIR: "composeApp/release/whatsNew"
+  RELEASE_NOTES_DIR: "androidApp/release/whatsNew"
 ```
 
 ### **Required Secrets**
@@ -293,10 +293,10 @@ Ensure these secrets are configured in your GitHub repository:
 #### **Run Tests Locally**
 ```bash
 # Unit tests
-./gradlew :composeApp:testDebugUnitTest
+./gradlew :androidApp:testDebugUnitTest
 
 # Instrumented tests
-./gradlew :composeApp:connectedDebugAndroidTest
+./gradlew :androidApp:connectedDebugAndroidTest
 
 # Build variants
 ./gradlew assembleDebug
@@ -333,10 +333,10 @@ FIREBASE_ORIENTATION: "portrait"    # Portrait orientation
 #### **Generate Coverage**
 ```bash
 # Generate coverage report
-./gradlew :composeApp:testDebugUnitTestCoverage
+./gradlew :androidApp:testDebugUnitTestCoverage
 
 # View coverage in browser
-open composeApp/build/reports/coverage/debug/index.html
+open androidApp/build/reports/coverage/debug/index.html
 ```
 
 ## 🐛 Troubleshooting
@@ -366,7 +366,7 @@ keytool -list -v -keystore path/to/your/keystore.jks
 ./gradlew clean
 
 # Check dependencies
-./gradlew :composeApp:dependencies
+./gradlew :androidApp:dependencies
 
 # Verify SDK installation
 ./gradlew androidDependencies
@@ -398,7 +398,7 @@ keytool -list -v -keystore path/to/your/keystore.jks
 ./gradlew assembleRelease --debug
 
 # Check specific task
-./gradlew :composeApp:assembleRelease --info
+./gradlew :androidApp:assembleRelease --info
 ```
 
 #### **Verify Configuration**
@@ -407,7 +407,7 @@ keytool -list -v -keystore path/to/your/keystore.jks
 ./gradlew signingReport
 
 # Verify build variants
-./gradlew :composeApp:assembleRelease --dry-run
+./gradlew :androidApp:assembleRelease --dry-run
 ```
 
 ## 📚 Best Practices
@@ -472,7 +472,7 @@ keytool -list -v -keystore path/to/your/keystore.jks
 
 # Dependencies
 ./gradlew dependencies
-./gradlew :composeApp:dependencies
+./gradlew :androidApp:dependencies
 
 # Clean and rebuild
 ./gradlew clean

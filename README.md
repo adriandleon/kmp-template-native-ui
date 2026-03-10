@@ -74,12 +74,12 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 1. **Update package names**
    - Replace `com.adriandeleon.template` with your package name
-   - Update in `composeApp/build.gradle.kts`
+   - Update in `androidApp/build.gradle.kts`
    - Update in `shared/build.gradle.kts`
    - Update in `iosApp/KMP-Template/Info.plist`
 
 2. **Update app name**
-   - Android: Update `app_name` in `composeApp/src/androidMain/res/values/strings.xml`
+   - Android: Update `app_name` in `androidApp/src/main/res/values/strings.xml`
    - iOS: Update `CFBundleDisplayName` in `iosApp/KMP-Template/Info.plist`
 
 3. **Update bundle identifier**
@@ -207,7 +207,7 @@ This template follows a clean, scalable architecture:
 
 # Run specific module tests
 ./gradlew :shared:test
-./gradlew :composeApp:test
+./gradlew :androidApp:test
 
 # Run tests with coverage
 ./gradlew testDebugUnitTestCoverage
@@ -233,7 +233,7 @@ For detailed testing information, see [Unit Tests Shared](docs/UNIT_TESTS_SHARED
 
 # Run on specific module
 ./gradlew :shared:detekt
-./gradlew :composeApp:detekt
+./gradlew :androidApp:detekt
 ```
 
 ### Pre-commit Hooks
@@ -306,7 +306,7 @@ For setup and configuration, see [MCP Servers Configuration](docs/MCP_SERVERS.md
 ## 🚀 Deployment
 
 ### Android
-1. Update version in `composeApp/build.gradle.kts`
+1. Update version in `androidApp/build.gradle.kts`
 2. Build release APK or bundle
 3. Sign with your release keystore
 4. Upload to Google Play Console

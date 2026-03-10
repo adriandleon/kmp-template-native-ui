@@ -41,7 +41,7 @@ pre-commit install
 
 # Run specific module tests
 ./gradlew :shared:test
-./gradlew :composeApp:test
+./gradlew :androidApp:test
 
 # Run tests with coverage (must be 90%+)
 ./gradlew testDebugUnitTestCoverage
@@ -56,10 +56,10 @@ pre-commit install
 ./gradlew detektAll
 
 # Build Android debug
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # Build Android release
-./gradlew :composeApp:assembleRelease
+./gradlew :androidApp:assembleRelease
 
 # Build shared framework for iOS
 ./gradlew :shared:assembleXCFramework
@@ -124,8 +124,8 @@ shared/
 │       ├── component/
 │       ├── mapper/
 │       └── store/
-composeApp/
-├── src/androidMain/kotlin/  # Android-specific UI
+androidApp/
+├── src/main/kotlin/  # Android-specific UI
 │   └── com/yourcompany/yourapp/
 │       ├── feature_a/
 │       │   ├── FeatureAScreen.kt
@@ -149,7 +149,7 @@ iosApp/
 
 # Run tests for specific module
 ./gradlew :shared:test
-./gradlew :composeApp:test
+./gradlew :androidApp:test
 
 # Run with coverage (must pass 90% threshold)
 ./gradlew testDebugUnitTestCoverage
@@ -185,13 +185,13 @@ class HomeStoreTest : FunSpec({
 ### Android Build
 ```bash
 # Debug build
-./gradlew :composeApp:assembleDebug
+./gradlew :androidApp:assembleDebug
 
 # Release build (signed)
-./gradlew :composeApp:assembleRelease
+./gradlew :androidApp:assembleRelease
 
 # Bundle for Play Store
-./gradlew :composeApp:bundleRelease
+./gradlew :androidApp:bundleRelease
 ```
 
 ### iOS Build
@@ -291,7 +291,7 @@ interface HomeComponent {
 - **UI Framework**: Compose Multiplatform only
 - **Navigation**: Decompose navigation
 - **State**: Use `@Observable` view models
-- **Testing**: Unit tests in `androidUnitTest`
+- **Testing**: Unit tests in `test`
 - **Previews**: Every composable MUST have `@Preview` annotations
 - **Multi-Locale Previews**: Create previews for all supported languages (en, es-r419, pt-rBR)
 - **Theme Variations**: Include both light and dark theme previews

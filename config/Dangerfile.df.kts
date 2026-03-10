@@ -15,8 +15,8 @@ val ANDROID_MODULE_PATH = "composeApp/src/androidMain/"          // Path to Andr
 val IOS_MODULE_PATH = "iosApp/Template/"                         // Path to iOS module code
 
 // Android App Configuration
-val ANDROID_APP_MODULE = "composeApp"                            // Your Android module name
-val ANDROID_RELEASE_NOTES_DIR = "composeApp/release/whatsNew"    // Path to release notes directory
+val ANDROID_APP_MODULE = "androidApp"                            // Your Android module name
+val ANDROID_RELEASE_NOTES_DIR = "androidApp/release/whatsNew"    // Path to release notes directory
 
 // Release Notes Configuration
 val RELEASE_NOTES_ENABLED = true                                 // Enable/disable release notes checks

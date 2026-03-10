@@ -17,7 +17,7 @@ config:
 processors:
   active: true
   exclude:
-    - DetektProgressListener
+  - DetektProgressListener
   # - 'KtFileCountProcessor'
   # - 'PackageCountProcessor'
   # - 'ClassCountProcessor'
@@ -34,11 +34,11 @@ processors:
 console-reports:
   active: true
   exclude:
-    - ProjectStatisticsReport
-    - ComplexityReport
-    - NotificationReport
-    - FindingsReport
-    - FileBasedFindingsReport
+  - ProjectStatisticsReport
+  - ComplexityReport
+  - NotificationReport
+  - FindingsReport
+  - FileBasedFindingsReport
   #  - 'LiteFindingsReport'
 
 output-reports:
@@ -47,8 +47,8 @@ output-reports:
     #   - 'TxtOutputReport'
     #   - 'XmlOutputReport'
     #   - 'HtmlOutputReport'
-    - MdOutputReport
-    - SarifOutputReport
+  - MdOutputReport
+  - SarifOutputReport
 
 comments:
   active: true
@@ -112,15 +112,15 @@ complexity:
     ignoreNestingFunctions: false
     excludes: ['**/ui/**']
     nestingFunctions:
-      - also
-      - apply
-      - forEach
-      - isNotNull
-      - ifNull
-      - let
-      - run
-      - use
-      - with
+    - also
+    - apply
+    - forEach
+    - isNotNull
+    - ifNull
+    - let
+    - run
+    - use
+    - with
   LabeledExpression:
     active: false
     ignoredLabels: []
@@ -153,11 +153,11 @@ complexity:
     active: false
     threshold: 1
     functions:
-      - kotlin.apply
-      - kotlin.run
-      - kotlin.with
-      - kotlin.let
-      - kotlin.also
+    - kotlin.apply
+    - kotlin.run
+    - kotlin.with
+    - kotlin.let
+    - kotlin.also
   ReplaceSafeCallChainWithRun:
     active: false
   StringLiteralDuplication:
@@ -187,9 +187,9 @@ coroutines:
   InjectDispatcher:
     active: true
     dispatcherNames:
-      - IO
-      - Default
-      - Unconfined
+    - IO
+    - Default
+    - Unconfined
   RedundantSuspendModifier:
     active: true
   SleepInsteadOfDelay:
@@ -241,10 +241,10 @@ exceptions:
   ExceptionRaisedInUnexpectedLocation:
     active: true
     methodNames:
-      - equals
-      - finalize
-      - hashCode
-      - toString
+    - equals
+    - finalize
+    - hashCode
+    - toString
   InstanceOfCheckForException:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
@@ -262,10 +262,10 @@ exceptions:
   SwallowedException:
     active: true
     ignoredExceptionTypes:
-      - InterruptedException
-      - MalformedURLException
-      - NumberFormatException
-      - ParseException
+    - InterruptedException
+    - MalformedURLException
+    - NumberFormatException
+    - ParseException
     allowedExceptionNameRegex: _|(ignore|expected).*
   ThrowingExceptionFromFinally:
     active: true
@@ -275,37 +275,37 @@ exceptions:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptions:
-      - ArrayIndexOutOfBoundsException
-      - Exception
-      - IllegalArgumentException
-      - IllegalMonitorStateException
-      - IllegalStateException
-      - IndexOutOfBoundsException
-      - NullPointerException
-      - RuntimeException
-      - Throwable
+    - ArrayIndexOutOfBoundsException
+    - Exception
+    - IllegalArgumentException
+    - IllegalMonitorStateException
+    - IllegalStateException
+    - IndexOutOfBoundsException
+    - NullPointerException
+    - RuntimeException
+    - Throwable
   ThrowingNewInstanceOfSameException:
     active: true
   TooGenericExceptionCaught:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**']
     exceptionNames:
-      - ArrayIndexOutOfBoundsException
-      - Error
-      - Exception
-      - IllegalMonitorStateException
-      - IndexOutOfBoundsException
-      - NullPointerException
-      - RuntimeException
-      - Throwable
+    - ArrayIndexOutOfBoundsException
+    - Error
+    - Exception
+    - IllegalMonitorStateException
+    - IndexOutOfBoundsException
+    - NullPointerException
+    - RuntimeException
+    - Throwable
     allowedExceptionNameRegex: _|(ignore|expected).*
   TooGenericExceptionThrown:
     active: true
     exceptionNames:
-      - Error
-      - Exception
-      - RuntimeException
-      - Throwable
+    - Error
+    - Exception
+    - RuntimeException
+    - Throwable
 
 naming:
   active: true
@@ -408,7 +408,7 @@ potential-bugs:
   AvoidReferentialEquality:
     active: true
     forbiddenTypePatterns:
-      - kotlin.String
+    - kotlin.String
   CastNullableToNonNullableType:
     active: false
   CastToNullableType:
@@ -420,14 +420,14 @@ potential-bugs:
   DoubleMutabilityForCollection:
     active: true
     mutableTypes:
-      - kotlin.collections.MutableList
-      - kotlin.collections.MutableMap
-      - kotlin.collections.MutableSet
-      - java.util.ArrayList
-      - java.util.LinkedHashSet
-      - java.util.HashSet
-      - java.util.LinkedHashMap
-      - java.util.HashMap
+    - kotlin.collections.MutableList
+    - kotlin.collections.MutableMap
+    - kotlin.collections.MutableSet
+    - java.util.ArrayList
+    - java.util.LinkedHashSet
+    - java.util.HashSet
+    - java.util.LinkedHashMap
+    - java.util.HashMap
   ElseCaseInsteadOfExhaustiveWhen:
     active: false
     ignoredSubjectTypes: []
@@ -445,17 +445,17 @@ potential-bugs:
     active: true
     restrictToConfig: true
     returnValueAnnotations:
-      - CheckResult
-      - '*.CheckResult'
-      - CheckReturnValue
-      - '*.CheckReturnValue'
+    - CheckResult
+    - '*.CheckResult'
+    - CheckReturnValue
+    - '*.CheckReturnValue'
     ignoreReturnValueAnnotations:
-      - CanIgnoreReturnValue
-      - '*.CanIgnoreReturnValue'
+    - CanIgnoreReturnValue
+    - '*.CanIgnoreReturnValue'
     returnValueTypes:
-      - kotlin.sequences.Sequence
-      - kotlinx.coroutines.flow.*Flow
-      - java.util.stream.*Stream
+    - kotlin.sequences.Sequence
+    - kotlinx.coroutines.flow.*Flow
+    - java.util.stream.*Stream
     ignoreFunctionCall: []
   ImplicitDefaultLocale:
     active: true
@@ -531,7 +531,7 @@ style:
   DataClassContainsFunctions:
     active: false
     conversionFunctionPrefix:
-      - to
+    - to
     allowOperators: false
   DataClassShouldBeImmutable:
     active: false
@@ -541,13 +541,13 @@ style:
   DoubleNegativeLambda:
     active: false
     negativeFunctions:
-      - reason: Use `takeIf` instead.
-        value: takeUnless
-      - reason: Use `all` instead.
-        value: none
+    - reason: Use `takeIf` instead.
+      value: takeUnless
+    - reason: Use `all` instead.
+      value: none
     negativeFunctionNameParts:
-      - not
-      - non
+    - not
+    - non
   EqualsNullCall:
     active: true
   EqualsOnSignatureLine:
@@ -562,29 +562,29 @@ style:
   ForbiddenAnnotation:
     active: false
     annotations:
-      - reason: it is a java annotation. Use `Suppress` instead.
-        value: java.lang.SuppressWarnings
-      - reason: it is a java annotation. Use `kotlin.Deprecated` instead.
-        value: java.lang.Deprecated
-      - reason: it is a java annotation. Use `kotlin.annotation.MustBeDocumented` instead.
-        value: java.lang.annotation.Documented
-      - reason: it is a java annotation. Use `kotlin.annotation.Target` instead.
-        value: java.lang.annotation.Target
-      - reason: it is a java annotation. Use `kotlin.annotation.Retention` instead.
-        value: java.lang.annotation.Retention
-      - reason: it is a java annotation. Use `kotlin.annotation.Repeatable` instead.
-        value: java.lang.annotation.Repeatable
-      - reason: Kotlin does not support @Inherited annotation, see https://youtrack.jetbrains.com/issue/KT-22265
-        value: java.lang.annotation.Inherited
+    - reason: it is a java annotation. Use `Suppress` instead.
+      value: java.lang.SuppressWarnings
+    - reason: it is a java annotation. Use `kotlin.Deprecated` instead.
+      value: java.lang.Deprecated
+    - reason: it is a java annotation. Use `kotlin.annotation.MustBeDocumented` instead.
+      value: java.lang.annotation.Documented
+    - reason: it is a java annotation. Use `kotlin.annotation.Target` instead.
+      value: java.lang.annotation.Target
+    - reason: it is a java annotation. Use `kotlin.annotation.Retention` instead.
+      value: java.lang.annotation.Retention
+    - reason: it is a java annotation. Use `kotlin.annotation.Repeatable` instead.
+      value: java.lang.annotation.Repeatable
+    - reason: Kotlin does not support @Inherited annotation, see https://youtrack.jetbrains.com/issue/KT-22265
+      value: java.lang.annotation.Inherited
   ForbiddenComment:
     active: true
     comments:
-      - reason: Forbidden FIXME todo marker in comment, please fix the problem.
-        value: 'FIXME:'
-      - reason: Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.
-        value: 'STOPSHIP:'
-      - reason: Forbidden TODO todo marker in comment, please do the changes.
-        value: 'TODO:'
+    - reason: Forbidden FIXME todo marker in comment, please fix the problem.
+      value: 'FIXME:'
+    - reason: Forbidden STOPSHIP todo marker in comment, please address the problem before shipping the code.
+      value: 'STOPSHIP:'
+    - reason: Forbidden TODO todo marker in comment, please do the changes.
+      value: 'TODO:'
     allowedPatterns: ''
   ForbiddenImport:
     active: false
@@ -593,10 +593,10 @@ style:
   ForbiddenMethodCall:
     active: false
     methods:
-      - reason: print does not allow you to configure the output stream. Use a logger instead.
-        value: kotlin.io.print
-      - reason: println does not allow you to configure the output stream. Use a logger instead.
-        value: kotlin.io.println
+    - reason: print does not allow you to configure the output stream. Use a logger instead.
+      value: kotlin.io.print
+    - reason: println does not allow you to configure the output stream. Use a logger instead.
+      value: kotlin.io.println
   ForbiddenSuppress:
     active: false
     rules: []
@@ -616,10 +616,10 @@ style:
     active: true
     excludes: ['**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/androidUnitTest/**', '**/androidInstrumentedTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts', '**/ui/**']
     ignoreNumbers:
-      - '-1'
-      - '0'
-      - '1'
-      - '2'
+    - '-1'
+    - '0'
+    - '1'
+    - '2'
     ignoreHashCodeFunction: true
     ignorePropertyDeclaration: true
     ignoreLocalVariableDeclaration: false
@@ -653,8 +653,8 @@ style:
     active: false
     indentSize: 4
     trimmingMethods:
-      - trimIndent
-      - trimMargin
+    - trimIndent
+    - trimMargin
   NestedClassesVisibility:
     active: true
   NewLineAtEndOfFile:
@@ -683,7 +683,7 @@ style:
     active: true
     max: 2
     excludedFunctions:
-      - equals
+    - equals
     excludeLabeled: false
     excludeReturnFromLambda: true
     excludeGuardClauses: false
@@ -707,8 +707,8 @@ style:
   TrimMultilineRawString:
     active: false
     trimmingMethods:
-      - trimIndent
-      - trimMargin
+    - trimIndent
+    - trimMargin
   UnderscoresInNumericLiterals:
     active: false
     acceptableLength: 4
@@ -791,7 +791,7 @@ style:
   WildcardImport:
     active: true
     excludeImports:
-      - java.util.*
+    - java.util.*
 
 Compose:
   ComposableAnnotationNaming:
@@ -807,7 +807,6 @@ Compose:
   CompositionLocalAllowlist:
     active: true
     # -- You can optionally define a list of CompositionLocals that are allowed here
-    allowedCompositionLocals: LocalColors, LocalContentColor, LocalRippleConfiguration, LocalContentAlpha, LocalFabPlacement, LocalTypography, LocalTextStyle
   CompositionLocalNaming:
     active: true
   ContentEmitterReturningValues:
@@ -843,10 +842,6 @@ Compose:
     # -- You can optionally allow parts of it, if you are in the middle of a migration.
     # allowedFromM2: icons.Icons,TopAppBar
   ModifierClickableOrder:
-    active: true
-    # -- You can optionally add your own Modifier types
-    # customModifiers: BananaModifier,PotatoModifier
-  ModifierComposable:
     active: true
     # -- You can optionally add your own Modifier types
     # customModifiers: BananaModifier,PotatoModifier

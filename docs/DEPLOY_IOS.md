@@ -197,7 +197,7 @@ The build number is automatically incremented during the release process. The ve
 
 Before releasing, ensure the changelog is up to date. The changelog is read from:
 ```
-composeApp/release/whatsNew/whatsnew-es-419
+androidApp/release/whatsNew/whatsnew-es-419
 ```
 
 **Changelog format:**

@@ -387,7 +387,7 @@ supabase stop --reset
 
 #### **Android Emulator Configuration**
 ```xml
-<!-- In composeApp/src/androidMain/res/xml/network_security_config.xml -->
+<!-- In androidApp/src/main/res/xml/network_security_config.xml -->
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
     <domain-config cleartextTrafficPermitted="true">
@@ -397,7 +397,7 @@ supabase stop --reset
 ```
 
 ```xml
-<!-- In composeApp/src/androidMain/AndroidManifest.xml -->
+<!-- In androidApp/src/main/AndroidManifest.xml -->
 <application
     android:networkSecurityConfig="@xml/network_security_config"
     ...>
