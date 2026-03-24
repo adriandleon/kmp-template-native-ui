@@ -9,7 +9,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ## 🚀 Features
 
-- **Kotlin Multiplatform** with Kotlin 2.2.21
+- **Kotlin Multiplatform** with Kotlin 2.3.20
 - **Compose Multiplatform** for Android UI
 - **SwiftUI** for iOS UI
 - **Decompose** for navigation and component lifecycle management
@@ -32,11 +32,11 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ### Prerequisites
 
-- **Android Studio Hedgehog** (2023.1.1) or later
+- **Android Studio Panda 2** (2025.3.2) or later
 - **Xcode 16.0** or later (for iOS development)
-- **Kotlin 2.2.21** or later
+- **Kotlin 2.3.20** or later
 - **Java 17** or later
-- **Gradle 8.0** or later
+- **Gradle 9.0** or later
 
 ### Quick Start
 

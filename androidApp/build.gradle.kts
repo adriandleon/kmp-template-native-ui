@@ -51,7 +51,7 @@ android {
             proguardFiles(
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro",
-            )
+        )
         }
     }
 
@@ -59,34 +59,31 @@ android {
         sourceCompatibility = JavaVersion.VERSION_21
         targetCompatibility = JavaVersion.VERSION_21
     }
+}
 
+ktfmt {
+    kotlinLangStyle()
+    removeUnusedImports = true
+    trailingCommaManagementStrategy = COMPLETE
+}
 
-    ktfmt {
-        kotlinLangStyle()
-        removeUnusedImports = true
-        trailingCommaManagementStrategy = COMPLETE
-    }
-
-    detekt {
-        parallel = true
-        buildUponDefaultConfig = true
-        config.setFrom("$rootDir/config/detekt.yml")
-    }
+detekt {
+    parallel = true
+    buildUponDefaultConfig = true
+    config.setFrom("$rootDir/config/detekt.yml")
 }
 
 dependencies {
     implementation(projects.shared)
     
-    implementation(compose.preview)
     implementation(libs.androidx.activity.compose)
     implementation(libs.splashscreen)
-    
-    implementation(compose.components.resources)
-    implementation(compose.components.uiToolingPreview)
-    implementation(compose.foundation)
-    implementation(compose.material3)
-    implementation(compose.runtime)
-    implementation(compose.ui)
+    implementation(libs.compose.components.resources)
+    implementation(libs.compose.ui.tooling.preview)
+    implementation(libs.compose.foundation)
+    implementation(libs.compose.material3)
+    implementation(libs.compose.runtime)
+    implementation(libs.compose.ui)
     implementation(libs.decompose)
     implementation(libs.decompose.extensions)
     implementation(libs.coil.compose)
@@ -97,6 +94,6 @@ dependencies {
     
     testImplementation(libs.kotlin.test)
     
-    debugImplementation(compose.uiTooling)
+    debugImplementation(libs.compose.ui.tooling)
     detektPlugins(libs.detekt.compose)
 }
