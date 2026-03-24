@@ -9,7 +9,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ## 🚀 Features
 
-- **Kotlin Multiplatform** with Kotlin 2.2.21
+- **Kotlin Multiplatform** with Kotlin 2.3.20
 - **Compose Multiplatform** for Android UI
 - **SwiftUI** for iOS UI
 - **Decompose** for navigation and component lifecycle management
@@ -32,11 +32,11 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ### Prerequisites
 
-- **Android Studio Hedgehog** (2023.1.1) or later
+- **Android Studio Panda 2** (2025.3.2) or later
 - **Xcode 16.0** or later (for iOS development)
-- **Kotlin 2.2.21** or later
+- **Kotlin 2.3.20** or later
 - **Java 17** or later
-- **Gradle 8.0** or later
+- **Gradle 9.0** or later
 
 ### Quick Start
 
@@ -106,15 +106,15 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 ## 🛠️ Tech Stack & Libraries
 
 ### Architecture & Navigation
-- **[Decompose](https://github.com/arkivanov/Decompose)** (3.4.0) - Navigation and component lifecycle
+- **[Decompose](https://github.com/arkivanov/Decompose)** (3.5.0) - Navigation and component lifecycle
 - **[MVIKotlin](https://github.com/arkivanov/MVIKotlin)** (4.3.0) - MVI architecture implementation
 - **[Essenty](https://github.com/arkivanov/Essenty)** (2.5.0) - Lifecycle management
 
 ### Dependency Injection
-- **[Koin](https://insert-koin.io/)** (4.1.1) - Dependency injection framework
+- **[Koin](https://insert-koin.io/)** (4.2.0) - Dependency injection framework
 
 ### UI Framework
-- **[Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)** (1.9.3) - Declarative UI toolkit
+- **[Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)** (1.10.3) - Declarative UI toolkit
 - **Compose Compiler** - Kotlin compiler plugin for Compose
 
 ### Networking
@@ -124,13 +124,13 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 
 ### Data & Storage
 - **[Supabase](https://supabase.com/)** (3.2.6) - Backend-as-a-Service
-- **[DataStore](https://developer.android.com/jetpack/compose/datastore)** (1.1.7) - Local data storage
-- **[Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)** (1.9.0) - JSON serialization
+- **[DataStore](https://developer.android.com/jetpack/compose/datastore)** (1.2.1) - Local data storage
+- **[Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)** (1.10.0) - JSON serialization
 - **[Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime)** (0.7.1) - Date and time utilities
 
 ### Testing
-- **[Kotest](https://kotest.io/)** (6.0.4) - Testing framework
-- **[Mokkery](https://github.com/mockk/mokkery)** (2.10.2) - Mocking library
+- **[Kotest](https://kotest.io/)** (6.1.7) - Testing framework
+- **[Mokkery](https://github.com/mockk/mokkery)** (3.3.0) - Mocking library
 
 ### Code Quality & Formatting
 - **[Ktfmt](https://github.com/facebook/ktfmt)** - Kotlin code formatter following official style guide
@@ -152,7 +152,7 @@ A modern, production-ready template for building Kotlin Multiplatform (KMP) appl
 - **[Firebase Remote Config](https://firebase.google.com/products/remote-config)** (2.4.0) - Remote configuration and feature flags
 
 ### Logging & Monitoring
-- **[Kermit](https://github.com/touchlab/Kermit)** (2.0.8) - Multiplatform logging
+- **[Kermit](https://github.com/touchlab/Kermit)** (2.1.0) - Multiplatform logging
 
 ### Utilities
 - **[Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines)** (1.10.2) - Asynchronous programming
@@ -194,7 +194,7 @@ This template follows a clean, scalable architecture:
 - **Xcode Version**: 16.0+
 
 ### Shared Configuration
-- **Kotlin Version**: 2.2.21
+- **Kotlin Version**: 2.3.20
 - **Compose Compiler**: Latest
 - **Coroutines**: 1.10.2
 

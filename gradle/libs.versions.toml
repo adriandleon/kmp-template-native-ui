@@ -1,37 +1,41 @@
 [versions]
 agp = "9.1.0"
+#noinspection UnusedVersionCatalogEntry
 android-compileSdk = "36"
+#noinspection UnusedVersionCatalogEntry
 android-minSdk = "26"
+#noinspection UnusedVersionCatalogEntry
 android-targetSdk = "36"
-androidx-activity = "1.12.4"
-androidx-datastore = "1.2.0"
-androidx-lifecycle = "2.9.6"
+androidx-activity = "1.13.0"
+androidx-datastore = "1.2.1"
+androidx-lifecycle = "2.10.0"
 buildkonfig = "0.17.1"
 coil-compose = "3.4.0"
-compose-multiplatform = "1.10.1"
+compose-multiplatform = "1.10.3"
 compose-rules = "0.5.6"
 configcat = "5.1.0"
 crashkios = "0.9.0"
-decompose = "3.4.0"
+decompose = "3.5.0"
 detekt = "1.23.8"
 essenty = "2.5.0"
 firebase-gitlive = "2.4.0"
 gradle-crashlytics = "3.0.6"
 gradle-google-services = "4.4.4"
 kermit = "2.1.0"
-koin = "4.1.1"
-kotest = "6.1.4"
-kotest-extensions-koin = "6.1.4"
-kotlin = "2.3.10"
+koin = "4.2.0"
+kotest = "6.1.7"
+kotest-extensions-koin = "6.1.7"
+kotlin = "2.3.20"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
 kotlinx-serialization = "1.10.0"
 kover = "0.9.7"
-ksp = "2.3.2"
-ktfmt-gradle = "0.25.0"
+ksp = "2.3.3"
+ktfmt-gradle = "0.26.0"
 ktor = "3.4.1"
 lumo-ui = "1.2.5"
-mokkery = "3.2.0"
+material3 = "1.11.0-alpha04"
+mokkery = "3.3.0"
 mvikotlin = "4.3.0"
 slf4j = "2.0.17"
 splashscreen = "1.2.0"
@@ -42,6 +46,13 @@ test-logger = "4.0.0"
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidx-activity" }
 coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil-compose" }
 coil-network-okhttp = { module = "io.coil-kt.coil3:coil-network-okhttp", version.ref = "coil-compose" }
+compose-components-resources = { module = "org.jetbrains.compose.components:components-resources", version.ref = "compose-multiplatform" }
+compose-foundation = { module = "org.jetbrains.compose.foundation:foundation", version.ref = "compose-multiplatform" }
+compose-material3 = { module = "org.jetbrains.compose.material3:material3", version.ref = "material3" }
+compose-runtime = { module = "org.jetbrains.compose.runtime:runtime", version.ref = "compose-multiplatform" }
+compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-multiplatform" }
+compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
+compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
 configcat = { module = "com.configcat:configcat-kotlin-client", version.ref = "configcat" }
 crashkios-crashlytics = { module = "co.touchlab.crashkios:crashlytics", version.ref = "crashkios" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }
