@@ -241,9 +241,37 @@ data class PostUiModel(
     val title: String,
     val body: String,
 )
+
+// PreviewPostsComponent.kt — public
+// Used by Android @Preview composables, iOS #Preview macros, and UI tests on both platforms.
+// Ships in the production binary but is lightweight (no real network/db calls).
+class PreviewPostsComponent : PostsComponent {
+    private val _state = MutableValue<PostsUiState>(PostsUiState.Content(previewPosts))
+    override val state: Value<PostsUiState> = _state
+    override fun onRetry() { /* no-op */ }
+
+    fun setState(state: PostsUiState) { _state.value = state }
+
+    companion object {
+        val previewPosts = listOf(
+            PostUiModel("1", "First Post", "Body of the first post."),
+            PostUiModel("2", "Second Post", "Body of the second post."),
+            PostUiModel("3", "Third Post", "Body of the third post."),
+        )
+    }
+}
 ```
 
-Everything else in the feature is `internal` or `private`.
+The same `PreviewComponent` pattern is applied retroactively to the existing `HomeComponent`:
+
+```kotlin
+// PreviewHomeComponent.kt — public (added to home feature)
+class PreviewHomeComponent : HomeComponent {
+    override val title: String = "Home Screen"
+}
+```
+
+Everything else in each feature is `internal` or `private`.
 
 ### 4.2 Internal shared module structure
 
@@ -274,7 +302,19 @@ shared/src/commonMain/kotlin/.../posts/
 │   │   ├── PostsState.kt               ← isLoading, posts, error (internal)
 │   │   └── PostsMessage.kt             ← PostsLoaded, PostsFailed (internal)
 │   └── DefaultPostsComponent.kt        ← maps State → PostsUiState (internal)
+├── PostsComponent.kt                   ← public interface
+├── PostsUiState.kt                     ← public sealed class
+├── PostUiModel.kt                      ← public data class
+├── PreviewPostsComponent.kt            ← public, preview/test fake
 └── PostsModule.kt                      ← Koin bindings (internal)
+```
+
+Existing `home` feature gains:
+```
+shared/src/commonMain/kotlin/.../home/
+├── HomeComponent.kt                    ← existing public interface
+├── DefaultHomeComponent.kt             ← existing internal implementation
+└── PreviewHomeComponent.kt             ← NEW: public preview/test fake
 ```
 
 ### 4.3 Data flow
@@ -325,7 +365,7 @@ No `PostsState`, `PostsStore`, `PostsIntent`, `Post`, `PostEntity`, or any inter
 
 ### 4.8 Koin wiring
 
-Decompose components are NOT created by Koin — they are instantiated by their parent component via `childStack`, receiving a `ComponentContext`. Koin provides store-level dependencies only.
+Components ARE created by Koin. `ComponentContext` is passed at runtime via `parametersOf`, which is the standard Koin + Decompose integration pattern. All dependencies are constructor-injected — no class pulls from Koin internally — making them trivially replaceable in tests.
 
 `PostsModule.kt` (internal):
 ```kotlin
@@ -337,22 +377,71 @@ internal val postsModule = module {
     factoryOf(::GetPostsUseCase)
     factoryOf(::PostsUiMapper)
     factoryOf(::PostsStoreFactory)
-    // DefaultPostsComponent is NOT registered here — it is created by DefaultRootComponent
+
+    // ComponentContext is passed at call-site via parametersOf
+    factory<PostsComponent> { (componentContext: ComponentContext) ->
+        DefaultPostsComponent(
+            componentContext = componentContext,
+            storeFactory = get(),
+            uiMapper = get(),
+        )
+    }
 }
 ```
 
-`DefaultRootComponent` creates `DefaultPostsComponent` via constructor injection, retrieving `PostsStoreFactory` from Koin:
+`DefaultRootComponent` creates `DefaultPostsComponent` via Koin, passing `ComponentContext` as a parameter:
 ```kotlin
+// DefaultRootComponent implements KoinComponent
 private fun postsComponent(componentContext: ComponentContext): PostsComponent =
-    DefaultPostsComponent(
-        componentContext = componentContext,
-        storeFactory = get<PostsStoreFactory>(),
-    )
+    get { parametersOf(componentContext) }
 ```
 
-`DefaultRootComponent` gains access to Koin by implementing `KoinComponent`, which is already the pattern in this project.
+`DefaultPostsComponent` constructor signature (pure constructor injection, no KoinComponent):
+```kotlin
+internal class DefaultPostsComponent(
+    componentContext: ComponentContext,
+    private val storeFactory: PostsStoreFactory,
+    private val uiMapper: PostsUiMapper,
+) : PostsComponent, ComponentContext by componentContext
+```
 
 `PostsModule` is included in `KoinApp` alongside existing modules.
+
+### 4.9 Component unit tests (commonTest)
+
+Each component gets a unit test in `commonTest` covering state mapping and intent dispatch. Dependencies are replaced via constructor injection — no mocking framework needed for simple cases, Mokkery for Store interactions.
+
+**`DefaultPostsComponentTest.kt`** (commonTest):
+```kotlin
+class DefaultPostsComponentTest : FunSpec({
+    val fakeStore = FakePostsStore()
+    val uiMapper = PostsUiMapper()
+    val component = DefaultPostsComponent(
+        componentContext = TestComponentContext(),
+        storeFactory = FakePostsStoreFactory(fakeStore),
+        uiMapper = uiMapper,
+    )
+
+    describe("DefaultPostsComponent") {
+        it("maps Loading store state to PostsUiState.Loading") { ... }
+        it("maps Content store state to PostsUiState.Content with correct items") { ... }
+        it("maps Error store state to PostsUiState.Error with correct message") { ... }
+        it("dispatches Retry intent when onRetry is called") { ... }
+    }
+})
+```
+
+**`DefaultHomeComponentTest.kt`** (commonTest) — simpler since `HomeComponent` only exposes `title`:
+```kotlin
+class DefaultHomeComponentTest : FunSpec({
+    it("exposes the correct title") {
+        val component = DefaultHomeComponent(TestComponentContext())
+        component.title shouldBe "Home Screen"
+    }
+})
+```
+
+`TestComponentContext` is a test utility (already a common pattern in Decompose projects) that provides a no-op `ComponentContext` for unit tests without requiring a real Android/iOS context.
 
 ---
 
@@ -368,10 +457,11 @@ androidTest/
 ├── util/
 │   └── TestUtils.kt                   ← onNodeWithTag/Text/ContentDesc helpers
 └── posts/
-    ├── PreviewPostsComponent.kt        ← fake component, MutableValue<PostsUiState>
     ├── PostsViewRobot.kt               ← launchPostsView(), Robot, Verification
     └── PostsViewTest.kt                ← test cases using robot DSL
 ```
+
+`PreviewPostsComponent` is NOT defined here — it lives in `shared/commonMain` and is imported directly from the `Shared` module. This keeps the fake component as a single source of truth used by both Compose `@Preview`, SwiftUI `#Preview`, androidTest, and iOS Swift Testing.
 
 **`TestUtils.kt`** — resolves string resources from the instrumentation context:
 ```kotlin
@@ -379,8 +469,6 @@ fun SemanticsNodeInteractionsProvider.onNodeWithTag(@StringRes resId: Int): Sema
 fun SemanticsNodeInteractionsProvider.onNodeWithText(@StringRes resId: Int): SemanticsNodeInteraction
 fun SemanticsNodeInteractionsProvider.onNodeWithContentDescription(@StringRes resId: Int): SemanticsNodeInteraction
 ```
-
-**`PreviewPostsComponent`** — a fake `PostsComponent` with a `MutableValue<PostsUiState>` so tests control state independently of any MVI internals.
 
 **`PostsViewRobot.kt`** — three-class pattern:
 ```kotlin
@@ -416,13 +504,19 @@ composeTestRule.launchPostsView(component) { clickRetry() } verify { retryWasCal
 ```
 KMP-TemplateTests/
 ├── Utils/
-│   └── PreviewPostsComponent.swift    ← fake component, MutableValue<PostsUiState>
+│   └── TestUtils.swift                ← shared test helpers if needed
 └── Posts/
     └── PostsViewTests.swift           ← Swift Testing suite
 ```
 
+`PreviewPostsComponent` is NOT defined here — it is exported from the `Shared` KMP framework and used directly via `import Shared`. Same single source of truth used by SwiftUI `#Preview` macros and Swift Testing tests.
+
 **`PostsViewTests.swift`:**
 ```swift
+import Shared  // PreviewPostsComponent comes from the KMP shared framework
+import Testing
+import ViewInspector
+
 @MainActor
 @Suite("PostsView Test Suite")
 struct PostsViewTests {
