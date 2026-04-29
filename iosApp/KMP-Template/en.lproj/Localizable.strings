@@ -1,0 +1,24 @@
+// iosApp/KMP-Template/en.lproj/Localizable.strings
+// English (default locale — always required as fallback)
+//
+// Localization note:
+// - en.lproj is the fallback for all unsupported locales.
+// - To add a language: duplicate this folder, change the locale code (e.g. fr.lproj/).
+// - To remove a language: delete its folder.
+// - To support only one language: delete all non-English folders.
+// - Always use NSLocalizedString("key", comment: "") in Swift code.
+// - See: https://developer.apple.com/documentation/xcode/localization
+
+// App
+"app_name" = "KMP Template";
+
+// Posts screen
+"posts_screen_title" = "Posts";
+"posts_loading_description" = "Loading posts…";
+"posts_empty_message" = "No posts available.";
+"posts_error_message" = "Something went wrong. Please try again.";
+"posts_retry_button" = "Retry";
+
+// Home screen
+"home_screen_title" = "Home Screen";
+"home_log_button" = "Log Message";

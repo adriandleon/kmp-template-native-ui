@@ -6,6 +6,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import com.adriandeleon.kmp.template.home.HomeView
+import com.adriandeleon.kmp.template.posts.PostsView
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.stack.animation.fade
 import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
@@ -23,6 +24,7 @@ fun RootView(component: RootComponent, modifier: Modifier = Modifier) {
         ) { child ->
             when (val instance = child.instance) {
                 is RootComponent.Child.Home -> HomeView(instance.component)
+                is RootComponent.Child.Posts -> PostsView(instance.component)
             }
         }
     }

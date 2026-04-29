@@ -22,6 +22,7 @@ struct RootView: View {
             getTitle: {
                 switch $0 {
                 case is RootComponentChildHome: ""
+                case is RootComponentChildPosts: ""
                 default: ""
                 }
             },
@@ -29,6 +30,7 @@ struct RootView: View {
             childContent: {
                 switch $0 {
                 case let child as RootComponentChildHome: HomeView(child.component)
+                case let posts as RootComponentChildPosts: PostsView(posts.component)
                 default: EmptyView()
                 }
             },

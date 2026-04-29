@@ -8,12 +8,24 @@
 
 /* Begin PBXBuildFile section */
 		EF5AF9E72E668CE300C68598 /* FirebaseRemoteConfig in Frameworks */ = {isa = PBXBuildFile; productRef = EF5AF9E62E668CE300C68598 /* FirebaseRemoteConfig */; };
+		EF96A1212FA2822600BB13DA /* ViewInspector in Frameworks */ = {isa = PBXBuildFile; productRef = EF96A1202FA2822600BB13DA /* ViewInspector */; };
 		EFCA44362E63CD0D0037ABE5 /* FirebaseAnalytics in Frameworks */ = {isa = PBXBuildFile; productRef = EFCA44352E63CD0D0037ABE5 /* FirebaseAnalytics */; };
 		EFCA44382E63CD0D0037ABE5 /* FirebaseCrashlytics in Frameworks */ = {isa = PBXBuildFile; productRef = EFCA44372E63CD0D0037ABE5 /* FirebaseCrashlytics */; };
 /* End PBXBuildFile section */
 
+/* Begin PBXContainerItemProxy section */
+		EF96A1172FA281C200BB13DA /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = B9DA97A92DC1472C00A4DA20 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = B9DA97B02DC1472C00A4DA20;
+			remoteInfo = "KMP-Template";
+		};
+/* End PBXContainerItemProxy section */
+
 /* Begin PBXFileReference section */
 		B9DA97B12DC1472C00A4DA20 /* KMP-Template.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "KMP-Template.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		EF96A1132FA281C200BB13DA /* KMP-TemplateTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "KMP-TemplateTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -40,6 +52,11 @@
 			path = Configuration;
 			sourceTree = "<group>";
 		};
+		EF96A1142FA281C200BB13DA /* KMP-TemplateTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "KMP-TemplateTests";
+			sourceTree = "<group>";
+		};
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -53,6 +70,14 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EF96A1102FA281C200BB13DA /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				EF96A1212FA2822600BB13DA /* ViewInspector in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
@@ -61,6 +86,7 @@
 			children = (
 				B9DA98002DC14AA900A4DA20 /* Configuration */,
 				B9DA97B32DC1472C00A4DA20 /* KMP-Template */,
+				EF96A1142FA281C200BB13DA /* KMP-TemplateTests */,
 				B9DA97B22DC1472C00A4DA20 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -69,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				B9DA97B12DC1472C00A4DA20 /* KMP-Template.app */,
+				EF96A1132FA281C200BB13DA /* KMP-TemplateTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -92,15 +119,39 @@
 			fileSystemSynchronizedGroups = (
 				B9DA97B32DC1472C00A4DA20 /* KMP-Template */,
 			);
-			name = KMP-Template;
+			name = "KMP-Template";
 			packageProductDependencies = (
 				EFCA44352E63CD0D0037ABE5 /* FirebaseAnalytics */,
 				EFCA44372E63CD0D0037ABE5 /* FirebaseCrashlytics */,
 				EF5AF9E62E668CE300C68598 /* FirebaseRemoteConfig */,
 			);
-			productName = KMP-Template;
+			productName = "KMP-Template";
 			productReference = B9DA97B12DC1472C00A4DA20 /* KMP-Template.app */;
 			productType = "com.apple.product-type.application";
+		};
+		EF96A1122FA281C200BB13DA /* KMP-TemplateTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = EF96A1192FA281C200BB13DA /* Build configuration list for PBXNativeTarget "KMP-TemplateTests" */;
+			buildPhases = (
+				EF96A10F2FA281C200BB13DA /* Sources */,
+				EF96A1102FA281C200BB13DA /* Frameworks */,
+				EF96A1112FA281C200BB13DA /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				EF96A1182FA281C200BB13DA /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				EF96A1142FA281C200BB13DA /* KMP-TemplateTests */,
+			);
+			name = "KMP-TemplateTests";
+			packageProductDependencies = (
+				EF96A1202FA2822600BB13DA /* ViewInspector */,
+			);
+			productName = "KMP-TemplateTests";
+			productReference = EF96A1132FA281C200BB13DA /* KMP-TemplateTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
 
@@ -109,12 +160,16 @@
 			isa = PBXProject;
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
-				LastSwiftUpdateCheck = 1620;
+				LastSwiftUpdateCheck = 2630;
 				LastUpgradeCheck = 1620;
-				ORGANIZATIONNAME = KMP-Template;
+				ORGANIZATIONNAME = "KMP-Template";
 				TargetAttributes = {
 					B9DA97B02DC1472C00A4DA20 = {
 						CreatedOnToolsVersion = 16.2;
+					};
+					EF96A1122FA281C200BB13DA = {
+						CreatedOnToolsVersion = 26.3;
+						TestTargetID = B9DA97B02DC1472C00A4DA20;
 					};
 				};
 			};
@@ -124,11 +179,14 @@
 			knownRegions = (
 				en,
 				Base,
+				"pt-BR",
+				"es-419",
 			);
 			mainGroup = B9DA97A82DC1472C00A4DA20;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				EFCA44342E63CD0D0037ABE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				EF96A11F2FA2822600BB13DA /* XCRemoteSwiftPackageReference "ViewInspector" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = B9DA97B22DC1472C00A4DA20 /* Products */;
@@ -136,12 +194,20 @@
 			projectRoot = "";
 			targets = (
 				B9DA97B02DC1472C00A4DA20 /* KMP-Template */,
+				EF96A1122FA281C200BB13DA /* KMP-TemplateTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
 		B9DA97AF2DC1472C00A4DA20 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EF96A1112FA281C200BB13DA /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -168,7 +234,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\ncd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
+			shellScript = "if [ \"YES\" = \"$OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED\" ]; then\n  echo \"Skipping Gradle build task invocation due to OVERRIDE_KOTLIN_BUILD_IDE_SUPPORTED environment variable set to \\\"YES\\\"\"\n  exit 0\nfi\nif [ -f \"$SRCROOT/.xcode.env\" ]; then\n  . \"$SRCROOT/.xcode.env\"\nfi\nif [ -f \"$SRCROOT/.xcode.env.local\" ]; then\n  . \"$SRCROOT/.xcode.env.local\"\nfi\ncd \"$SRCROOT/..\"\n./gradlew :shared:embedAndSignAppleFrameworkForXcode\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -180,7 +246,22 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		EF96A10F2FA281C200BB13DA /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		EF96A1182FA281C200BB13DA /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = B9DA97B02DC1472C00A4DA20 /* KMP-Template */;
+			targetProxy = EF96A1172FA281C200BB13DA /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		B9DA97BD2DC1472D00A4DA20 /* Debug */ = {
@@ -319,7 +400,7 @@
 					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KMP-Template/Info.plist;
+				INFOPLIST_FILE = "KMP-Template/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -353,7 +434,7 @@
 					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = KMP-Template/Info.plist;
+				INFOPLIST_FILE = "KMP-Template/Info.plist";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -367,6 +448,58 @@
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
+		EF96A11A2FA281C200BB13DA /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adriandeleon.kmp.template.KMP-TemplateTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KMP-Template.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KMP-Template";
+			};
+			name = Debug;
+		};
+		EF96A11B2FA281C200BB13DA /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(SRCROOT)/../shared/build/xcode-frameworks/$(CONFIGURATION)/$(SDK_NAME)",
+				);
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.2;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = "com.adriandeleon.kmp.template.KMP-TemplateTests";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				STRING_CATALOG_GENERATE_SYMBOLS = NO;
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/KMP-Template.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/KMP-Template";
 			};
 			name = Release;
 		};
@@ -391,9 +524,26 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
+		EF96A1192FA281C200BB13DA /* Build configuration list for PBXNativeTarget "KMP-TemplateTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				EF96A11A2FA281C200BB13DA /* Debug */,
+				EF96A11B2FA281C200BB13DA /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		EF96A11F2FA2822600BB13DA /* XCRemoteSwiftPackageReference "ViewInspector" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/nalexn/ViewInspector";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 0.10.3;
+			};
+		};
 		EFCA44342E63CD0D0037ABE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
@@ -409,6 +559,11 @@
 			isa = XCSwiftPackageProductDependency;
 			package = EFCA44342E63CD0D0037ABE5 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
 			productName = FirebaseRemoteConfig;
+		};
+		EF96A1202FA2822600BB13DA /* ViewInspector */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = EF96A11F2FA2822600BB13DA /* XCRemoteSwiftPackageReference "ViewInspector" */;
+			productName = ViewInspector;
 		};
 		EFCA44352E63CD0D0037ABE5 /* FirebaseAnalytics */ = {
 			isa = XCSwiftPackageProductDependency;

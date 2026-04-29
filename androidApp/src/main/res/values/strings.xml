@@ -1,3 +1,30 @@
+<!--
+    Localization note:
+    - This file (values/) is the English default and the fallback for all unsupported locales.
+    - To add a language: duplicate a locale folder and change the suffix (e.g. values-fr/).
+    - To remove a language: delete its folder.
+    - To support only one language: delete all non-English folders.
+    - Naming convention: feature_element_description (e.g. posts_screen_title).
+    - See: https://developer.android.com/guide/topics/resources/localization
+-->
 <resources>
-    <string name="app_name">KMP-Template</string>
+    <string name="app_name">KMP Template</string>
+
+    <!-- Posts screen -->
+    <string name="posts_screen_title">Posts</string>
+    <string name="posts_loading_description">Loading posts…</string>
+    <string name="posts_empty_message">No posts available.</string>
+    <string name="posts_error_message">Something went wrong. Please try again.</string>
+    <string name="posts_retry_button">Retry</string>
+
+    <!-- Home screen -->
+    <string name="home_screen_title">Home Screen</string>
+    <string name="home_log_button">Log Message</string>
+
+    <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
+    <string name="tag_posts_loading" translatable="false">posts_loading</string>
+    <string name="tag_posts_list" translatable="false">posts_list</string>
+    <string name="tag_posts_item" translatable="false">posts_item</string>
+    <string name="tag_posts_error" translatable="false">posts_error</string>
+    <string name="tag_posts_retry_button" translatable="false">posts_retry_button</string>
 </resources>

@@ -7,6 +7,7 @@ import kotlinx.coroutines.Dispatchers
 private class AndroidDispatcher : DispatcherProvider {
     override val main: CoroutineDispatcher = Dispatchers.Main
     override val default: CoroutineDispatcher = Dispatchers.Default
+    override val io: CoroutineDispatcher = Dispatchers.IO
 }
 
 internal actual fun provideDispatcher(): DispatcherProvider = AndroidDispatcher()

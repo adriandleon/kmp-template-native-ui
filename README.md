@@ -1,353 +1,188 @@
-# Kotlin Multiplatform KMP-Template
+# Kotlin Multiplatform native UI template
 
-![Static Badge](https://img.shields.io/badge/Compose-327CF3?style=flat&logo=android&logoColor=white)
-![Static Badge](https://img.shields.io/badge/SwiftUI-FA7343?style=flat&logo=swift&logoColor=white)
-![Static Badge](https://img.shields.io/badge/Kotlin-663399?&style=flat&logo=kotlin&logoColor=white)
+![Compose](https://img.shields.io/badge/Compose-327CF3?style=flat&logo=android&logoColor=white)
+![SwiftUI](https://img.shields.io/badge/SwiftUI-FA7343?style=flat&logo=swift&logoColor=white)
+![Kotlin](https://img.shields.io/badge/Kotlin-663399?style=flat&logo=kotlin&logoColor=white)
 [![Android App Deploy](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml/badge.svg?branch=main)](https://github.com/adriandleon/kmp-template-native-ui/actions/workflows/android_deploy.yml)
 
-A modern, production-ready template for building Kotlin Multiplatform (KMP) applications with native UI targeting Android and iOS. This template provides a solid foundation for creating cross-platform apps using **Compose Multiplatform** and **SwiftUI** for the UI layer and **Kotlin Multiplatform** for the shared logic.
+This repository is a public template for Kotlin Multiplatform applications with
+native UI on both platforms:
 
-## 🚀 Features
+- Android uses Compose Multiplatform.
+- iOS uses SwiftUI.
+- Shared business logic, navigation, state, networking, persistence, analytics,
+  and feature flags live in Kotlin.
 
-- **Kotlin Multiplatform** with Kotlin 2.3.20
-- **Compose Multiplatform** for Android UI
-- **SwiftUI** for iOS UI
-- **Decompose** for navigation and component lifecycle management
-- **MVVM + MVI** architecture with MVIKotlin
-- **Dependency Injection** with Koin
-- **Networking** with Ktor
-- **Testing** with Kotest
-- **Logging** with Kermit
-- **Feature Flags** with ConfigCat and Firebase Remote Config
-- **Database** with Supabase
-- **Modern Android** (API 26+, Compile SDK 36)
+The template includes one example feature, `Posts`, that demonstrates the
+intended architecture end to end. It fetches remote data with Ktor, caches it
+with Room, exposes state through MVIKotlin and Decompose, and renders native UI
+on both platforms. Keep new template consumers focused on that single example
+until they replace it with their own feature set.
 
-## 📱 Supported Platforms
+## What this template includes
 
-- **Android**: API 26+ (Android 8.0+)
-- **iOS**: iOS 18.2+
-- **Shared**: Common Kotlin code
+This template gives you a production-oriented baseline without hiding the
+architecture behind generated code.
 
-## 🛠️ Getting Started
+- Kotlin Multiplatform with a shared `shared` module
+- Compose Multiplatform Android app in `androidApp`
+- SwiftUI iOS app in `iosApp`
+- Decompose for navigation and component lifecycle
+- MVIKotlin for state management
+- Koin for dependency injection
+- Ktor for networking
+- Room for shared local persistence, including iOS
+- ConfigCat and Firebase Remote Config for feature flags
+- Firebase Analytics and Crashlytics
+- Kermit for logging
+- Kotest and Mokkery for shared Kotlin tests
+- Swift Testing and ViewInspector for iOS UI tests
 
-### Prerequisites
+## Supported platforms
 
-- **Android Studio Panda 2** (2025.3.2) or later
-- **Xcode 16.0** or later (for iOS development)
-- **Kotlin 2.3.20** or later
-- **Java 17** or later
-- **Gradle 9.0** or later
+This template currently targets the following platforms:
 
-### Quick Start
+- Android API 26 and later
+- iOS 18.2 and later
 
-1. **Clone the repository**
+## Project structure
+
+The repository is split into three main areas:
+
+```text
+androidApp/   Android UI and app configuration
+iosApp/       SwiftUI UI, Xcode project, and iOS tests
+shared/       Shared Kotlin logic, data, navigation, and state
+```
+
+The `Posts` example is intentionally small. It exists to show the contract
+between the shared module and both native UIs, not to act as a starter kit for
+multiple unrelated features.
+
+## Prerequisites
+
+Before you build the template, install the following tools:
+
+- Android Studio or IntelliJ IDEA with Kotlin Multiplatform support
+- Xcode 16 or later
+- Java 21
+
+The Gradle wrapper is included, so you do not need to install Gradle manually.
+
+## Get started
+
+Use the following steps to run the template locally.
+
+1. Clone the repository.
+
    ```bash
    git clone <your-repo-url>
-   cd KMP-Template
+   cd kmp-template-native-ui
    ```
 
-2. **Open in Android Studio**
-   - Open the project in Android Studio
-   - Sync Gradle files
-   - Wait for the initial build to complete
+2. Open the project in Android Studio and let Gradle sync.
 
-3. **Run on Android**
-   - Select an Android device or emulator
-   - Click the "Run" button or press `Shift + F10`
+3. Configure local secrets for Firebase, Supabase, and ConfigCat. The template
+   reads them from `local.properties` or environment variables. Review
+   [Firebase integration](docs/FIREBASE_INTEGRATION.md),
+   [Supabase integration](docs/SUPABASE_INTEGRATION.md), and
+   [Feature flags integration](docs/FEATURE_FLAGS_INTEGRATION.md) before you
+   run the apps.
 
-4. **Run on iOS**
-   - Open `iosApp/KMP-Template.xcodeproj` in Xcode
-   - Select an iOS simulator or device
-   - Press `Cmd + R` to build and run
+4. Run Android from Android Studio, or assemble it from the command line.
 
-5. **Set up GitHub Actions** (Optional)
-   - Configure required secrets in your repository settings
-   - Customize workflow variables for your project
-   - See [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) for detailed setup
+   ```bash
+   ./gradlew :androidApp:assembleDebug
+   ```
 
-6. **Configure MCP Servers** (Optional)
-   - Set up environment variables for API keys
-   - Configure GitHub and Context7 MCP servers
-   - See [MCP Servers Configuration](docs/MCP_SERVERS.md) for setup instructions
+5. Open `iosApp/KMP-Template.xcodeproj` in Xcode, select a simulator, and run
+   the `KMP-Template` scheme.
 
-### Customization
+## Template conventions
 
-1. **Update package names**
-   - Replace `com.adriandeleon.template` with your package name
-   - Update in `androidApp/build.gradle.kts`
-   - Update in `shared/build.gradle.kts`
-   - Update in `iosApp/KMP-Template/Info.plist`
+This template is meant to be readable and easy to replace.
 
-2. **Update app name**
-   - Android: Update `app_name` in `androidApp/src/main/res/values/strings.xml`
-   - iOS: Update `CFBundleDisplayName` in `iosApp/KMP-Template/Info.plist`
+- Keep shared business logic in `shared`.
+- Expose only the minimum public API needed by Android and iOS.
+- Use the existing `Posts` feature as the reference implementation for new
+  features.
+- Replace template branding and package identifiers early.
+- Avoid adding multiple example domains to the template. One complete example is
+  easier to understand and maintain than several partial ones.
 
-3. **Update bundle identifier**
-   - iOS: Update `CFBundleIdentifier` in `iosApp/KMP-Template/Info.plist`
+## Customize the template
 
-## 📚 Project Documentation
+When you adapt the template for a real product, start with these updates:
 
-- [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) - Configurable CI/CD workflows
-- [MCP Servers Configuration](docs/MCP_SERVERS.md) - AI assistance setup and configuration
-- [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md) - Local code quality automation
-- [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md) - Kotlin code quality tools
-- [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md) - Swift code quality tools
-- [Pull Request Checks](docs/PR_DANGER_CHECKS.md) - Automated PR validation
-- [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md) - Testing strategies and tools
-- [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md) - Coverage configuration and reporting
-- [Feature Flags Integration](docs/FEATURE_FLAGS_INTEGRATION.md) - Feature toggles and configuration management
-- [Supabase Integration](docs/SUPABASE_INTEGRATION.md) - Backend-as-a-Service setup
-- [Firebase Integration](docs/FIREBASE_INTEGRATION.md) - Analytics and crash reporting
-- [Analytics Integration](docs/ANALYTICS_INTEGRATION.md) - User analytics and tracking
-- [Deploy Android Version](docs/DEPLOY_ANDROID.md) - Play Store deployment guide
-- [Deploy iOS Version](docs/DEPLOY_IOS.md) - App Store deployment guide
-- [Logging Multiplatform](docs/LOGGING_MULTIPLATFORM.md) - Cross-platform logging setup
+1. Rename the application package and bundle identifiers.
+2. Replace the example `Posts` feature with your product's first real feature.
+3. Update app names, icons, and Firebase/Supabase configuration.
+4. Review CI, deployment, and pre-commit configuration before publishing.
 
-## 🛠️ Tech Stack & Libraries
+## Build and test
 
-### Architecture & Navigation
-- **[Decompose](https://github.com/arkivanov/Decompose)** (3.5.0) - Navigation and component lifecycle
-- **[MVIKotlin](https://github.com/arkivanov/MVIKotlin)** (4.3.0) - MVI architecture implementation
-- **[Essenty](https://github.com/arkivanov/Essenty)** (2.5.0) - Lifecycle management
+Use these commands as the primary verification workflow for the template.
 
-### Dependency Injection
-- **[Koin](https://insert-koin.io/)** (4.2.0) - Dependency injection framework
+### Shared Kotlin verification
 
-### UI Framework
-- **[Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)** (1.10.3) - Declarative UI toolkit
-- **Compose Compiler** - Kotlin compiler plugin for Compose
+Run the shared Kotlin test suite and compilation tasks with Gradle.
 
-### Networking
-- **[Ktor](https://ktor.io/)** (3.3.2) - HTTP client for networking
-  - `ktor-client-okhttp` for Android
-  - `ktor-client-darwin` for iOS
-
-### Data & Storage
-- **[Supabase](https://supabase.com/)** (3.2.6) - Backend-as-a-Service
-- **[DataStore](https://developer.android.com/jetpack/compose/datastore)** (1.2.1) - Local data storage
-- **[Kotlinx Serialization](https://github.com/Kotlin/kotlinx.serialization)** (1.10.0) - JSON serialization
-- **[Kotlinx DateTime](https://github.com/Kotlin/kotlinx-datetime)** (0.7.1) - Date and time utilities
-
-### Testing
-- **[Kotest](https://kotest.io/)** (6.1.7) - Testing framework
-- **[Mokkery](https://github.com/mockk/mokkery)** (3.3.0) - Mocking library
-
-### Code Quality & Formatting
-- **[Ktfmt](https://github.com/facebook/ktfmt)** - Kotlin code formatter following official style guide
-- **[Detekt](https://detekt.dev/)** - Static code analysis tool
-- **[Detekt Compose Rules](https://github.com/mrmans0n/compose-rules)** - Compose-specific linting rules
-
-### CI/CD & Automation
-- **[GitHub Actions](https://github.com/features/actions)** - Configurable CI/CD workflows for testing, building, and deployment
-- **[Danger](https://github.com/danger/danger)** - Automated PR review and quality checks
-- **[Codecov](https://about.codecov.io/)** - Code coverage reporting and analysis
-
-### AI Development Assistance
-- **[MCP Servers](https://modelcontextprotocol.io/)** - Model Context Protocol servers for enhanced AI assistance
-- **[GitHub MCP Server](https://github.com/modelcontextprotocol/server-github)** - GitHub integration for AI-powered development
-- **[Context7 MCP Server](https://mcp.context7.com/)** - Library documentation and code examples access
-
-### Feature Flags & Configuration
-- **[ConfigCat](https://configcat.com/)** (5.1.0) - Feature flags and configuration management
-- **[Firebase Remote Config](https://firebase.google.com/products/remote-config)** (2.4.0) - Remote configuration and feature flags
-
-### Logging & Monitoring
-- **[Kermit](https://github.com/touchlab/Kermit)** (2.1.0) - Multiplatform logging
-
-### Utilities
-- **[Kotlinx Coroutines](https://github.com/Kotlin/kotlinx.coroutines)** (1.10.2) - Asynchronous programming
-- **[SLF4J](https://www.slf4j.org/)** (2.0.17) - Logging facade
-
-## 🏛️ Architecture
-
-This template follows a clean, scalable architecture:
-
-### **MVVM + MVI Pattern**
-- **Model**: Data and business logic
-- **View**: UI components (Compose/SwiftUI)
-- **ViewModel**: State management and business logic
-- **Intent**: User actions and system events
-- **State**: UI state representation
-
-### **Component-Based Navigation**
-- Uses Decompose for navigation and component lifecycle
-- Each screen is a separate component
-- Shared navigation logic between platforms
-
-### **Dependency Injection**
-- Koin for dependency injection
-- Shared dependencies in the common module
-- Platform-specific implementations
-
-## 🔧 Configuration
-
-### Android Configuration
-- **Minimum SDK**: 26 (Android 8.0)
-- **Target SDK**: 36 (Android 14)
-- **Compile SDK**: 36
-- **Java Version**: 17
-- **Kotlin JVM Target**: 17
-
-### iOS Configuration
-- **Deployment Target**: iOS 18.2+
-- **Swift Version**: 5.0
-- **Xcode Version**: 16.0+
-
-### Shared Configuration
-- **Kotlin Version**: 2.3.20
-- **Compose Compiler**: Latest
-- **Coroutines**: 1.10.2
-
-## 🧪 Testing
-
-### Running Tests
 ```bash
-# Run all tests
-./gradlew test
-
-# Run specific module tests
-./gradlew :shared:test
-./gradlew :androidApp:test
-
-# Run tests with coverage
-./gradlew testDebugUnitTestCoverage
+./gradlew :shared:kotest
+./gradlew :shared:compileKotlinIosSimulatorArm64
 ```
 
-For detailed testing information, see [Unit Tests Shared](docs/UNIT_TESTS_SHARED.md) and [Code Coverage Reports](docs/CODE_COVERAGE_REPORTS.md).
+If you want the aggregated Kotlin Multiplatform test task for the shared
+module, run:
 
-## 🎨 Code Quality
-
-### Code Formatting
 ```bash
-# Format all code
-./gradlew ktfmtFormat
-
-# Check formatting without changes
-./gradlew ktfmtCheck
+./gradlew :shared:allTests
 ```
 
-### Static Analysis
-```bash
-# Run detekt on all modules
-./gradlew detektAll
+### Android verification
 
-# Run on specific module
-./gradlew :shared:detekt
-./gradlew :androidApp:detekt
+Build the Android app with:
+
+```bash
+./gradlew :androidApp:assembleDebug
 ```
 
-### Pre-commit Hooks
-The project includes pre-commit hooks that automatically:
-- Format code with ktfmt
-- Run detekt analysis
-- Block commits with quality issues
+### iOS verification
 
-**Setup:**
+Build the iOS app and Swift test bundle from Xcode, or use `xcodebuild`:
+
 ```bash
-pip install pre-commit
-pre-commit install
+xcodebuild \
+  -project iosApp/KMP-Template.xcodeproj \
+  -scheme KMP-Template \
+  -destination 'generic/platform=iOS Simulator' \
+  -configuration Debug \
+  build-for-testing
 ```
 
-For detailed information, see [Kotlin Format & Lint](docs/KOTLIN_FORMAT_LINT.md), [Swift Format & Lint](docs/SWIFT_FORMAT_LINT.md), and [Pre-Commit Hooks](docs/PRE_COMMIT_HOOKS.md).
+This template includes a Swift test target, `KMP-TemplateTests`, with
+ViewInspector-based UI coverage for the `Posts` screen.
 
-### Continuous Integration
-The project includes fully configurable GitHub Actions workflows that automatically:
-- Run code quality checks on every PR
-- Execute unit tests and coverage analysis
-- Build and deploy Android and iOS apps
-- Validate code formatting and linting
+## Documentation
 
-**Key Workflows:**
-- **Shared Test & Lint** - Code quality and testing on PRs
-- **Android Deploy** - Build, test, and deploy to Play Store
-- **iOS Deploy** - Build, test, and deploy to TestFlight
+Use the following docs as the main entry points after cloning the template.
 
-**Automated PR Reviews:**
-- **Danger Kotlin** - Configurable PR validation and quality checks
-- **Automatic label suggestions** based on modified files
-- **Release notes validation** for Android deployments
-- **PR size and description** quality enforcement
+- [Unit tests in shared Kotlin](docs/UNIT_TESTS_SHARED.md)
+- [Code coverage reports](docs/CODE_COVERAGE_REPORTS.md)
+- [Kotlin format and lint](docs/KOTLIN_FORMAT_LINT.md)
+- [Swift format and lint](docs/SWIFT_FORMAT_LINT.md)
+- [Pre-commit hooks](docs/PRE_COMMIT_HOOKS.md)
+- [GitHub Actions workflows](docs/GITHUB_ACTIONS.md)
+- [Firebase integration](docs/FIREBASE_INTEGRATION.md)
+- [Feature flags integration](docs/FEATURE_FLAGS_INTEGRATION.md)
+- [Supabase integration](docs/SUPABASE_INTEGRATION.md)
+- [Analytics integration](docs/ANALYTICS_INTEGRATION.md)
+- [Android deployment](docs/DEPLOY_ANDROID.md)
+- [iOS deployment](docs/DEPLOY_IOS.md)
+- [Logging in Kotlin Multiplatform](docs/LOGGING_MULTIPLATFORM.md)
 
-For detailed information and customization, see [GitHub Actions Workflows](docs/GITHUB_ACTIONS.md) and [Pull Request Checks](docs/PR_DANGER_CHECKS.md).
+## Next steps
 
-### AI-Powered Development
-The project includes MCP (Model Context Protocol) servers that enhance AI assistance:
-- **GitHub Integration** - Access repository information, issues, and workflows
-- **Library Documentation** - Quick access to library docs and code examples
-- **Enhanced AI Context** - Better understanding of project structure and dependencies
-
-For setup and configuration, see [MCP Servers Configuration](docs/MCP_SERVERS.md).
-
-## 📦 Building
-
-### Android Build
-```bash
-# Debug build
-./gradlew assembleDebug
-
-# Release build
-./gradlew assembleRelease
-
-# Bundle for Play Store
-./gradlew bundleRelease
-```
-
-### iOS Build
-- Open `iosApp/KMP-Template.xcodeproj` in Xcode
-- Select target device/simulator
-- Build using `Cmd + B` or Product → Build
-
-### Shared Framework
-```bash
-# Build shared framework for iOS
-./gradlew :shared:assembleXCFramework
-```
-
-## 🚀 Deployment
-
-### Android
-1. Update version in `androidApp/build.gradle.kts`
-2. Build release APK or bundle
-3. Sign with your release keystore
-4. Upload to Google Play Console
-
-For detailed deployment guide, see [Deploy Android Version](docs/DEPLOY_ANDROID.md).
-
-### iOS
-1. Update version in Xcode project
-2. Archive the project
-3. Upload to App Store Connect
-
-For detailed deployment guide, see [Deploy iOS Version](docs/DEPLOY_IOS.md).
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests for new functionality
-5. Submit a pull request
-
-## 📄 License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## 🆘 Support
-
-If you encounter any issues or have questions:
-
-1. Check the [Issues](../../issues) page
-2. Create a new issue with detailed information
-3. Include your environment details and error logs
-
-## 🔗 Useful Links
-
-- [Kotlin Multiplatform Documentation](https://kotlinlang.org/docs/multiplatform.html)
-- [Compose Multiplatform](https://www.jetbrains.com/lp/compose-multiplatform/)
-- [Decompose Documentation](https://arkivanov.github.io/Decompose/)
-- [MVIKotlin Documentation](https://arkivanov.github.io/MVIKotlin/)
-- [Koin Documentation](https://insert-koin.io/)
-
----
-
-**Happy coding! 🎉**
+After you can build both apps, replace the example feature, update the app
+identifiers, and wire your own backend and analytics configuration before using
+the template for production work.

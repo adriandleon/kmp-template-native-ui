@@ -1,0 +1,14 @@
+// iosApp/KMP-Template/es-419.lproj/Localizable.strings
+// Spanish (Latin America) — es-419
+// Fallback: en.lproj (English)
+
+"app_name" = "KMP Template";
+
+"posts_screen_title" = "Publicaciones";
+"posts_loading_description" = "Cargando publicaciones…";
+"posts_empty_message" = "No hay publicaciones disponibles.";
+"posts_error_message" = "Algo salió mal. Por favor intenta de nuevo.";
+"posts_retry_button" = "Reintentar";
+
+"home_screen_title" = "Pantalla de Inicio";
+"home_log_button" = "Registrar Mensaje";

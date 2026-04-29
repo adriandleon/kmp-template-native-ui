@@ -5,8 +5,11 @@ import co.touchlab.kermit.koin.KermitKoinLogger
 import com.adriandeleon.kmp.template.BuildKonfig
 import com.adriandeleon.kmp.template.analytics.analyticsModule
 import com.adriandeleon.kmp.template.common.commonModule
+import com.adriandeleon.kmp.template.common.platformDatabaseModule
 import com.adriandeleon.kmp.template.features.featureFlagModule
 import com.adriandeleon.kmp.template.logger.loggerModule
+import com.adriandeleon.kmp.template.network.networkModule
+import com.adriandeleon.kmp.template.posts.postsModule
 import org.koin.core.context.startKoin
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.includes
@@ -22,9 +25,12 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         modules(
             // Here the list of shared modules
             commonModule,
+            platformDatabaseModule,
+            networkModule,
             featureFlagModule,
             analyticsModule,
             loggerModule,
+            postsModule,
         )
         logger(KermitKoinLogger(koin.get()))
         CrashlyticsKotlin.setCustomValue("flavor", if (BuildKonfig.DEBUG) "debug" else "release")

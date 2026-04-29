@@ -1,0 +1,18 @@
+<!--
+    Portuguese (Brazil) — pt-rBR
+    Fallback: values/strings.xml (English)
+-->
+<resources>
+    <string name="app_name">KMP Template</string>
+
+    <!-- Posts screen -->
+    <string name="posts_screen_title">Publicações</string>
+    <string name="posts_loading_description">Carregando publicações…</string>
+    <string name="posts_empty_message">Nenhuma publicação disponível.</string>
+    <string name="posts_error_message">Algo deu errado. Por favor, tente novamente.</string>
+    <string name="posts_retry_button">Tentar novamente</string>
+
+    <!-- Home screen -->
+    <string name="home_screen_title">Tela Inicial</string>
+    <string name="home_log_button">Registrar Mensagem</string>
+</resources>

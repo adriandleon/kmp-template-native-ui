@@ -190,10 +190,10 @@ kover {
 #### Run Tests with Coverage
 ```bash
 # Run tests and generate coverage
-./gradlew :shared:testDebugUnitTest
+./gradlew :shared:kotest :shared:koverHtmlReport
 
 # Run specific tests with coverage
-./gradlew :shared:testDebugUnitTest --tests "*UserEntityTest*"
+./gradlew :shared:kotest --tests "*UserEntityTest*" :shared:koverHtmlReport
 ```
 
 #### Coverage Verification
@@ -202,7 +202,7 @@ kover {
 ./gradlew :shared:koverVerify
 
 # Run tests and verify coverage
-./gradlew :shared:testDebugUnitTest koverVerify
+./gradlew :shared:kotest :shared:koverVerify
 ```
 
 ### **IDE Integration**
@@ -433,7 +433,7 @@ kover {
 #### 1. **Coverage Not Generated**
 ```bash
 # Check if tests ran successfully
-./gradlew :shared:test --info
+./gradlew :shared:kotest --info
 
 # Verify Kover plugin is applied
 ./gradlew :shared:plugins
@@ -442,7 +442,7 @@ kover {
 #### 2. **Coverage Reports Empty**
 ```bash
 # Check test execution
-./gradlew :shared:testDebugUnitTest --info
+./gradlew :shared:kotest --info
 
 # Verify source sets
 ./gradlew :shared:sourceSets

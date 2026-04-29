@@ -12,6 +12,7 @@ plugins {
     alias(libs.plugins.kotest)
     alias(libs.plugins.ktfmt.gradle)
     alias(libs.plugins.ksp)
+    alias(libs.plugins.room)
     alias(libs.plugins.kotlin.multiplatform)
     alias(libs.plugins.kotlin.serialization)
     alias(libs.plugins.kover)
@@ -29,7 +30,7 @@ kotlin {
         compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
     }
 
-    listOf(iosArm64(), iosSimulatorArm64()).forEach { iosTarget ->
+    listOf(iosArm64(), iosSimulatorArm64(), iosX64()).forEach { iosTarget ->
         iosTarget.binaries.framework {
             baseName = "Shared"
             isStatic = true
@@ -57,11 +58,14 @@ kotlin {
             implementation(libs.kotlinx.coroutines)
             implementation(libs.kotlinx.datetime)
             implementation(libs.kotlinx.serialization)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.serialization.kotlinx.json)
             implementation(libs.mvikotlin.coroutines)
             implementation(libs.mvikotlin.core)
             implementation(libs.mvikotlin.logging)
             implementation(libs.mvikotlin.main)
             implementation(libs.mvikotlin.timetravel)
+            implementation(libs.room.runtime)
             implementation(libs.slf4j.nop)
             implementation(libs.supabase.postgrest)
         }
@@ -72,7 +76,10 @@ kotlin {
             implementation(project.dependencies.platform("com.google.firebase:firebase-bom:33.9.0"))
         }
 
-        iosMain.dependencies { implementation(libs.ktor.client.darwin) }
+        iosMain.dependencies {
+            implementation(libs.ktor.client.darwin)
+            implementation(libs.sqlite.bundled)
+        }
 
         commonTest.dependencies {
             implementation(libs.kermit.test)
@@ -87,7 +94,15 @@ kotlin {
     }
 }
 
-dependencies { detektPlugins(libs.detekt.compose) }
+dependencies {
+    detektPlugins(libs.detekt.compose)
+    add("kspAndroid", libs.room.compiler)
+    add("kspIosArm64", libs.room.compiler)
+    add("kspIosSimulatorArm64", libs.room.compiler)
+    add("kspIosX64", libs.room.compiler)
+}
+
+room { schemaDirectory("$projectDir/schemas") }
 
 ktfmt {
     kotlinLangStyle()
@@ -194,79 +209,47 @@ buildkonfig {
 
     // TargetConfig
     targetConfigs {
-        create("iosArm64") {
-            buildConfigField(
-                type = STRING,
-                name = "SUPABASE_URL",
-                value = getSecret("SUPABASE_URL_DEV_IOS"),
-                nullable = false,
-                const = true,
-            )
+        listOf("iosArm64", "iosSimulatorArm64", "iosX64").forEach { target ->
+            create(target) {
+                buildConfigField(
+                    type = STRING,
+                    name = "SUPABASE_URL",
+                    value = getSecret("SUPABASE_URL_DEV_IOS"),
+                    nullable = false,
+                    const = true,
+                )
 
-            buildConfigField(
-                type = STRING,
-                name = "CONFIGCAT_KEY",
-                value = getSecret("CONFIGCAT_IOS_TEST_KEY"),
-                nullable = false,
-                const = true,
-            )
-        }
-
-        create("iosSimulatorArm64") {
-            buildConfigField(
-                type = STRING,
-                name = "SUPABASE_URL",
-                value = getSecret("SUPABASE_URL_DEV_IOS"),
-                nullable = false,
-                const = true,
-            )
-
-            buildConfigField(
-                type = STRING,
-                name = "CONFIGCAT_KEY",
-                value = getSecret("CONFIGCAT_IOS_TEST_KEY"),
-                nullable = false,
-                const = true,
-            )
+                buildConfigField(
+                    type = STRING,
+                    name = "CONFIGCAT_KEY",
+                    value = getSecret("CONFIGCAT_IOS_TEST_KEY"),
+                    nullable = false,
+                    const = true,
+                )
+            }
         }
     }
 
     // Flavored TargetConfig
     targetConfigs("release") {
-        create("iosArm64") {
-            buildConfigField(
-                type = STRING,
-                name = "SUPABASE_URL",
-                value = getSecret("SUPABASE_URL_PROD"),
-                nullable = false,
-                const = true,
-            )
+        listOf("iosArm64", "iosSimulatorArm64", "iosX64").forEach { target ->
+            create(target) {
+                buildConfigField(
+                    type = STRING,
+                    name = "SUPABASE_URL",
+                    value = getSecret("SUPABASE_URL_PROD"),
+                    nullable = false,
+                    const = true,
+                )
 
-            buildConfigField(
-                type = STRING,
-                name = "CONFIGCAT_KEY",
-                value = getSecret("CONFIGCAT_IOS_LIVE_KEY"),
-                nullable = false,
-                const = true,
-            )
-        }
-
-        create("iosSimulatorArm64") {
-            buildConfigField(
-                type = STRING,
-                name = "SUPABASE_URL",
-                value = getSecret("SUPABASE_URL_PROD"),
-                nullable = false,
-                const = true,
-            )
-
-            buildConfigField(
-                type = STRING,
-                name = "CONFIGCAT_KEY",
-                value = getSecret("CONFIGCAT_IOS_LIVE_KEY"),
-                nullable = false,
-                const = true,
-            )
+                buildConfigField(
+                    type = STRING,
+                    name = "CONFIGCAT_KEY",
+                    value = getSecret("CONFIGCAT_IOS_LIVE_KEY"),
+                    nullable = false,
+                    const = true,
+                )
+            }
         }
     }
 }

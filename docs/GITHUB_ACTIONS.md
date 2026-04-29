@@ -159,7 +159,7 @@ To migrate these workflows to a new repository:
 4. **Run Tests**
    ```yaml
    - name: Test Shared Module
-     run: ${{ env.GRADLE_WRAPPER }} :shared:test
+     run: ${{ env.GRADLE_WRAPPER }} :shared:kotest
    ```
 
 5. **Run Linting**

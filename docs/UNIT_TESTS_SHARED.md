@@ -1,499 +1,164 @@
-# Unit Testing in Kotlin Multiplatform
+# Unit tests in shared Kotlin
 
-This document covers unit testing strategies and tools used in the Kotlin Multiplatform project, focusing on shared module testing and platform-specific test implementations.
+This guide explains how testing works in the template today. It focuses on the
+shared Kotlin module, the single example feature in the repository, and the iOS
+Swift test target that validates the native UI contract.
 
-## 📋 Table of Contents
+The template is intentionally small. The `Posts` feature is the reference
+implementation for how to test shared business logic, shared presentation
+logic, and native iOS UI around one end-to-end example.
 
-- [🎯 Overview](#-overview)
-- [🧪 Testing Strategy](#-testing-strategy)
-- [🛠️ Testing Tools](#-testing-tools)
-- [📁 Test Structure](#-test-structure)
-- [✍️ Writing Tests](#-writing-tests)
-- [🏃 Running Tests](#-running-tests)
-- [📊 Test Coverage](#-test-coverage)
-- [📚 Best Practices](#-best-practices)
-- [🐛 Troubleshooting](#-troubleshooting)
+## Test layout
 
-## 🎯 Overview
+The project uses two test layers:
 
-The project uses a comprehensive testing strategy that ensures code quality across all platforms:
+- Shared Kotlin tests in `shared/src/commonTest/kotlin`
+- iOS Swift tests in `iosApp/KMP-TemplateTests`
 
-- **Shared Module Tests** - Common business logic testing
-- **Platform-Specific Tests** - Android and iOS specific implementations
-- **Integration Tests** - Cross-platform functionality validation
-- **Test Coverage** - Automated coverage reporting and analysis
+The shared module does not currently use a dedicated `iosTest` source set for
+feature tests. Shared feature behavior is covered in `commonTest`, and the iOS
+UI layer is covered separately with Swift Testing and ViewInspector.
 
-## 🧪 Testing Strategy
+## What the template covers
 
-### **Multi-Layer Testing Approach**
+The repository uses the `Posts` feature to demonstrate the expected testing
+shape for real features.
 
-1. **Unit Tests** - Test individual functions and classes in isolation
-2. **Integration Tests** - Test interactions between components
-3. **Platform Tests** - Test platform-specific implementations
-4. **Coverage Tests** - Ensure comprehensive test coverage
+- Repository and mapper tests validate data transformation and persistence flow.
+- Use case tests validate business behavior.
+- Component tests validate the shared presentation contract exposed to native
+  UIs.
+- Swift UI tests validate that the iOS `PostsView` renders shared state
+  correctly and handles retry interaction.
 
-### **Test Organization**
+This keeps the template focused on one understandable example instead of
+spreading test patterns across multiple unrelated demo features.
 
-```
-shared/
-├── src/
-│   ├── commonMain/           # Shared business logic
-│   ├── commonTest/           # Shared unit tests
-│   ├── androidMain/          # Android implementations
-│   ├── androidTest/          # Android-specific tests
-│   ├── iosMain/              # iOS implementations
-│   └── iosTest/              # iOS-specific tests
-```
+## Test tools
 
-## 🛠️ Testing Tools
+The template uses the following libraries:
 
-### **Primary Testing Framework**
+- Kotest for shared Kotlin tests
+- Mokkery for mocking in shared tests
+- `kotlinx-coroutines-test` for coroutine control in shared tests
+- Swift Testing for iOS test structure
+- ViewInspector for SwiftUI inspection in the iOS test target
 
-#### Kotest
-[Kotest](https://kotest.io/) is the primary testing framework, providing:
+## Shared test locations
 
-- **Multiple testing styles** (StringSpec, BehaviorSpec, FunSpec)
-- **Property-based testing** with generators
-- **Matchers** for assertions
-- **Test lifecycle hooks** for setup and teardown
-- **Parallel test execution** for performance
+Shared Kotlin tests live under `shared/src/commonTest/kotlin`. Current examples
+include:
 
-#### Installation
-```kotlin
-// In shared/build.gradle.kts
-dependencies {
-    commonTestImplementation(libs.kotest.framework.engine)
-    commonTestImplementation(libs.kotest.assertions.core)
-    commonTestImplementation(libs.kotest.property)
-}
-```
+- `posts/data/repository/DefaultPostsRepositoryTest.kt`
+- `posts/domain/usecase/GetPostsUseCaseTest.kt`
+- `posts/presentation/mapper/PostsUiMapperTest.kt`
+- `posts/presentation/DefaultPostsComponentTest.kt`
 
-### **Mocking Framework**
+These tests are the best starting point when you add new shared features to the
+template.
 
-#### Mokkery
-[Mokkery](https://github.com/mockk/mokkery) provides mocking capabilities:
+## iOS UI test locations
 
-- **Mock creation** for interfaces and classes
-- **Stubbing** for method calls
-- **Verification** of method invocations
-- **Argument matching** and capture
+The iOS SwiftUI tests live under `iosApp/KMP-TemplateTests`. The template
+currently includes:
 
-#### Installation
-```kotlin
-// In shared/build.gradle.kts
-dependencies {
-    commonTestImplementation(libs.mokkery.runtime)
-}
-```
+- `Posts/PostsViewTests.swift`
 
-### **Additional Testing Libraries**
+That file shows how to use `PreviewPostsComponent` from the shared framework to
+drive SwiftUI state-based tests without duplicating feature logic in Swift.
 
-#### Coroutines Testing
-```kotlin
-dependencies {
-    commonTestImplementation(libs.kotlinx.coroutines.test)
-}
-```
+## Run tests
 
-#### DateTime Testing
-```kotlin
-dependencies {
-    commonTestImplementation(libs.kotlinx.datetime.test)
-}
-```
+Use the commands in this section as the primary test workflow for this
+repository.
 
-## 📁 Test Structure
+### Run shared Kotlin tests
 
-### **Shared Module Test Structure**
+Run the shared Kotest suite with:
 
-```
-shared/src/commonTest/kotlin/
-├── com/yourcompany/yourapp/
-│   ├── domain/
-│   │   ├── entity/
-│   │   │   └── UserEntityTest.kt
-│   │   ├── repository/
-│   │   │   └── UserRepositoryTest.kt
-│   │   └── usecase/
-│   │       └── GetUserUseCaseTest.kt
-│   ├── data/
-│   │   ├── datasource/
-│   │   │   └── UserDataSourceTest.kt
-│   │   ├── mapper/
-│   │   │   └── UserMapperTest.kt
-│   │   └── repository/
-│   │       └── UserRepositoryImplTest.kt
-│   └── presentation/
-│       ├── component/
-│       │   └── HomeComponentTest.kt
-│       └── store/
-│           └── HomeStoreTest.kt
-```
-
-### **Test File Naming Convention**
-
-- **Test files**: `{ClassName}Test.kt`
-- **Test classes**: `{ClassName}Test`
-- **Test functions**: Descriptive names using backticks
-
-## ✍️ Writing Tests
-
-### **Basic Test Structure**
-
-#### Using StringSpec Style
-```kotlin
-class UserEntityTest : StringSpec({
-    "should create user with valid data" {
-        // Given
-        val id = "user123"
-        val name = "John Doe"
-        val email = "john@example.com"
-        
-        // When
-        val user = UserEntity(id = id, name = name, email = email)
-        
-        // Then
-        user.id shouldBe id
-        user.name shouldBe name
-        user.email shouldBe email
-    }
-    
-    "should validate email format" {
-        // Given
-        val validEmails = listOf(
-            "test@example.com",
-            "user.name@domain.co.uk",
-            "user+tag@example.org"
-        )
-        
-        val invalidEmails = listOf(
-            "invalid-email",
-            "@example.com",
-            "user@",
-            "user@.com"
-        )
-        
-        // When & Then
-        validEmails.forEach { email ->
-            UserEntity.isValidEmail(email) shouldBe true
-        }
-        
-        invalidEmails.forEach { email ->
-            UserEntity.isValidEmail(email) shouldBe false
-        }
-    }
-})
-```
-
-#### Using BehaviorSpec Style
-```kotlin
-class UserRepositoryTest : BehaviorSpec({
-    given("a user repository") {
-        val mockDataSource = mockk<UserDataSource>()
-        val repository = UserRepositoryImpl(mockDataSource)
-        
-        `when`("fetching a user by ID") {
-            val userId = "user123"
-            val expectedUser = UserEntity(id = userId, name = "John Doe")
-            
-            every { mockDataSource.getUser(userId) } returns expectedUser
-            
-            then("it should return the user") {
-                val result = repository.getUser(userId)
-                result shouldBe expectedUser
-            }
-            
-            then("it should call the data source") {
-                verify { mockDataSource.getUser(userId) }
-            }
-        }
-        
-        `when`("user is not found") {
-            val userId = "nonexistent"
-            
-            every { mockDataSource.getUser(userId) } throws UserNotFoundException()
-            
-            then("it should throw an exception") {
-                shouldThrow<UserNotFoundException> {
-                    repository.getUser(userId)
-                }
-            }
-        }
-    }
-})
-```
-
-### **Property-Based Testing**
-
-```kotlin
-class UserValidationTest : PropertySpec({
-    property("valid emails should pass validation") {
-        forAll(Arb.string().filter { it.contains("@") }) { email ->
-            UserEntity.isValidEmail(email) shouldBe true
-        }
-    }
-    
-    property("user ID should be non-empty") {
-        forAll(Arb.string().filter { it.isNotEmpty() }) { id ->
-            UserEntity(id = id, name = "Test", email = "test@example.com").id shouldBe id
-        }
-    }
-})
-```
-
-### **Testing Coroutines**
-
-```kotlin
-class AsyncUserUseCaseTest : StringSpec({
-    "should execute use case successfully" {
-        runTest {
-            // Given
-            val mockRepository = mockk<UserRepository>()
-            val useCase = GetUserUseCase(mockRepository)
-            val expectedUser = UserEntity(id = "user123", name = "John Doe")
-            
-            coEvery { mockRepository.getUser("user123") } returns expectedUser
-            
-            // When
-            val result = useCase.execute("user123")
-            
-            // Then
-            result shouldBe expectedUser
-            coVerify { mockRepository.getUser("user123") }
-        }
-    }
-    
-    "should handle repository errors" {
-        runTest {
-            // Given
-            val mockRepository = mockk<UserRepository>()
-            val useCase = GetUserUseCase(mockRepository)
-            val expectedError = UserNotFoundException()
-            
-            coEvery { mockRepository.getUser("user123") } throws expectedError
-            
-            // When & Then
-            shouldThrow<UserNotFoundException> {
-                useCase.execute("user123")
-            }
-        }
-    }
-})
-```
-
-## 🚀 Running Tests
-
-### **Command Line Execution**
-
-#### Run All Tests
 ```bash
-# Run all tests in the project
-./gradlew test
-
-# Run tests for specific module
-./gradlew :shared:test
-./gradlew :androidApp:test
+./gradlew :shared:kotest
 ```
 
-#### Run Specific Tests
+If you want the aggregated Kotlin Multiplatform test task for the shared
+module, run:
+
 ```bash
-# Run tests matching a pattern
-./gradlew :shared:test --tests "*UserEntityTest*"
-
-# Run specific test class
-./gradlew :shared:test --tests "com.yourcompany.yourapp.domain.entity.UserEntityTest"
-
-# Run specific test function
-./gradlew :shared:test --tests "*should create user with valid data*"
+./gradlew :shared:allTests
 ```
 
-#### Test Execution Options
+### Compile shared iOS Kotlin code
+
+Compile the shared Kotlin code for the iOS simulator with:
+
 ```bash
-# Run tests in parallel
-./gradlew :shared:test --parallel
-
-# Run tests with debug output
-./gradlew :shared:test --debug
-
-# Run tests with info logging
-./gradlew :shared:test --info
+./gradlew :shared:compileKotlinIosSimulatorArm64
 ```
 
-### **IDE Integration**
+This is useful when you change shared APIs that are consumed by SwiftUI.
 
-#### Android Studio
-1. **Run individual tests**: Right-click on test function → Run
-2. **Run test class**: Right-click on test class → Run
-3. **Run all tests**: Right-click on test directory → Run Tests
+### Build the iOS app and Swift test bundle
 
-#### VS Code
-1. **Install Kotlin extension**
-2. **Use Test Explorer** for test execution
-3. **Run tests** via command palette
+Build the iOS app and its Swift test target with:
 
-### **Continuous Integration**
-
-Tests run automatically in GitHub Actions:
-
-```yaml
-# In .github/workflows/shared_test_lint.yml
-- name: Run Unit Tests
-  run: ./gradlew test
-```
-
-## 📊 Test Coverage
-
-### **Coverage Configuration**
-
-#### Enable Coverage
-```kotlin
-// In shared/build.gradle.kts
-plugins {
-    id("org.jetbrains.kotlinx.kover")
-}
-
-kover {
-    reports {
-        html {
-            setEnabled(true)
-        }
-        xml {
-            setEnabled(true)
-        }
-    }
-}
-```
-
-#### Run Coverage
 ```bash
-# Generate coverage report
-./gradlew :shared:koverHtmlReport
-
-# View coverage in browser
-open shared/build/reports/kover/html/index.html
+xcodebuild \
+  -project iosApp/KMP-Template.xcodeproj \
+  -scheme KMP-Template \
+  -destination 'generic/platform=iOS Simulator' \
+  -configuration Debug \
+  build-for-testing
 ```
 
-### **Coverage Goals**
+This command verifies that:
 
-- **Minimum coverage**: 90% for shared module
-- **Critical paths**: 100% coverage
-- **Platform-specific**: 80% minimum
+- the shared `Shared` framework is exposed to the iOS app and test target,
+- the app target compiles against the current shared Kotlin API, and
+- the `KMP-TemplateTests` bundle compiles successfully.
 
-### **Coverage Exclusions**
+## Write new shared tests
 
-```kotlin
-kover {
-    filters {
-        classes {
-            excludes += listOf(
-                "com.yourcompany.yourapp.generated.*",
-                "*MapperImpl",
-                "*ComponentImpl"
-            )
-        }
-    }
-}
-```
+When you add a new shared feature, keep the test structure close to the feature
+structure.
 
-## 📚 Best Practices
+1. Add repository tests for data flow and mapping.
+2. Add use case tests for business rules.
+3. Add component or store-facing tests for shared presentation behavior.
+4. Add platform UI tests only where the native layer contains real rendering or
+   interaction logic.
 
-### **1. Test Organization**
-- **Group related tests** in the same test class
-- **Use descriptive test names** that explain the scenario
-- **Follow AAA pattern**: Arrange, Act, Assert
-- **Keep tests focused** on single responsibility
+Follow the existing `Posts` example before introducing new test patterns.
 
-### **2. Test Data Management**
-- **Use test factories** for creating test objects
-- **Create realistic test data** that represents real scenarios
-- **Avoid hardcoded values** in test logic
-- **Use builders** for complex object construction
+## Write new iOS UI tests
 
-### **3. Mocking Strategy**
-- **Mock external dependencies** (APIs, databases)
-- **Don't mock simple data objects** or value classes
-- **Verify important interactions** with mocks
-- **Use appropriate mock types** (mockk, relaxed, etc.)
+When you add a SwiftUI screen backed by a shared component, prefer the existing
+pattern:
 
-### **4. Test Performance**
-- **Run tests in parallel** when possible
-- **Avoid slow operations** in unit tests
-- **Use test doubles** for external services
-- **Cache test data** when appropriate
+1. Create or reuse a preview component in `shared/commonMain`.
+2. Drive the SwiftUI view with shared state from that preview component.
+3. Use accessibility identifiers for inspectable UI elements.
+4. Verify rendering and user interaction from the Swift test target.
 
-### **5. Platform-Specific Testing**
-- **Test expect/actual implementations** separately
-- **Verify platform behavior** matches expectations
-- **Use platform-specific test utilities** when needed
-- **Maintain consistent test structure** across platforms
+This keeps the Swift test layer thin and avoids reimplementing feature state in
+Swift.
 
-## 🐛 Troubleshooting
+## Notes for template maintainers
 
-### **Common Issues**
+There are two implementation details worth keeping in mind when you change the
+testing setup.
 
-#### 1. **Tests Not Running**
-```bash
-# Check if tests are discovered
-./gradlew :shared:test --info
+<!-- prettier-ignore -->
+> [!IMPORTANT]
+> The iOS test target must keep the same `FRAMEWORK_SEARCH_PATHS` integration as
+> the app target so `import Shared` continues to compile.
 
-# Verify test source sets
-./gradlew :shared:sourceSets
-```
+<!-- prettier-ignore -->
+> [!IMPORTANT]
+> MVIKotlin store messages must be dispatched from the main context on iOS. If
+> you move executor logic across dispatchers, verify that UI-facing store
+> updates still happen on the main thread.
 
-#### 2. **Mock Issues**
-```bash
-# Check mock configuration
-./gradlew :shared:test --debug
+## Next steps
 
-# Verify mock setup
-every { mock.method() } returns result
-```
-
-#### 3. **Coroutine Test Issues**
-```bash
-# Use runTest for coroutine tests
-runTest {
-    // Test coroutine code here
-}
-
-# Check dispatcher configuration
-Dispatchers.setMain(Dispatchers.Unconfined)
-```
-
-### **Debug Mode**
-
-#### Enable Verbose Logging
-```bash
-# Run with debug information
-./gradlew :shared:test --debug
-
-# Check test discovery
-./gradlew :shared:test --scan
-```
-
-#### Test Isolation
-```bash
-# Run single test
-./gradlew :shared:test --tests "*specific test name*"
-
-# Run with specific JVM options
-./gradlew :shared:test -Dkotest.framework.parallelism=1
-```
-
-## 🔗 Related Documentation
-
-- [Code Coverage Reports](CODE_COVERAGE_REPORTS.md) - Coverage configuration and reporting
-- [GitHub Actions Workflows](GITHUB_ACTIONS.md) - CI/CD test execution
-- [Kotlin Format & Lint](KOTLIN_FORMAT_LINT.md) - Code quality tools
-- [Pre-Commit Hooks](PRE_COMMIT_HOOKS.md) - Local test automation
-
-## 📖 Resources
-
-- [Kotest Documentation](https://kotest.io/)
-- [Mokkery Documentation](https://github.com/mockk/mokkery)
-- [Kotlin Testing Guide](https://kotlinlang.org/docs/testing.html)
-- [Kover Coverage Tool](https://github.com/Kotlin/kotlinx-kover)
-
----
-
-**Write comprehensive tests for reliable code! 🚀**
+After you understand the `Posts` tests, use the same structure when you replace
+the example feature with your product-specific functionality.

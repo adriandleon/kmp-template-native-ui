@@ -54,8 +54,12 @@ build/
 **/build/
 !src/**/build/
 
-# Local configuration file
+# Local configuration files
 local.properties
+.xcode.env
+**/.xcode.env
+.xcode.env.local
+**/.xcode.env.local
 
 # Fastlane
 **/fastlane/report.xml

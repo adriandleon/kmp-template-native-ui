@@ -17,7 +17,7 @@ This is a **Kotlin Multiplatform** project with **native UI** targeting Android 
 ### Prerequisites
 - **Android Studio** or **IntelliJ IDEA** (latest stable version)
 - **Xcode 16.0+** (for iOS development)
-- **Java 17+**
+- **Java 21**
 - **Gradle 8.0+**
 
 ### Initial Setup

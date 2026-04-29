@@ -39,10 +39,9 @@ The setup script automates the process of customizing the template project by:
    ```
 
 4. **Follow the interactive prompts**:
-   - Enter your package name (e.g., `com.yourcompany.yourapp`)
    - Enter your project name (e.g., `MyAwesomeApp`)
-   - Review the auto-generated bundle identifier (e.g., `com.yourcompany.yourapp.MyAwesomeApp`)
-   - Optionally customize the bundle identifier if needed
+   - Enter your package name (e.g., `com.yourcompany.yourapp`)
+   - Review the generated app and test bundle identifiers
    - Confirm the transformation
 
 ## 📋 What the Script Does
@@ -51,27 +50,29 @@ The setup script automates the process of customizing the template project by:
 
 **Before** (Template):
 ```
-shared/src/commonMain/kotlin/com/adriandeleon/template/
-shared/src/main/kotlin/com/adriandeleon/template/
-shared/src/iosMain/kotlin/com/adriandeleon/template/
-shared/src/commonTest/kotlin/com/adriandeleon/template/
-androidApp/src/main/kotlin/com/adriandeleon/template/
-iosApp/Template/
-iosApp/Template.xcodeproj/
+shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/
+shared/src/androidMain/kotlin/com/adriandeleon/kmp/template/
+shared/src/iosMain/kotlin/com/adriandeleon/kmp/template/
+shared/src/commonTest/kotlin/com/adriandeleon/kmp/template/
+androidApp/src/main/kotlin/com/adriandeleon/kmp/template/
+iosApp/KMP-Template/
+iosApp/KMP-Template.xcodeproj/
+iosApp/KMP-TemplateTests/
 ```
 
 **After** (Your Project):
 ```
 shared/src/commonMain/kotlin/com/yourcompany/yourapp/
-shared/src/main/kotlin/com/yourcompany/yourapp/
+shared/src/androidMain/kotlin/com/yourcompany/yourapp/
 shared/src/iosMain/kotlin/com/yourcompany/yourapp/
 shared/src/commonTest/kotlin/com/yourcompany/yourapp/
 androidApp/src/main/kotlin/com/yourcompany/yourapp/
 iosApp/MyAwesomeApp/
 iosApp/MyAwesomeApp.xcodeproj/
+iosApp/MyAwesomeAppTests/
 ```
 
-**Complete Coverage**: The script handles all source sets (`commonMain`, `main`, `iosMain`, `commonTest`) ensuring complete package migration.
+**Complete Coverage**: The script handles all shared source sets (`commonMain`, `androidMain`, `iosMain`, `commonTest`) and renames the iOS app and iOS test target folders so the Xcode project stays aligned with the filesystem.
 
 **Cleanup**: The script automatically removes all old empty directories, ensuring no leftover folder structure remains from the template.
 
@@ -119,14 +120,15 @@ The script updates the following types of files:
 ### 3. Package Name Updates
 
 The script replaces all occurrences of:
-- `com.adriandeleon.template` → `com.yourcompany.yourapp`
-- `Template` → `MyAwesomeApp`
+- `com.adriandeleon.kmp.template` → `com.yourcompany.yourapp`
+- `KMP-Template` → `MyAwesomeApp`
 - `adriandeleon` → `yourcompany`
 
 ### 4. Bundle Identifier Updates
 
 Updates iOS bundle identifiers:
-- `com.adriandeleon.template.Template` → `com.yourcompany.yourapp.MyAwesomeApp`
+- App target: `com.adriandeleon.kmp.template.KMPTemplate` → `com.yourcompany.yourapp.MyAwesomeApp`
+- Test target: `com.adriandeleon.kmp.template.KMPTemplateTests` → `com.yourcompany.yourapp.MyAwesomeAppTests`
 
 ### 5. Firebase Configuration Creation
 
@@ -168,11 +170,11 @@ The script validates all inputs to ensure they follow proper conventions:
 - Example: `MyAwesomeApp`
 
 ### Bundle Identifier Generation
-- **Auto-generated**: Uses the same identifier as Android package name (standard practice)
-- **Format**: `packageName` (e.g., `com.yourcompany.yourapp`)
-- **Consistency**: iOS and Android use the same identifier for easier management
-- **Customizable**: Option to override with custom bundle identifier if needed
-- **Validation**: Must follow iOS bundle identifier conventions
+- **Auto-generated**: Uses the package name as the base identifier
+- **App target format**: `packageName.ProjectName` (e.g., `com.yourcompany.yourapp.MyAwesomeApp`)
+- **Test target format**: `packageName.ProjectNameTests` (e.g., `com.yourcompany.yourapp.MyAwesomeAppTests`)
+- **Consistency**: The script keeps Android package naming and iOS bundle naming aligned
+- **Validation**: Package and project names are validated before the derived bundle identifiers are generated
 
 ## 📊 Example Transformation
 
@@ -180,7 +182,8 @@ The script validates all inputs to ensure they follow proper conventions:
 ```
 Package Name: org.example.project
 Project Name: MyApp
-Bundle ID: org.example.project (auto-generated, same as package name)
+App Bundle ID: org.example.project.MyApp
+Test Bundle ID: org.example.project.MyAppTests
 Domain: project.example.org (auto-generated from package name)
 ```
 
@@ -188,19 +191,21 @@ Domain: project.example.org (auto-generated from package name)
 ```
 Directory Structure:
 ├── shared/src/commonMain/kotlin/org/example/project/
-├── shared/src/main/kotlin/org/example/project/
+├── shared/src/androidMain/kotlin/org/example/project/
 ├── shared/src/iosMain/kotlin/org/example/project/
 ├── shared/src/commonTest/kotlin/org/example/project/
 ├── androidApp/src/main/kotlin/org/example/project/
 ├── iosApp/MyApp/
-└── iosApp/MyApp.xcodeproj/
+├── iosApp/MyApp.xcodeproj/
+└── iosApp/MyAppTests/
 
 Updated Files:
 - All .kt files now use package org.example.project
 - All .swift files now reference MyApp
 - All build files use org.example.project
 - All documentation references MyApp
-- iOS bundle identifier: org.example.project (same as Android package)
+- iOS app bundle identifier: org.example.project.MyApp
+- iOS test bundle identifier: org.example.project.MyAppTests
 - Domain: project.example.org (reversed from package name)
 - Firebase configs created with correct package names and bundle IDs
 - local.properties created with API key placeholders for Supabase and ConfigCat
@@ -236,16 +241,23 @@ The script provides colored, informative output:
 ## 🚀 Improved User Experience
 
 ### Smart Bundle Identifier Generation
-- **Automatic**: Bundle identifier matches the Android package name (standard practice)
-- **Consistent**: iOS and Android use the same identifier for easier management
-- **Flexible**: Option to customize if needed for special cases
-- **Reduced Input**: No need to manually type the same identifier twice
+- **Automatic**: The package name is used as the base for derived iOS bundle identifiers
+- **App target**: The script generates `packageName.ProjectName`
+- **Test target**: The script generates `packageName.ProjectNameTests`
+- **Consistent**: Android keeps the package name while iOS app and test targets derive from the same base
+- **Reduced Input**: No separate bundle identifier prompt is required
 
 ### Complete Source Set Coverage
-- **All Source Sets**: Handles `commonMain`, `main`, `iosMain`, and `commonTest`
+- **All Shared Source Sets**: Handles `commonMain`, `androidMain`, `iosMain`, and `commonTest`
 - **No Missing Files**: Ensures all Kotlin files are properly migrated
 - **Consistent Structure**: Maintains the same package structure across all source sets
 - **Complete Cleanup**: Removes old directories from all source sets
+
+### iOS Test Target Support
+- **Test folder rename**: Renames `iosApp/KMP-TemplateTests` to `iosApp/<ProjectName>Tests`
+- **Xcode group compatibility**: Keeps the Xcode file-system-synchronized test group pointing at a real folder after renaming
+- **Bundle identifiers**: Updates both the app bundle ID and the unit test bundle ID
+- **Shared framework lookup**: Preserves the `Shared` framework search path configuration already stored in the Xcode project
 
 ### Firebase Configuration Templates
 - **Automatic Creation**: Creates template Firebase configuration files with correct identifiers
@@ -264,11 +276,15 @@ The script provides colored, informative output:
 
 ### Example Flow
 ```
-Enter your package name: org.example.project
 Enter your project name: MyApp
-Generated bundle identifier: org.example.project
-Note: iOS bundle identifier matches Android package name (standard practice)
-Do you want to customize the bundle identifier? (y/N): N
+Enter your package name: org.example.project
+
+Configuration Summary:
+  Project Name: MyApp
+  Package Name: org.example.project
+  App Bundle ID: org.example.project.MyApp
+  Test Bundle ID: org.example.project.MyAppTests
+  Domain: project.example.org
 ```
 
 ## 📝 Post-Setup Instructions
@@ -285,6 +301,7 @@ After running the script, you'll need to:
 - Replace `iosApp/YourApp/GoogleService-Info.plist` with your actual Firebase configuration
 - Update `local.properties` with your actual API keys (placeholders were added)
 - Note: Template files were created with correct package names and bundle IDs
+- Verify the iOS test sources now live under `iosApp/YourAppTests/`
 
 ### 3. Update GitHub Repository
 - Update repository secrets in GitHub Settings
@@ -299,7 +316,11 @@ After running the script, you'll need to:
 # Test Android build
 ./gradlew :androidApp:assembleDebug
 
-# Test iOS build in Xcode
+# Test shared Kotlin iOS compilation
+./gradlew :shared:compileKotlinIosSimulatorArm64
+
+# Test the iOS app and test target build
+xcodebuild -project iosApp/YourApp.xcodeproj -scheme YourApp -destination 'generic/platform=iOS Simulator' -configuration Debug build-for-testing
 ```
 
 ## 🐛 Troubleshooting
@@ -333,6 +354,11 @@ chmod +x setup_new_project.sh
 - **File locations**: 
   - Android: `androidApp/google-services.json`
   - iOS: `iosApp/YourApp/GoogleService-Info.plist`
+
+#### iOS Test Target Issues
+- **Missing test folder**: Confirm the script renamed `iosApp/KMP-TemplateTests` to `iosApp/YourAppTests`
+- **Build-for-testing check**: Run the `xcodebuild ... build-for-testing` command to verify the app target and test target both compile
+- **Shared framework import errors**: If Swift tests report `No such module 'Shared'`, verify the generated Xcode project still contains the `FRAMEWORK_SEARCH_PATHS` entries under the test target build settings
 
 #### API Key Configuration Issues
 - **Placeholders added**: The script automatically adds API key placeholders to `local.properties`

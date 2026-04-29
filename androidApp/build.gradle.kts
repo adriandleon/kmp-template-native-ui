@@ -93,7 +93,9 @@ dependencies {
     implementation(libs.lifecycle.viewmodel.compose)
     
     testImplementation(libs.kotlin.test)
-    
+
+    androidTestImplementation(libs.compose.ui.test.junit4)
+
     debugImplementation(libs.compose.ui.tooling)
     detektPlugins(libs.detekt.compose)
 }

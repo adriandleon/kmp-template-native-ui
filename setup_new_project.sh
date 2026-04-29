@@ -64,20 +64,10 @@ to_project_name() {
     echo "$1" | sed 's/[^a-zA-Z0-9]//g' | sed 's/^[0-9]*//g'
 }
 
-# Function to convert string to valid bundle identifier
-to_bundle_id() {
-    echo "$1" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9.]//g' | sed 's/\.\.*/\./g' | sed 's/^\.\|\.$//g'
-}
-
 # Function to get domain from package name (reversed domain)
 # Converts: org.example.project -> project.example.org
 get_domain() {
-    echo "$1" | tr '.' '\n' | tail -r | tr '\n' '.' | sed 's/\.$//'
-}
-
-# Function to get app name from package name
-get_app_name() {
-    echo "$1" | rev | cut -d'.' -f1 | rev
+    echo "$1" | tr '.' '\n' | awk '{lines[NR]=$0} END {for(i=NR;i>=1;i--) printf "%s%s", lines[i], (i>1 ? "." : "\n")}'
 }
 
 # Function to create directory structure
@@ -176,15 +166,16 @@ update_file_contents() {
     if [ -f "$file" ]; then
         # Create backup
         cp "$file" "$file.backup"
+
+        # Replace full bundle identifiers before package names so app target
+        # bundle IDs do not get stuck with the old project suffix.
+        sed -i.tmp "s|$old_bundle_id|$new_bundle_id.$new_project_name|g" "$file"
         
         # Replace package names
         sed -i.tmp "s|$old_package|$new_package|g" "$file"
         
         # Replace project names
         sed -i.tmp "s|$old_project_name|$new_project_name|g" "$file"
-        
-        # Replace bundle identifiers
-        sed -i.tmp "s|$old_bundle_id|$new_bundle_id|g" "$file"
         
         # Replace domain names
         sed -i.tmp "s|$old_domain|$new_domain|g" "$file"
@@ -198,19 +189,21 @@ update_file_contents() {
 
 # Function to update Xcode project
 update_xcode_project() {
-    local old_project_name="$1"
-    local new_project_name="$2"
-    local old_bundle_id="$3"
-    local new_bundle_id="$4"
+    local old_package="$1"
+    local new_package="$2"
+    local old_project_name="$3"
+    local new_project_name="$4"
+    local old_bundle_id="$5"
+    local new_bundle_id="$6"
     
     print_step "Updating Xcode project..."
     
     # Update project.pbxproj
     if [ -f "iosApp/$old_project_name.xcodeproj/project.pbxproj" ]; then
         update_file_contents "iosApp/$old_project_name.xcodeproj/project.pbxproj" \
-            "com.adriandeleon.template" "$new_bundle_id" \
+            "$old_package" "$new_package" \
             "$old_project_name" "$new_project_name" \
-            "com.adriandeleon.kmp.template.KMPTemplate" "$new_bundle_id.$new_project_name" \
+            "$old_bundle_id" "$new_bundle_id" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
         
         # Rename Xcode project directory
@@ -221,9 +214,9 @@ update_xcode_project() {
     # Update Config.xcconfig
     if [ -f "iosApp/Configuration/Config.xcconfig" ]; then
         update_file_contents "iosApp/Configuration/Config.xcconfig" \
-            "com.adriandeleon.template" "$new_bundle_id" \
+            "$old_package" "$new_package" \
             "$old_project_name" "$new_project_name" \
-            "com.adriandeleon.kmp.template.KMPTemplate" "$new_bundle_id.$new_project_name" \
+            "$old_bundle_id" "$new_bundle_id" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
     fi
     
@@ -232,13 +225,20 @@ update_xcode_project() {
         mv "iosApp/$old_project_name" "iosApp/$new_project_name"
         print_success "Renamed iOS app folder"
     fi
+
+    # Rename the Swift test target folder so the synchronized Xcode group path
+    # keeps matching the filesystem after project renaming.
+    if [ -d "iosApp/${old_project_name}Tests" ]; then
+        mv "iosApp/${old_project_name}Tests" "iosApp/${new_project_name}Tests"
+        print_success "Renamed iOS test folder"
+    fi
     
     # Update Swift files in the new folder
     find "iosApp/$new_project_name" -name "*.swift" -type f | while read -r file; do
         update_file_contents "$file" \
-            "com.adriandeleon.template" "$new_bundle_id" \
+            "$old_package" "$new_package" \
             "$old_project_name" "$new_project_name" \
-            "com.adriandeleon.kmp.template.KMPTemplate" "$new_bundle_id.$new_project_name" \
+            "$old_bundle_id" "$new_bundle_id" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
     done
 }
@@ -692,7 +692,7 @@ show_final_instructions() {
     echo "   - Replace androidApp/google-services.json with your actual Firebase config"
     echo "   - Replace iosApp/$new_project_name/GoogleService-Info.plist with your actual Firebase config"
     echo "   - Update local.properties with your actual API keys (placeholders were added)"
-    echo "   - Note: KMP-Template files were created with correct package names and bundle IDs"
+    echo "   - Note: Template files were created with correct package names and bundle IDs"
     echo ""
     echo -e "${YELLOW}3. Update GitHub repository:${NC}"
     echo "   - Update repository secrets in GitHub Settings"
@@ -702,12 +702,13 @@ show_final_instructions() {
     echo -e "${YELLOW}4. Test your setup:${NC}"
     echo "   - Run: ./gradlew clean build"
     echo "   - Test Android build: ./gradlew :androidApp:assembleDebug"
-    echo "   - Test iOS build in Xcode"
+    echo "   - Test iOS build in Xcode or with xcodebuild build-for-testing"
     echo ""
     echo -e "${CYAN}📊 Project Details:${NC}"
     echo "   Package Name: $new_package"
     echo "   Project Name: $new_project_name"
-    echo "   Bundle ID: $new_bundle_id"
+    echo "   App Bundle ID: $new_bundle_id.$new_project_name"
+    echo "   Test Bundle ID: $new_bundle_id.${new_project_name}Tests"
     echo ""
     echo -e "${GREEN}Happy coding! 🚀${NC}"
 }
@@ -749,25 +750,8 @@ main() {
         fi
     done
     
-    # Use package name as bundle identifier (standard practice)
+    # Use the package name as the base for derived iOS bundle identifiers.
     NEW_BUNDLE_ID="$NEW_PACKAGE"
-    
-    # echo -e "${CYAN}Generated bundle identifier: $NEW_BUNDLE_ID${NC}"
-    # echo -e "${YELLOW}Note: iOS bundle identifier matches Android package name (standard practice)${NC}"
-    # echo ""
-    
-    # Ask if user wants to customize the bundle identifier
-    # read -p "Do you want to customize the bundle identifier? (y/N): " customize_bundle
-    # if [[ $customize_bundle =~ ^[Yy]$ ]]; then
-    #     while true; do
-    #         read -p "Enter your custom bundle identifier (e.g., com.yourcompany.yourapp): " NEW_BUNDLE_ID_RAW
-    #         NEW_BUNDLE_ID=$(to_bundle_id "$NEW_BUNDLE_ID_RAW")
-            
-    #         if validate_input "$NEW_BUNDLE_ID" "^[a-z][a-z0-9]*(\.[a-z][a-z0-9]*)*$" "Invalid bundle identifier. Must be in format: com.yourcompany.yourapp"; then
-    #             break
-    #         fi
-    #     done
-    # fi
     
     # Extract domain from package name
     NEW_DOMAIN=$(get_domain "$NEW_PACKAGE")
@@ -776,7 +760,8 @@ main() {
     echo -e "${CYAN}📋 Configuration Summary:${NC}"
     echo "   Project Name: $NEW_PROJECT_NAME"
     echo "   Package Name: $NEW_PACKAGE"
-    echo "   Bundle ID: $NEW_BUNDLE_ID.$NEW_PROJECT_NAME"
+    echo "   App Bundle ID: $NEW_BUNDLE_ID.$NEW_PROJECT_NAME"
+    echo "   Test Bundle ID: $NEW_BUNDLE_ID.${NEW_PROJECT_NAME}Tests"
     echo "   Domain: $NEW_DOMAIN"
     echo ""
     
@@ -801,7 +786,7 @@ main() {
     update_other_configs "$OLD_PACKAGE" "$NEW_PACKAGE" "$OLD_PROJECT_NAME" "$NEW_PROJECT_NAME" "$OLD_BUNDLE_ID" "$NEW_BUNDLE_ID" "$OLD_DOMAIN" "$NEW_DOMAIN"
     
     # Update Xcode project (must be done after other updates)
-    update_xcode_project "$OLD_PROJECT_NAME" "$NEW_PROJECT_NAME" "$OLD_BUNDLE_ID" "$NEW_BUNDLE_ID"
+    update_xcode_project "$OLD_PACKAGE" "$NEW_PACKAGE" "$OLD_PROJECT_NAME" "$NEW_PROJECT_NAME" "$OLD_BUNDLE_ID" "$NEW_BUNDLE_ID"
     
     # Create Firebase configuration files
     create_firebase_configs "$NEW_PACKAGE" "$NEW_PROJECT_NAME" "$NEW_BUNDLE_ID"
