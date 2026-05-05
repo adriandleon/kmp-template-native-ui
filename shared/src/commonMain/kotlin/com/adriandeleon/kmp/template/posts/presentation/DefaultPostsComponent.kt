@@ -1,7 +1,6 @@
 package com.adriandeleon.kmp.template.posts.presentation
 
 import com.adriandeleon.kmp.template.posts.PostsComponent
-import com.adriandeleon.kmp.template.posts.PostsUiState
 import com.adriandeleon.kmp.template.posts.presentation.mapper.PostsUiMapper
 import com.adriandeleon.kmp.template.posts.presentation.store.PostsIntent
 import com.adriandeleon.kmp.template.posts.presentation.store.PostsStoreFactory
@@ -22,14 +21,14 @@ internal class DefaultPostsComponent(
 ) : PostsComponent, ComponentContext by componentContext {
 
     private val store = storeFactory.create()
-    private val _state = MutableValue(uiMapper.map(store.state))
-    override val state: Value<PostsUiState> = _state
+    private val _uiState = MutableValue(uiMapper.map(store.state))
+    override val uiState: Value<PostsComponent.UiState> = _uiState
 
     init {
         lifecycle.doOnDestroy(store::dispose)
         val scope = coroutineScope()
         scope.launch {
-            store.stateFlow.collect { storeState -> _state.value = uiMapper.map(storeState) }
+            store.stateFlow.collect { storeState -> _uiState.value = uiMapper.map(storeState) }
         }
     }
 

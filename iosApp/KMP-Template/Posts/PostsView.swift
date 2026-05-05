@@ -11,22 +11,22 @@ import SwiftUI
 
 struct PostsView: View {
     private let component: PostsComponent
-    @StateObject private var stateObserver: ObservableValue<PostsUiState>
+    @StateObject private var uiStateObserver: ObservableValue<PostsComponentUiState>
 
     init(_ component: PostsComponent) {
         self.component = component
-        self._stateObserver = StateObject(
-            wrappedValue: ObservableValue(component.state)
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
         )
     }
 
     var body: some View {
-        switch stateObserver.value {
-        case is PostsUiState.Loading:
+        switch uiStateObserver.value {
+        case is PostsComponentUiState.Loading:
             PostsLoadingView()
-        case let content as PostsUiState.Content:
+        case let content as PostsComponentUiState.Content:
             PostsListView(posts: content.posts)
-        case let error as PostsUiState.Error:
+        case let error as PostsComponentUiState.Error:
             PostsErrorView(message: error.message, onRetry: component.onRetry)
         default:
             EmptyView()
@@ -81,14 +81,16 @@ private struct PostsErrorView: View {
 
 private func postsLoadingPreview() -> some View {
     let component = PreviewPostsComponent()
-    component.setState(newState: PostsUiState.Loading())
+    component.setUiState(newState: PostsComponentUiState.Loading())
     return PostsView(component)
         .environment(\.locale, .init(identifier: "en"))
 }
 
 private func postsErrorPreview() -> some View {
     let component = PreviewPostsComponent()
-    component.setState(newState: PostsUiState.Error(message: "Something went wrong."))
+    component.setUiState(
+        newState: PostsComponentUiState.Error(message: "Something went wrong.")
+    )
     return PostsView(component)
         .environment(\.locale, .init(identifier: "en"))
 }

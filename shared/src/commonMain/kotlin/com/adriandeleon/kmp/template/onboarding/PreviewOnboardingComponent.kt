@@ -26,8 +26,8 @@ class PreviewOnboardingComponent(
         Value<ChildPages<OnboardingComponent.Page, OnboardingComponent.PageComponent>> =
         mutablePages
 
-    private val mutableState = MutableValue(mutablePages.value.toState())
-    override val state: Value<OnboardingComponent.State> = mutableState
+    private val mutableUiState = MutableValue(mutablePages.value.toUiState())
+    override val uiState: Value<OnboardingComponent.UiState> = mutableUiState
 
     override fun next() {
         select((mutablePages.value.selectedIndex + 1).coerceAtMost(items.lastIndex))
@@ -40,16 +40,17 @@ class PreviewOnboardingComponent(
     override fun skip() = Unit
 
     override fun finish() {
-        if (!mutableState.value.isLastPage) next()
+        if (!mutableUiState.value.isLastPage) next()
     }
 
     private fun select(index: Int) {
         mutablePages.value = mutablePages.value.copy(selectedIndex = index)
-        mutableState.value = mutablePages.value.toState()
+        mutableUiState.value = mutablePages.value.toUiState()
     }
 
-    private fun ChildPages<OnboardingComponent.Page, OnboardingComponent.PageComponent>.toState() =
-        OnboardingComponent.State(
+    private fun ChildPages<OnboardingComponent.Page, OnboardingComponent.PageComponent>
+        .toUiState() =
+        OnboardingComponent.UiState(
             selectedPage = items[selectedIndex].configuration,
             selectedIndex = selectedIndex,
             pageCount = items.size,

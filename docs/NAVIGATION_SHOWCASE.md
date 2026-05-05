@@ -56,9 +56,10 @@ user actions. Internal navigation configuration, serializers, child item
 collections, panel state, generic navigation state, repositories, stores,
 domain models, and persistence models must stay `internal` or `private`.
 
-Use this public API shape for new screens:
+Use this public API shape for new screens. See
+`COMPONENT_UI_STATE_PATTERN.md` for the full state boundary recipe.
 
-- `val state: Value<FeatureComponent.UiState>` for renderable screen state.
+- `val uiState: Value<FeatureComponent.UiState>` for renderable screen state.
 - Decompose child component values only when native UI must render native
   navigation, such as `ChildStack` or `ChildSlot`.
 - Small intent-style methods for user actions and platform events.
@@ -172,6 +173,7 @@ The shared handler currently supports these neutral sample routes:
 
 Use this pattern to keep parsing and route resolution in shared code. Keep
 platform-specific URL registration in Android and iOS app configuration.
+See `NATIVE_DEEPLINKS.md` for the native capture and shared routing boundary.
 
 ## Web navigation
 
@@ -218,6 +220,8 @@ Use this checklist for agentic implementation:
 6. Add shared unit tests for each route, dismissal, back action, and invalid
    deep link.
 7. Add platform UI only after the shared tests describe the behavior.
+8. Use `COMPONENT_UI_STATE_PATTERN.md` and `NATIVE_DEEPLINKS.md` for UI state
+   and deeplink boundaries.
 8. Keep examples domain-neutral unless the app consuming the template already
    has a real domain model.
 

@@ -10,7 +10,7 @@ import com.arkivanov.decompose.router.pages.selectPrev
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class DefaultOnboardingComponent(
+internal class DefaultOnboardingComponent(
     componentContext: ComponentContext,
     private val onOutput: (OnboardingComponent.Output) -> Unit,
 ) : OnboardingComponent, ComponentContext by componentContext {
@@ -25,15 +25,15 @@ class DefaultOnboardingComponent(
             childFactory = ::createPageComponent,
         )
 
-    private val mutableState = MutableValue(pages.value.toState())
-    override val state: Value<OnboardingComponent.State> = mutableState
+    private val mutableUiState = MutableValue(pages.value.toUiState())
+    override val uiState: Value<OnboardingComponent.UiState> = mutableUiState
 
     override fun next() {
-        navigation.selectNext { newPages, _ -> mutableState.value = newPages.toState() }
+        navigation.selectNext { newPages, _ -> mutableUiState.value = newPages.toUiState() }
     }
 
     override fun previous() {
-        navigation.selectPrev { newPages, _ -> mutableState.value = newPages.toState() }
+        navigation.selectPrev { newPages, _ -> mutableUiState.value = newPages.toUiState() }
     }
 
     override fun skip() {
@@ -41,7 +41,7 @@ class DefaultOnboardingComponent(
     }
 
     override fun finish() {
-        if (mutableState.value.isLastPage) {
+        if (mutableUiState.value.isLastPage) {
             onOutput(OnboardingComponent.Output.Completed)
         } else {
             next()
@@ -54,17 +54,17 @@ class DefaultOnboardingComponent(
     ): OnboardingComponent.PageComponent =
         DefaultPageComponent(page = page, componentContext = context)
 
-    private fun Pages<OnboardingComponent.Page>.toState(): OnboardingComponent.State =
-        items.toState(selectedIndex = selectedIndex)
+    private fun Pages<OnboardingComponent.Page>.toUiState(): OnboardingComponent.UiState =
+        items.toUiState(selectedIndex = selectedIndex)
 
-    private fun ChildPages<OnboardingComponent.Page, OnboardingComponent.PageComponent>.toState():
-        OnboardingComponent.State =
-        items.map { it.configuration }.toState(selectedIndex = selectedIndex)
+    private fun ChildPages<OnboardingComponent.Page, OnboardingComponent.PageComponent>.toUiState():
+        OnboardingComponent.UiState =
+        items.map { it.configuration }.toUiState(selectedIndex = selectedIndex)
 
-    private fun List<OnboardingComponent.Page>.toState(
+    private fun List<OnboardingComponent.Page>.toUiState(
         selectedIndex: Int
-    ): OnboardingComponent.State =
-        OnboardingComponent.State(
+    ): OnboardingComponent.UiState =
+        OnboardingComponent.UiState(
             selectedPage = this[selectedIndex],
             selectedIndex = selectedIndex,
             pageCount = size,

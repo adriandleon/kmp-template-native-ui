@@ -8,6 +8,6 @@ class DefaultHomeComponentTest :
     FunSpec({
         test("exposes the correct title") {
             val component = DefaultHomeComponent(testComponentContext())
-            component.title shouldBe "Home Screen"
+            component.uiState.value.title shouldBe "Home Screen"
         }
     })

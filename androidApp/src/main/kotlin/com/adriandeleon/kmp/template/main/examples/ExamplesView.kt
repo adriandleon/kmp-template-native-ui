@@ -1,3 +1,5 @@
+@file:Suppress("TooManyFunctions")
+
 package com.adriandeleon.kmp.template.main.examples
 
 import android.content.res.Configuration
@@ -60,7 +62,7 @@ fun ExamplesView(component: ExamplesComponent, modifier: Modifier = Modifier) {
 
 @Composable
 private fun ExamplesListView(component: ExamplesComponent) {
-    val state by component.state.subscribeAsState()
+    val state by component.uiState.subscribeAsState()
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         Text(
@@ -102,9 +104,6 @@ private fun ExamplesListView(component: ExamplesComponent) {
         PanelsShowcaseView(
             component = component,
             state = state,
-            mode = state.panelsMode,
-            hasDetails = state.hasPanelDetails,
-            hasExtra = state.hasPanelExtra,
         )
 
         GenericNavigationShowcaseView(component = component, state = state)
@@ -117,9 +116,6 @@ private fun ExamplesListView(component: ExamplesComponent) {
 private fun PanelsShowcaseView(
     component: ExamplesComponent,
     state: ExamplesComponent.UiState,
-    mode: ExamplesComponent.PanelMode,
-    hasDetails: Boolean,
-    hasExtra: Boolean,
 ) {
     val selectedItemId = state.selectedItemId ?: state.itemIds.firstOrNull()
 
@@ -133,89 +129,120 @@ private fun PanelsShowcaseView(
             style = MaterialTheme.typography.bodyMedium,
         )
         Text(
-            text = stringResource(R.string.examples_panels_mode_format, mode.name),
+            text = stringResource(R.string.examples_panels_mode_format, state.panelsMode.name),
             style = MaterialTheme.typography.bodySmall,
         )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            OutlinedButton(
-                onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.SINGLE) },
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(stringResource(R.string.examples_panels_single_mode))
-            }
-            OutlinedButton(
-                onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.DUAL) },
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(stringResource(R.string.examples_panels_dual_mode))
-            }
-            OutlinedButton(
-                onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.TRIPLE) },
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(stringResource(R.string.examples_panels_triple_mode))
-            }
-        }
+        PanelModeButtons(component)
+        PanelMainActions(
+            selectedItemId = selectedItemId,
+            onOpenDetails = component::openPanelDetails,
+            onOpenExtra = component::openPanelExtra,
+        )
+        PanelDetailsStatus(state = state, onDismiss = component::dismissPanelDetails)
+        PanelExtraStatus(state = state, onDismiss = component::dismissPanelExtra)
+    }
+}
 
-        Text(
-            text = stringResource(R.string.examples_panels_main_title),
-            style = MaterialTheme.typography.titleMedium,
-        )
-        Text(
-            text = stringResource(R.string.examples_panels_main_body),
-            style = MaterialTheme.typography.bodySmall,
-        )
-        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-            Button(
-                onClick = { selectedItemId?.let(component::openPanelDetails) },
-                enabled = selectedItemId != null,
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(stringResource(R.string.examples_panels_open_details_button))
-            }
-            OutlinedButton(
-                onClick = { selectedItemId?.let(component::openPanelExtra) },
-                enabled = selectedItemId != null,
-                modifier = Modifier.weight(1f),
-            ) {
-                Text(stringResource(R.string.examples_panels_open_extra_button))
-            }
+@Composable
+private fun PanelModeButtons(component: ExamplesComponent) {
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        OutlinedButton(
+            onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.SINGLE) },
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(stringResource(R.string.examples_panels_single_mode))
         }
-
-        Text(
-            text =
-                if (hasDetails) {
-                    stringResource(
-                        R.string.examples_panels_details_body_format,
-                        state.panelItemId.orEmpty(),
-                    )
-                } else {
-                    stringResource(R.string.examples_panels_details_empty)
-                },
-            style = MaterialTheme.typography.bodySmall,
-        )
-        if (hasDetails) {
-            TextButton(onClick = component::dismissPanelDetails) {
-                Text(stringResource(R.string.examples_panels_dismiss_details_button))
-            }
+        OutlinedButton(
+            onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.DUAL) },
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(stringResource(R.string.examples_panels_dual_mode))
         }
+        OutlinedButton(
+            onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.TRIPLE) },
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(stringResource(R.string.examples_panels_triple_mode))
+        }
+    }
+}
 
-        Text(
-            text =
-                if (hasExtra) {
-                    stringResource(
-                        R.string.examples_panels_extra_body_format,
-                        state.panelItemId.orEmpty(),
-                    )
-                } else {
-                    stringResource(R.string.examples_panels_extra_empty)
-                },
-            style = MaterialTheme.typography.bodySmall,
-        )
-        if (hasExtra) {
-            TextButton(onClick = component::dismissPanelExtra) {
-                Text(stringResource(R.string.examples_panels_dismiss_extra_button))
-            }
+@Composable
+private fun PanelMainActions(
+    selectedItemId: String?,
+    onOpenDetails: (String) -> Unit,
+    onOpenExtra: (String) -> Unit,
+) {
+    Text(
+        text = stringResource(R.string.examples_panels_main_title),
+        style = MaterialTheme.typography.titleMedium,
+    )
+    Text(
+        text = stringResource(R.string.examples_panels_main_body),
+        style = MaterialTheme.typography.bodySmall,
+    )
+    Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+        Button(
+            onClick = { selectedItemId?.let(onOpenDetails) },
+            enabled = selectedItemId != null,
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(stringResource(R.string.examples_panels_open_details_button))
+        }
+        OutlinedButton(
+            onClick = { selectedItemId?.let(onOpenExtra) },
+            enabled = selectedItemId != null,
+            modifier = Modifier.weight(1f),
+        ) {
+            Text(stringResource(R.string.examples_panels_open_extra_button))
+        }
+    }
+}
+
+@Composable
+private fun PanelDetailsStatus(
+    state: ExamplesComponent.UiState,
+    onDismiss: () -> Unit,
+) {
+    Text(
+        text =
+            if (state.hasPanelDetails) {
+                stringResource(
+                    R.string.examples_panels_details_body_format,
+                    state.panelItemId.orEmpty(),
+                )
+            } else {
+                stringResource(R.string.examples_panels_details_empty)
+            },
+        style = MaterialTheme.typography.bodySmall,
+    )
+    if (state.hasPanelDetails) {
+        TextButton(onClick = onDismiss) {
+            Text(stringResource(R.string.examples_panels_dismiss_details_button))
+        }
+    }
+}
+
+@Composable
+private fun PanelExtraStatus(
+    state: ExamplesComponent.UiState,
+    onDismiss: () -> Unit,
+) {
+    Text(
+        text =
+            if (state.hasPanelExtra) {
+                stringResource(
+                    R.string.examples_panels_extra_body_format,
+                    state.panelItemId.orEmpty(),
+                )
+            } else {
+                stringResource(R.string.examples_panels_extra_empty)
+            },
+        style = MaterialTheme.typography.bodySmall,
+    )
+    if (state.hasPanelExtra) {
+        TextButton(onClick = onDismiss) {
+            Text(stringResource(R.string.examples_panels_dismiss_extra_button))
         }
     }
 }
@@ -338,7 +365,7 @@ private fun SampleItemRow(
     onOpenDetail: () -> Unit,
     onRemove: () -> Unit,
 ) {
-    val state by component.state.subscribeAsState()
+    val state by component.uiState.subscribeAsState()
 
     Column(
         modifier =
@@ -389,7 +416,7 @@ private fun ExamplesDetailView(
     detailComponent: ExamplesComponent.DetailComponent,
 ) {
     val sampleComponent = component.itemComponent(detailComponent.itemId)
-    val sampleState by sampleComponent.state.subscribeAsState()
+    val sampleState by sampleComponent.uiState.subscribeAsState()
 
     Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
         TextButton(onClick = component::back) {

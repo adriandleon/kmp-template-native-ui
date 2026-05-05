@@ -9,7 +9,7 @@ interface OnboardingComponent {
 
     val pages: Value<ChildPages<Page, PageComponent>>
 
-    val state: Value<State>
+    val uiState: Value<UiState>
 
     fun next()
 
@@ -30,7 +30,7 @@ interface OnboardingComponent {
         Customize,
     }
 
-    data class State(
+    data class UiState(
         val selectedPage: Page,
         val selectedIndex: Int,
         val pageCount: Int,

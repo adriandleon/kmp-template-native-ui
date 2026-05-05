@@ -13,7 +13,7 @@ internal actual val platformAppStateModule: Module = module {
     single<DataStore<Preferences>> {
         PreferenceDataStoreFactory.createWithPath(
             produceFile = {
-                File(androidContext().filesDir, APP_STATE_DATA_STORE_FILE).absolutePath.toPath()
+                File(androidContext().filesDir, AppStateDataStoreFile).absolutePath.toPath()
             }
         )
     }

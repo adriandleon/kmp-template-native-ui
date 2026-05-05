@@ -29,7 +29,7 @@ env:
   SWIFTLINT_CONFIG: config/.swiftlint.yml
 
   # Test Configuration
-  KONSIST_TEST_TASK: konsistTest:test
+  KONSIST_TEST_TASK: :konsistTest:test
   KOVER_VERIFY_TASK: koverVerify
   KOVER_REPORT_TASK: koverXmlReport
 
@@ -153,8 +153,8 @@ jobs:
     # - name: Load Google Service JSON file
     #   run: echo $GOOGLE_SERVICES_JSON | base64 -di > ${{ env.ANDROID_APP_MODULE }}/${{ env.ANDROID_GOOGLE_SERVICES_FILE }}
 
-    # - name: Konsist Tests
-    #   run: ${{ env.GRADLE_WRAPPER }} ${{ env.KONSIST_TEST_TASK }} --rerun-tasks
+    - name: Konsist Tests
+      run: ${{ env.GRADLE_WRAPPER }} ${{ env.KONSIST_TEST_TASK }} --rerun-tasks
 
     # Unit tests run when the gradle task koverVerify run.
     - name: Run Unit Tests

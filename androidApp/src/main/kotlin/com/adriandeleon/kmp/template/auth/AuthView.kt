@@ -120,74 +120,73 @@ private fun AuthActions(
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         when (screen) {
-            AuthComponent.Screen.SignIn -> {
-                Button(
-                    onClick = component::signIn,
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .testTag(stringResource(R.string.tag_auth_primary_button)),
-                ) {
-                    Text(stringResource(R.string.auth_sign_in_button))
-                }
-                Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                    OutlinedButton(
-                        onClick = component::openSignUp,
-                        modifier =
-                            Modifier.weight(1f)
-                                .testTag(stringResource(R.string.tag_auth_secondary_button)),
-                    ) {
-                        Text(stringResource(R.string.auth_create_account_button))
-                    }
-                    OutlinedButton(
-                        onClick = component::openForgotPassword,
-                        modifier =
-                            Modifier.weight(1f)
-                                .testTag(stringResource(R.string.tag_auth_forgot_button)),
-                    ) {
-                        Text(stringResource(R.string.auth_forgot_button))
-                    }
-                }
-            }
-            AuthComponent.Screen.SignUp -> {
-                Button(
-                    onClick = component::signUp,
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .testTag(stringResource(R.string.tag_auth_primary_button)),
-                ) {
-                    Text(stringResource(R.string.auth_sign_up_button))
-                }
-                TextButton(
-                    onClick = component::showTerms,
-                    modifier =
-                        Modifier.align(Alignment.CenterHorizontally)
-                            .testTag(stringResource(R.string.tag_auth_terms_button)),
-                ) {
-                    Text(stringResource(R.string.auth_terms_button))
-                }
-            }
-            AuthComponent.Screen.ForgotPassword -> {
-                Button(
-                    onClick = component::requestVerification,
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .testTag(stringResource(R.string.tag_auth_primary_button)),
-                ) {
-                    Text(stringResource(R.string.auth_send_verification_button))
-                }
-            }
-            AuthComponent.Screen.Verification -> {
-                Button(
-                    onClick = component::back,
-                    modifier =
-                        Modifier.fillMaxWidth()
-                            .testTag(stringResource(R.string.tag_auth_primary_button)),
-                ) {
-                    Text(stringResource(R.string.auth_verification_done_button))
-                }
-            }
+            AuthComponent.Screen.SignIn -> SignInActions(component)
+            AuthComponent.Screen.SignUp -> SignUpActions(component)
+            AuthComponent.Screen.ForgotPassword -> ForgotPasswordActions(component)
+            AuthComponent.Screen.Verification -> VerificationActions(component)
             AuthComponent.Screen.Terms -> Unit
         }
+    }
+}
+
+@Composable
+private fun SignInActions(component: AuthComponent) {
+    Button(
+        onClick = component::signIn,
+        modifier = Modifier.fillMaxWidth().testTag(stringResource(R.string.tag_auth_primary_button)),
+    ) {
+        Text(stringResource(R.string.auth_sign_in_button))
+    }
+    Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+        OutlinedButton(
+            onClick = component::openSignUp,
+            modifier = Modifier.weight(1f).testTag(stringResource(R.string.tag_auth_secondary_button)),
+        ) {
+            Text(stringResource(R.string.auth_create_account_button))
+        }
+        OutlinedButton(
+            onClick = component::openForgotPassword,
+            modifier = Modifier.weight(1f).testTag(stringResource(R.string.tag_auth_forgot_button)),
+        ) {
+            Text(stringResource(R.string.auth_forgot_button))
+        }
+    }
+}
+
+@Composable
+private fun SignUpActions(component: AuthComponent) {
+    Button(
+        onClick = component::signUp,
+        modifier = Modifier.fillMaxWidth().testTag(stringResource(R.string.tag_auth_primary_button)),
+    ) {
+        Text(stringResource(R.string.auth_sign_up_button))
+    }
+    TextButton(
+        onClick = component::showTerms,
+        modifier =
+            Modifier.testTag(stringResource(R.string.tag_auth_terms_button)),
+    ) {
+        Text(stringResource(R.string.auth_terms_button))
+    }
+}
+
+@Composable
+private fun ForgotPasswordActions(component: AuthComponent) {
+    Button(
+        onClick = component::requestVerification,
+        modifier = Modifier.fillMaxWidth().testTag(stringResource(R.string.tag_auth_primary_button)),
+    ) {
+        Text(stringResource(R.string.auth_send_verification_button))
+    }
+}
+
+@Composable
+private fun VerificationActions(component: AuthComponent) {
+    Button(
+        onClick = component::back,
+        modifier = Modifier.fillMaxWidth().testTag(stringResource(R.string.tag_auth_primary_button)),
+    ) {
+        Text(stringResource(R.string.auth_verification_done_button))
     }
 }
 

@@ -11,19 +11,19 @@ import SwiftUI
 
 struct MainView: View {
     private let component: MainComponent
-    @StateObject private var stateObserver: ObservableValue<MainComponentState>
+    @StateObject private var uiStateObserver: ObservableValue<MainComponentUiState>
 
     init(_ component: MainComponent) {
         self.component = component
-        self._stateObserver = StateObject(
-            wrappedValue: ObservableValue(component.state)
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
         )
     }
 
     var body: some View {
         TabView(
             selection: Binding(
-                get: { Int(stateObserver.value.selectedIndex) },
+                get: { Int(uiStateObserver.value.selectedIndex) },
                 set: { component.selectPage(index: Int32($0)) },
             )
         ) {

@@ -4,8 +4,9 @@ import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
 class PreviewPostsComponent : PostsComponent {
-    private val _state = MutableValue<PostsUiState>(PostsUiState.Content(previewPosts))
-    override val state: Value<PostsUiState> = _state
+    private val _uiState =
+        MutableValue<PostsComponent.UiState>(PostsComponent.UiState.Content(previewPosts))
+    override val uiState: Value<PostsComponent.UiState> = _uiState
 
     var retryCallCount = 0
         private set
@@ -14,8 +15,8 @@ class PreviewPostsComponent : PostsComponent {
         retryCallCount++
     }
 
-    fun setState(newState: PostsUiState) {
-        _state.value = newState
+    fun setUiState(newState: PostsComponent.UiState) {
+        _uiState.value = newState
     }
 
     companion object {

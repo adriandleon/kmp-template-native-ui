@@ -15,7 +15,8 @@ import com.arkivanov.decompose.router.stack.pushNew
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 
-class DefaultAuthComponent(
+@Suppress("TooManyFunctions")
+internal class DefaultAuthComponent(
     componentContext: ComponentContext,
     private val sessionRepository: FakeSessionRepository = FakeSessionRepository(),
     private val onOutput: (AuthComponent.Output) -> Unit,

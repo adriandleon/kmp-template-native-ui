@@ -7,6 +7,7 @@ import com.arkivanov.mvikotlin.core.store.SimpleBootstrapper
 import com.arkivanov.mvikotlin.core.store.Store
 import com.arkivanov.mvikotlin.core.store.StoreFactory
 import com.arkivanov.mvikotlin.extensions.coroutines.CoroutineExecutor
+import kotlinx.coroutines.CancellationException
 import kotlinx.coroutines.launch
 
 internal class PostsStoreFactory(
@@ -48,6 +49,7 @@ internal class PostsStoreFactory(
             }
         }
 
+        @Suppress("TooGenericExceptionCaught")
         private fun loadPosts() {
             scope.launch {
                 // MVIKotlin requires store messages to be dispatched on main.
@@ -55,6 +57,8 @@ internal class PostsStoreFactory(
                 dispatch(PostsMessage.LoadingStarted)
                 try {
                     getPostsUseCase().collect { posts -> dispatch(PostsMessage.PostsLoaded(posts)) }
+                } catch (e: CancellationException) {
+                    throw e
                 } catch (e: Exception) {
                     dispatch(PostsMessage.PostsFailed(e.message ?: "Unknown error"))
                 }

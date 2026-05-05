@@ -24,6 +24,7 @@ gradle-google-services = "4.4.4"
 kermit = "2.1.0"
 koin = "4.2.1"
 kotest = "6.1.11"
+konsist = "0.17.3"
 kotlin = "2.3.20"
 kotlinx-coroutines = "1.10.2"
 kotlinx-datetime = "0.7.1"
@@ -79,6 +80,7 @@ kotest-framework-engine = { group = "io.kotest", name = "kotest-framework-engine
 kotest-extensions-koin = { group = "io.kotest", name = "kotest-extensions-koin", version.ref = "kotest" }
 kotest-property = { group = "io.kotest", name = "kotest-property", version.ref="kotest" }
 kotest-runner-junit5 = { group = "io.kotest", name = "kotest-runner-junit5", version.ref = "kotest" }
+konsist = { group = "com.lemonappdev", name = "konsist", version.ref = "konsist" }
 kotlin-test = { module = "org.jetbrains.kotlin:kotlin-test", version.ref = "kotlin" }
 kotlinx-coroutines = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-core", version.ref = "kotlinx-coroutines" }
 kotlinx-coroutines-test = { group = "org.jetbrains.kotlinx", name = "kotlinx-coroutines-test", version.ref = "kotlinx-coroutines" }
@@ -114,6 +116,7 @@ detekt = { id = "io.gitlab.arturbosch.detekt", version.ref = "detekt" }
 google-services = { id = "com.google.gms.google-services", version.ref = "gradle-google-services" }
 kotest = { id = "io.kotest", version.ref = "kotest" }
 kotlin-multiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
 kover = { id = "org.jetbrains.kotlinx.kover", version.ref = "kover" }
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }

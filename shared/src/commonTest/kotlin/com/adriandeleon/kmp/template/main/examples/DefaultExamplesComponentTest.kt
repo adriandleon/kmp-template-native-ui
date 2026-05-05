@@ -1,6 +1,9 @@
 package com.adriandeleon.kmp.template.main.examples
 
-import com.adriandeleon.kmp.template.common.util.testComponentContext
+import com.adriandeleon.kmp.template.common.util.activeInstance
+import com.adriandeleon.kmp.template.common.util.activeSlotInstance
+import com.adriandeleon.kmp.template.common.util.assertEmptySlot
+import com.adriandeleon.kmp.template.common.util.createComponentForTest
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -12,9 +15,9 @@ class DefaultExamplesComponentTest :
             val component = examplesComponent()
 
             component.activeChild().shouldBeInstanceOf<ExamplesComponent.Child.List>()
-            component.state.value.itemIds shouldContainExactly
+            component.uiState.value.itemIds shouldContainExactly
                 listOf("sample-1", "sample-2", "sample-3")
-            component.state.value.selectedItemId shouldBe "sample-1"
+            component.uiState.value.selectedItemId shouldBe "sample-1"
         }
 
         test("opens detail and pops back to list") {
@@ -25,7 +28,7 @@ class DefaultExamplesComponentTest :
             val detail =
                 component.activeChild().shouldBeInstanceOf<ExamplesComponent.Child.Detail>()
             detail.component.itemId shouldBe "sample-2"
-            component.state.value.selectedItemId shouldBe "sample-2"
+            component.uiState.value.selectedItemId shouldBe "sample-2"
 
             component.back()
 
@@ -47,13 +50,11 @@ class DefaultExamplesComponentTest :
 
             component.showConfirmation()
 
-            component.modalSlot.value.child
-                ?.instance
-                .shouldBeInstanceOf<ExamplesComponent.ModalChild.Confirmation>()
+            component.modalSlot.activeSlotInstance<ExamplesComponent.ModalChild.Confirmation>()
 
             component.dismissConfirmation()
 
-            component.modalSlot.value.child shouldBe null
+            component.modalSlot.assertEmptySlot()
         }
 
         test("add item appends and selects a new child item") {
@@ -61,9 +62,9 @@ class DefaultExamplesComponentTest :
 
             component.addItem()
 
-            component.state.value.itemIds shouldContainExactly
+            component.uiState.value.itemIds shouldContainExactly
                 listOf("sample-1", "sample-2", "sample-3", "sample-4")
-            component.state.value.selectedItemId shouldBe "sample-4"
+            component.uiState.value.selectedItemId shouldBe "sample-4"
         }
 
         test("remove item deletes it and clears selection when needed") {
@@ -72,8 +73,8 @@ class DefaultExamplesComponentTest :
             component.selectItem("sample-2")
             component.removeItem("sample-2")
 
-            component.state.value.itemIds shouldContainExactly listOf("sample-1", "sample-3")
-            component.state.value.selectedItemId shouldBe null
+            component.uiState.value.itemIds shouldContainExactly listOf("sample-1", "sample-3")
+            component.uiState.value.selectedItemId shouldBe null
         }
 
         test("child items keep independent state") {
@@ -83,18 +84,18 @@ class DefaultExamplesComponentTest :
             component.incrementItem("sample-1")
             component.incrementItem("sample-2")
 
-            component.itemComponent("sample-1").state.value.count shouldBe 2
-            component.itemComponent("sample-2").state.value.count shouldBe 1
-            component.itemComponent("sample-3").state.value.count shouldBe 0
+            component.itemComponent("sample-1").uiState.value.count shouldBe 2
+            component.itemComponent("sample-2").uiState.value.count shouldBe 1
+            component.itemComponent("sample-3").uiState.value.count shouldBe 0
         }
 
         test("panels start with main only") {
             val component = examplesComponent()
 
-            component.state.value.panelsMode shouldBe ExamplesComponent.PanelMode.SINGLE
-            component.state.value.hasPanelDetails shouldBe false
-            component.state.value.hasPanelExtra shouldBe false
-            component.state.value.panelItemId shouldBe null
+            component.uiState.value.panelsMode shouldBe ExamplesComponent.PanelMode.SINGLE
+            component.uiState.value.hasPanelDetails shouldBe false
+            component.uiState.value.hasPanelExtra shouldBe false
+            component.uiState.value.panelItemId shouldBe null
         }
 
         test("panels open details and extra for an item") {
@@ -103,9 +104,9 @@ class DefaultExamplesComponentTest :
             component.openPanelDetails("sample-2")
             component.openPanelExtra("sample-2")
 
-            component.state.value.panelItemId shouldBe "sample-2"
-            component.state.value.hasPanelDetails shouldBe true
-            component.state.value.hasPanelExtra shouldBe true
+            component.uiState.value.panelItemId shouldBe "sample-2"
+            component.uiState.value.hasPanelDetails shouldBe true
+            component.uiState.value.hasPanelExtra shouldBe true
         }
 
         test("panels can dismiss extra and details independently") {
@@ -115,13 +116,13 @@ class DefaultExamplesComponentTest :
             component.openPanelExtra("sample-2")
             component.dismissPanelExtra()
 
-            component.state.value.hasPanelDetails shouldBe true
-            component.state.value.hasPanelExtra shouldBe false
+            component.uiState.value.hasPanelDetails shouldBe true
+            component.uiState.value.hasPanelExtra shouldBe false
 
             component.dismissPanelDetails()
 
-            component.state.value.panelItemId shouldBe null
-            component.state.value.hasPanelDetails shouldBe false
+            component.uiState.value.panelItemId shouldBe null
+            component.uiState.value.hasPanelDetails shouldBe false
         }
 
         test("panels mode can be changed") {
@@ -129,14 +130,14 @@ class DefaultExamplesComponentTest :
 
             component.setPanelsMode(ExamplesComponent.PanelMode.TRIPLE)
 
-            component.state.value.panelsMode shouldBe ExamplesComponent.PanelMode.TRIPLE
+            component.uiState.value.panelsMode shouldBe ExamplesComponent.PanelMode.TRIPLE
         }
 
         test("generic workspace starts with one active pane") {
             val component = examplesComponent()
 
-            component.state.value.workspacePaneIds shouldContainExactly listOf("pane-1", "pane-2")
-            component.state.value.activeWorkspacePaneId shouldBe "pane-1"
+            component.uiState.value.workspacePaneIds shouldContainExactly listOf("pane-1", "pane-2")
+            component.uiState.value.activeWorkspacePaneId shouldBe "pane-1"
         }
 
         test("generic workspace can add activate and close panes") {
@@ -146,8 +147,8 @@ class DefaultExamplesComponentTest :
             component.activateWorkspacePane("pane-2")
             component.closeWorkspacePane("pane-1")
 
-            component.state.value.workspacePaneIds shouldContainExactly listOf("pane-2", "pane-3")
-            component.state.value.activeWorkspacePaneId shouldBe "pane-2"
+            component.uiState.value.workspacePaneIds shouldContainExactly listOf("pane-2", "pane-3")
+            component.uiState.value.activeWorkspacePaneId shouldBe "pane-2"
         }
 
         test("deep link opens an item detail") {
@@ -158,8 +159,8 @@ class DefaultExamplesComponentTest :
             val detail =
                 component.activeChild().shouldBeInstanceOf<ExamplesComponent.Child.Detail>()
             detail.component.itemId shouldBe "sample-3"
-            component.state.value.lastDeepLinkPath shouldBe "examples/item/sample-3"
-            component.state.value.lastDeepLinkHandled shouldBe true
+            component.uiState.value.lastDeepLinkPath shouldBe "examples/item/sample-3"
+            component.uiState.value.lastDeepLinkHandled shouldBe true
         }
 
         test("deep link can target panels and generic workspace") {
@@ -168,9 +169,9 @@ class DefaultExamplesComponentTest :
             component.handleDeepLink("template://examples/panel/sample-2") shouldBe true
             component.handleDeepLink("template://examples/workspace/pane-2") shouldBe true
 
-            component.state.value.panelItemId shouldBe "sample-2"
-            component.state.value.hasPanelDetails shouldBe true
-            component.state.value.activeWorkspacePaneId shouldBe "pane-2"
+            component.uiState.value.panelItemId shouldBe "sample-2"
+            component.uiState.value.hasPanelDetails shouldBe true
+            component.uiState.value.activeWorkspacePaneId shouldBe "pane-2"
         }
 
         test("unknown deep link is reported but ignored") {
@@ -178,12 +179,12 @@ class DefaultExamplesComponentTest :
 
             component.handleDeepLink("template://examples/unknown") shouldBe false
 
-            component.state.value.lastDeepLinkPath shouldBe "examples/unknown"
-            component.state.value.lastDeepLinkHandled shouldBe false
+            component.uiState.value.lastDeepLinkPath shouldBe "examples/unknown"
+            component.uiState.value.lastDeepLinkHandled shouldBe false
         }
     })
 
 private fun examplesComponent(): ExamplesComponent =
-    DefaultExamplesComponent(testComponentContext())
+    createComponentForTest(::DefaultExamplesComponent)
 
-private fun ExamplesComponent.activeChild(): ExamplesComponent.Child = stack.value.active.instance
+private fun ExamplesComponent.activeChild(): ExamplesComponent.Child = stack.activeInstance()

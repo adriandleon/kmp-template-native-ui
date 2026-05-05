@@ -11,7 +11,7 @@ import com.arkivanov.decompose.router.pages.select
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class DefaultMainComponent(componentContext: ComponentContext) :
+internal class DefaultMainComponent(componentContext: ComponentContext) :
     MainComponent, ComponentContext by componentContext {
 
     private val navigation = PagesNavigation<MainComponent.Page>()
@@ -30,8 +30,8 @@ class DefaultMainComponent(componentContext: ComponentContext) :
                     as MainComponent.PageComponent.Examples)
                 .component
 
-    private val mutableState = MutableValue(pages.value.toState())
-    override val state: Value<MainComponent.State> = mutableState
+    private val mutableUiState = MutableValue(pages.value.toUiState())
+    override val uiState: Value<MainComponent.UiState> = mutableUiState
 
     override fun selectPage(page: MainComponent.Page) {
         selectPage(mainPages.indexOf(page))
@@ -39,7 +39,9 @@ class DefaultMainComponent(componentContext: ComponentContext) :
 
     override fun selectPage(index: Int) {
         val selectedIndex = index.coerceIn(mainPages.indices)
-        navigation.select(selectedIndex) { newPages, _ -> mutableState.value = newPages.toState() }
+        navigation.select(selectedIndex) { newPages, _ ->
+            mutableUiState.value = newPages.toUiState()
+        }
     }
 
     private fun createPageComponent(
@@ -52,14 +54,15 @@ class DefaultMainComponent(componentContext: ComponentContext) :
             else -> MainComponent.PageComponent.Generic(page)
         }
 
-    private fun Pages<MainComponent.Page>.toState(): MainComponent.State =
-        items.toState(selectedIndex = selectedIndex)
+    private fun Pages<MainComponent.Page>.toUiState(): MainComponent.UiState =
+        items.toUiState(selectedIndex = selectedIndex)
 
-    private fun ChildPages<MainComponent.Page, MainComponent.PageComponent>.toState():
-        MainComponent.State = items.map { it.configuration }.toState(selectedIndex = selectedIndex)
+    private fun ChildPages<MainComponent.Page, MainComponent.PageComponent>.toUiState():
+        MainComponent.UiState =
+        items.map { it.configuration }.toUiState(selectedIndex = selectedIndex)
 
-    private fun List<MainComponent.Page>.toState(selectedIndex: Int): MainComponent.State =
-        MainComponent.State(
+    private fun List<MainComponent.Page>.toUiState(selectedIndex: Int): MainComponent.UiState =
+        MainComponent.UiState(
             selectedPage = this[selectedIndex],
             selectedIndex = selectedIndex,
             pageCount = size,

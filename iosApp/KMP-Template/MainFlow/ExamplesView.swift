@@ -51,17 +51,17 @@ struct ExamplesView: View {
 
 private struct ExamplesListView: View {
     let component: ExamplesComponent
-    @StateObject private var stateObserver: ObservableValue<ExamplesComponentUiState>
+    @StateObject private var uiStateObserver: ObservableValue<ExamplesComponentUiState>
 
     init(component: ExamplesComponent) {
         self.component = component
-        self._stateObserver = StateObject(
-            wrappedValue: ObservableValue(component.state)
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
         )
     }
 
     var body: some View {
-        let state = stateObserver.value
+        let state = uiStateObserver.value
 
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
@@ -111,7 +111,7 @@ private struct SampleItemRow: View {
     let onOpenDetail: () -> Void
     let onRemove: () -> Void
 
-    @StateObject private var stateObserver: ObservableValue<SampleItemComponentState>
+    @StateObject private var uiStateObserver: ObservableValue<SampleItemComponentUiState>
 
     init(
         component: SampleItemComponent,
@@ -125,13 +125,13 @@ private struct SampleItemRow: View {
         self.onSelect = onSelect
         self.onOpenDetail = onOpenDetail
         self.onRemove = onRemove
-        self._stateObserver = StateObject(
-            wrappedValue: ObservableValue(component.state)
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
         )
     }
 
     var body: some View {
-        let state = stateObserver.value
+        let state = uiStateObserver.value
 
         VStack(alignment: .leading, spacing: 8) {
             Text(
@@ -418,17 +418,17 @@ private struct ExamplesDetailView: View {
 
 private struct SampleDetailContent: View {
     let component: SampleItemComponent
-    @StateObject private var stateObserver: ObservableValue<SampleItemComponentState>
+    @StateObject private var uiStateObserver: ObservableValue<SampleItemComponentUiState>
 
     init(component: SampleItemComponent) {
         self.component = component
-        self._stateObserver = StateObject(
-            wrappedValue: ObservableValue(component.state)
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
         )
     }
 
     var body: some View {
-        let state = stateObserver.value
+        let state = uiStateObserver.value
 
         Text(
             String(

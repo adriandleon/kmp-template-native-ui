@@ -11,13 +11,17 @@ import SwiftUI
 
 struct HomeView: View {
     private let component: HomeComponent
+    @StateObject private var uiStateObserver: ObservableValue<HomeComponentUiState>
 
     init(_ component: HomeComponent) {
         self.component = component
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
+        )
     }
 
     var body: some View {
-        Text(component.title)
+        Text(uiStateObserver.value.title)
             .font(.title)
     }
 }

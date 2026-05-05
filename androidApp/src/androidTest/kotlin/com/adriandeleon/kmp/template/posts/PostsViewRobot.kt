@@ -54,6 +54,9 @@ class PostsViewVerification(
     }
 
     fun postsListHasItemCount(expected: Int) {
-        assertEquals(expected, (component.state.value as PostsUiState.Content).posts.size)
+        assertEquals(
+            expected,
+            (component.uiState.value as PostsComponent.UiState.Content).posts.size,
+        )
     }
 }

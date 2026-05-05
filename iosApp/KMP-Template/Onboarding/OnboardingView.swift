@@ -11,17 +11,17 @@ import SwiftUI
 
 struct OnboardingView: View {
     private let component: OnboardingComponent
-    @StateObject private var stateObserver: ObservableValue<OnboardingComponentState>
+    @StateObject private var uiStateObserver: ObservableValue<OnboardingComponentUiState>
 
     init(_ component: OnboardingComponent) {
         self.component = component
-        self._stateObserver = StateObject(
-            wrappedValue: ObservableValue(component.state)
+        self._uiStateObserver = StateObject(
+            wrappedValue: ObservableValue(component.uiState)
         )
     }
 
     var body: some View {
-        let state = stateObserver.value
+        let state = uiStateObserver.value
 
         VStack(spacing: 24) {
             HStack {

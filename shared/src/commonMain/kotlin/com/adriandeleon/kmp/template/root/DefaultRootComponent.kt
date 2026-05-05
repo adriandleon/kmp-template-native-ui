@@ -26,7 +26,8 @@ import org.koin.core.component.get
  * @param componentContext context of this component
  * @see RootComponent
  */
-class DefaultRootComponent(
+@Suppress("TooManyFunctions")
+internal class DefaultRootComponent(
     componentContext: ComponentContext,
     appStateRepository: AppStateRepository? = null,
 ) : RootComponent, KoinComponent, ComponentContext by componentContext {
@@ -109,11 +110,12 @@ class DefaultRootComponent(
         navigation.activate(stateRepository.state.value.rootConfiguration())
     }
 
-    private fun AppState.rootConfiguration(): Configuration {
-        if (!hasSeenOnboarding) return Configuration.Onboarding
-        if (authRequired && !isAuthenticated) return Configuration.Auth
-        return Configuration.Main
-    }
+    private fun AppState.rootConfiguration(): Configuration =
+        when {
+            !hasSeenOnboarding -> Configuration.Onboarding
+            authRequired && !isAuthenticated -> Configuration.Auth
+            else -> Configuration.Main
+        }
 
     @Serializable
     private sealed interface Configuration {

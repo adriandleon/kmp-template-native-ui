@@ -5,9 +5,9 @@ import com.arkivanov.decompose.value.Value
 /** Independent row component used by the Child Items example. */
 interface SampleItemComponent {
 
-    val state: Value<State>
+    val uiState: Value<UiState>
 
     fun increment()
 
-    data class State(val id: String, val title: String, val count: Int)
+    data class UiState(val id: String, val title: String, val count: Int)
 }

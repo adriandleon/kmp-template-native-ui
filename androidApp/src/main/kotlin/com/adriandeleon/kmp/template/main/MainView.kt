@@ -25,7 +25,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun MainView(component: MainComponent, modifier: Modifier = Modifier) {
-    val state by component.state.subscribeAsState()
+    val uiState by component.uiState.subscribeAsState()
 
     Scaffold(
         modifier = modifier.fillMaxSize().testTag(stringResource(R.string.tag_main_screen)),
@@ -33,7 +33,7 @@ fun MainView(component: MainComponent, modifier: Modifier = Modifier) {
             NavigationBar {
                 MainComponent.Page.entries.forEach { page ->
                     NavigationBarItem(
-                        selected = state.selectedPage == page,
+                        selected = uiState.selectedPage == page,
                         onClick = { component.selectPage(page) },
                         icon = { Text(page.iconLabel()) },
                         label = { Text(page.tabLabel()) },

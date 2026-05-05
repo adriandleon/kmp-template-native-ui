@@ -17,8 +17,8 @@ class DefaultMainComponentTest :
                     MainComponent.Page.Adaptive,
                     MainComponent.Page.Settings,
                 )
-            component.state.value.selectedPage shouldBe MainComponent.Page.Home
-            component.state.value.selectedIndex shouldBe 0
+            component.uiState.value.selectedPage shouldBe MainComponent.Page.Home
+            component.uiState.value.selectedIndex shouldBe 0
         }
 
         test("select page by page updates selected tab") {
@@ -26,7 +26,7 @@ class DefaultMainComponentTest :
 
             component.selectPage(MainComponent.Page.Settings)
 
-            component.state.value.selectedPage shouldBe MainComponent.Page.Settings
+            component.uiState.value.selectedPage shouldBe MainComponent.Page.Settings
             component.pages.value.selectedIndex shouldBe 3
         }
 
@@ -35,7 +35,7 @@ class DefaultMainComponentTest :
 
             component.selectPage(2)
 
-            component.state.value.selectedPage shouldBe MainComponent.Page.Adaptive
+            component.uiState.value.selectedPage shouldBe MainComponent.Page.Adaptive
             component.pages.value.selectedIndex shouldBe 2
         }
 
@@ -44,12 +44,12 @@ class DefaultMainComponentTest :
 
             component.selectPage(99)
 
-            component.state.value.selectedPage shouldBe MainComponent.Page.Settings
+            component.uiState.value.selectedPage shouldBe MainComponent.Page.Settings
             component.pages.value.selectedIndex shouldBe 3
 
             component.selectPage(-1)
 
-            component.state.value.selectedPage shouldBe MainComponent.Page.Home
+            component.uiState.value.selectedPage shouldBe MainComponent.Page.Home
             component.pages.value.selectedIndex shouldBe 0
         }
     })

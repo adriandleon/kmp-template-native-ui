@@ -11,7 +11,7 @@ import platform.Foundation.NSHomeDirectory
 internal actual val platformAppStateModule: Module = module {
     single<DataStore<Preferences>> {
         PreferenceDataStoreFactory.createWithPath(
-            produceFile = { "${NSHomeDirectory()}/Documents/$APP_STATE_DATA_STORE_FILE".toPath() }
+            produceFile = { "${NSHomeDirectory()}/Documents/$AppStateDataStoreFile".toPath() }
         )
     }
 }

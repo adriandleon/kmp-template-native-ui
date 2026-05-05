@@ -3,6 +3,7 @@ package com.adriandeleon.kmp.template.root
 import com.adriandeleon.kmp.template.auth.AuthComponent
 import com.adriandeleon.kmp.template.main.MainComponent
 import com.adriandeleon.kmp.template.onboarding.OnboardingComponent
+import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
@@ -35,3 +36,7 @@ interface RootComponent : BackHandlerOwner {
         data class Main(val component: MainComponent) : Child
     }
 }
+
+/** Creates the root component without exposing the default implementation. */
+fun createRootComponent(componentContext: ComponentContext): RootComponent =
+    DefaultRootComponent(componentContext)

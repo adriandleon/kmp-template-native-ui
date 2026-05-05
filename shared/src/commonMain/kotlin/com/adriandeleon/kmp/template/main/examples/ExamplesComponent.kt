@@ -5,13 +5,14 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
 
 /** Native UI contract for the neutral navigation examples. */
+@Suppress("TooManyFunctions")
 interface ExamplesComponent {
 
     val stack: Value<ChildStack<*, Child>>
 
     val modalSlot: Value<ChildSlot<*, ModalChild>>
 
-    val state: Value<UiState>
+    val uiState: Value<UiState>
 
     fun openDetail(itemId: String)
 

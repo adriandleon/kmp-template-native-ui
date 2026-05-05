@@ -19,6 +19,7 @@ env:
   IOS_GOOGLE_SERVICES_FILE: GoogleService-Info.plist
   IOS_APP_FOLDER: KMP-Template
   IOS_TARGET_NAME: KMP-Template
+  IOS_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 17
 
   # Build Configuration
   JAVA_VERSION: '17'
@@ -97,15 +98,12 @@ jobs:
     - name: Load Google Service PLIST file
       run: echo $GOOGLE_SERVICES_PLIST | base64 -d > ${{ env.IOS_APP_MODULE }}/${{ env.IOS_APP_FOLDER }}/${{ env.IOS_GOOGLE_SERVICES_FILE }}
 
-    - name: Set Up Ruby
-      uses: ruby/setup-ruby@v1
-      with:
-        ruby-version: ${{ env.RUBY_VERSION }}
-        bundler-cache: true
-        working-directory: ${{ env.IOS_APP_MODULE }}
-
-    - name: iOS Unit Tests (bundle exec)
-      run: bundle exec fastlane tests
+    - name: iOS Unit Tests
+      run: >
+        xcodebuild test
+        -project ${{ env.IOS_APP_MODULE }}/${{ env.PROJECT_NAME }}.xcodeproj
+        -scheme ${{ env.IOS_TARGET_NAME }}
+        -destination '${{ env.IOS_TEST_DESTINATION }}'
 
 #    - name: iOS Unit Tests (Fastlane)
 #      uses: maierj/fastlane-action@v3.1.0

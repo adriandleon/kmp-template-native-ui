@@ -27,12 +27,13 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun PostsView(component: PostsComponent, modifier: Modifier = Modifier) {
-    val state by component.state.subscribeAsState()
+    val uiState by component.uiState.subscribeAsState()
 
-    when (val s = state) {
-        is PostsUiState.Loading -> PostsLoadingContent(modifier)
-        is PostsUiState.Content -> PostsListContent(s.posts, modifier)
-        is PostsUiState.Error -> PostsErrorContent(s.message, component::onRetry, modifier)
+    when (val state = uiState) {
+        is PostsComponent.UiState.Loading -> PostsLoadingContent(modifier)
+        is PostsComponent.UiState.Content -> PostsListContent(state.posts, modifier)
+        is PostsComponent.UiState.Error ->
+            PostsErrorContent(state.message, component::onRetry, modifier)
     }
 }
 
@@ -104,7 +105,11 @@ private fun PostsErrorContent(
 @Composable
 private fun PostsLoadingPreview() {
     MaterialTheme {
-        PostsView(PreviewPostsComponent().also { it.setState(PostsUiState.Loading) })
+        PostsView(
+            PreviewPostsComponent().also {
+                it.setUiState(PostsComponent.UiState.Loading)
+            }
+        )
     }
 }
 
@@ -125,7 +130,7 @@ private fun PostsContentPreview() {
 private fun PostsErrorPreview() {
     MaterialTheme {
         PostsView(PreviewPostsComponent().also {
-            it.setState(PostsUiState.Error("Something went wrong."))
+            it.setUiState(PostsComponent.UiState.Error("Something went wrong."))
         })
     }
 }

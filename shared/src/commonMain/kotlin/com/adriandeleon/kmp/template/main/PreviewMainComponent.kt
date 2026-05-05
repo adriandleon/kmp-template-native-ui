@@ -26,8 +26,8 @@ class PreviewMainComponent(initialPage: MainComponent.Page = MainComponent.Page.
     override val pages: Value<ChildPages<MainComponent.Page, MainComponent.PageComponent>> =
         mutablePages
 
-    private val mutableState = MutableValue(mutablePages.value.toState())
-    override val state: Value<MainComponent.State> = mutableState
+    private val mutableUiState = MutableValue(mutablePages.value.toUiState())
+    override val uiState: Value<MainComponent.UiState> = mutableUiState
 
     override fun selectPage(page: MainComponent.Page) {
         selectPage(MainComponent.Page.entries.indexOf(page))
@@ -35,11 +35,11 @@ class PreviewMainComponent(initialPage: MainComponent.Page = MainComponent.Page.
 
     override fun selectPage(index: Int) {
         mutablePages.value = mutablePages.value.copy(selectedIndex = index.coerceIn(items.indices))
-        mutableState.value = mutablePages.value.toState()
+        mutableUiState.value = mutablePages.value.toUiState()
     }
 
-    private fun ChildPages<MainComponent.Page, MainComponent.PageComponent>.toState() =
-        MainComponent.State(
+    private fun ChildPages<MainComponent.Page, MainComponent.PageComponent>.toUiState() =
+        MainComponent.UiState(
             selectedPage = items[selectedIndex].configuration,
             selectedIndex = selectedIndex,
             pageCount = items.size,

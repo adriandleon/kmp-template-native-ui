@@ -12,7 +12,7 @@ interface MainComponent {
 
     val examples: ExamplesComponent
 
-    val state: Value<State>
+    val uiState: Value<UiState>
 
     fun selectPage(page: Page)
 
@@ -26,7 +26,7 @@ interface MainComponent {
         Settings,
     }
 
-    data class State(val selectedPage: Page, val selectedIndex: Int, val pageCount: Int)
+    data class UiState(val selectedPage: Page, val selectedIndex: Int, val pageCount: Int)
 
     sealed interface PageComponent {
         val page: Page

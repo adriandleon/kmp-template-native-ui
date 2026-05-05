@@ -2,6 +2,7 @@ package com.adriandeleon.kmp.template.root
 
 import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.InMemoryAppStateRepository
+import com.adriandeleon.kmp.template.common.util.activeSlotInstance
 import com.adriandeleon.kmp.template.common.util.testComponentContext
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.types.shouldBeInstanceOf
@@ -209,5 +210,4 @@ private fun rootComponent(
             ),
     )
 
-private fun RootComponent.activeChild(): RootComponent.Child =
-    slot.value.child?.instance ?: error("Expected an active root child")
+private fun RootComponent.activeChild(): RootComponent.Child = slot.activeSlotInstance()

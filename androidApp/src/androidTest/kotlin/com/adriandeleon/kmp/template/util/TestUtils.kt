@@ -3,6 +3,7 @@ package com.adriandeleon.kmp.template.util
 import android.content.Context
 import androidx.annotation.StringRes
 import androidx.compose.ui.test.SemanticsNodeInteraction
+import androidx.compose.ui.test.SemanticsNodeInteractionCollection
 import androidx.compose.ui.test.SemanticsNodeInteractionsProvider
 import androidx.compose.ui.test.hasContentDescription
 import androidx.compose.ui.test.hasTestTag
@@ -16,6 +17,12 @@ fun SemanticsNodeInteractionsProvider.onNodeWithTag(
     useUnmergedTree: Boolean = false,
 ): SemanticsNodeInteraction =
     onNode(matcher = hasTestTag(context.getString(resId)), useUnmergedTree = useUnmergedTree)
+
+fun SemanticsNodeInteractionsProvider.onAllNodesWithTag(
+    @StringRes resId: Int,
+    useUnmergedTree: Boolean = false,
+): SemanticsNodeInteractionCollection =
+    onAllNodes(matcher = hasTestTag(context.getString(resId)), useUnmergedTree = useUnmergedTree)
 
 fun SemanticsNodeInteractionsProvider.onNodeWithText(
     @StringRes resId: Int,

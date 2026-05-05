@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
+@Suppress("TooManyFunctions")
 class PreviewAuthComponent(initialScreen: AuthComponent.Screen = AuthComponent.Screen.SignIn) :
     AuthComponent {
 

@@ -2,7 +2,7 @@ package com.adriandeleon.kmp.template.posts.presentation
 
 import com.adriandeleon.kmp.template.common.util.DispatcherProvider
 import com.adriandeleon.kmp.template.common.util.testComponentContext
-import com.adriandeleon.kmp.template.posts.PostsUiState
+import com.adriandeleon.kmp.template.posts.PostsComponent
 import com.adriandeleon.kmp.template.posts.domain.model.Post
 import com.adriandeleon.kmp.template.posts.domain.repository.PostsRepository
 import com.adriandeleon.kmp.template.posts.domain.usecase.GetPostsUseCase
@@ -56,7 +56,7 @@ class DefaultPostsComponentTest :
                     storeFactory = storeFactory,
                     uiMapper = uiMapper,
                 )
-            component.state.value.shouldBeInstanceOf<PostsUiState.Loading>()
+            component.uiState.value.shouldBeInstanceOf<PostsComponent.UiState.Loading>()
         }
 
         test("state becomes Content when repository returns posts") {
@@ -73,6 +73,6 @@ class DefaultPostsComponentTest :
                     storeFactory = storeFactory,
                     uiMapper = uiMapper,
                 )
-            component.state.value.shouldBeInstanceOf<PostsUiState.Content>()
+            component.uiState.value.shouldBeInstanceOf<PostsComponent.UiState.Content>()
         }
     })

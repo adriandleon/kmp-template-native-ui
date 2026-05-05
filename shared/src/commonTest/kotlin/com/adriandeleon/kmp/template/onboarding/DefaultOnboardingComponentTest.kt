@@ -16,8 +16,8 @@ class DefaultOnboardingComponentTest :
                     OnboardingComponent.Page.Organize,
                     OnboardingComponent.Page.Customize,
                 )
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
-            component.state.value.selectedIndex shouldBe 0
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
+            component.uiState.value.selectedIndex shouldBe 0
         }
 
         test("next selects the following page") {
@@ -25,7 +25,7 @@ class DefaultOnboardingComponentTest :
 
             component.next()
 
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Organize
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Organize
             component.pages.value.selectedIndex shouldBe 1
         }
 
@@ -35,7 +35,7 @@ class DefaultOnboardingComponentTest :
             component.next()
             component.previous()
 
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
             component.pages.value.selectedIndex shouldBe 0
         }
 
@@ -44,7 +44,7 @@ class DefaultOnboardingComponentTest :
 
             component.previous()
 
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
             component.pages.value.selectedIndex shouldBe 0
         }
 
@@ -55,7 +55,7 @@ class DefaultOnboardingComponentTest :
             component.next()
             component.next()
 
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Customize
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Customize
             component.pages.value.selectedIndex shouldBe 2
         }
 
@@ -86,12 +86,12 @@ class DefaultOnboardingComponentTest :
             component.finish()
 
             outputs shouldBe emptyList()
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Organize
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Organize
 
             component.finish()
 
             outputs shouldBe emptyList()
-            component.state.value.selectedPage shouldBe OnboardingComponent.Page.Customize
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Customize
 
             component.finish()
 

@@ -36,6 +36,7 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalDecomposeApi::class)
+@Suppress("TooManyFunctions")
 internal class DefaultExamplesComponent(componentContext: ComponentContext) :
     ExamplesComponent, ComponentContext by componentContext {
 
@@ -63,7 +64,7 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
                 lastDeepLinkHandled = null,
             )
         )
-    override val state: Value<ExamplesComponent.UiState> = mutableState
+    override val uiState: Value<ExamplesComponent.UiState> = mutableState
 
     override val stack: Value<ChildStack<*, ExamplesComponent.Child>> =
         childStack(
@@ -98,6 +99,7 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
             childFactory = ::createSampleItemComponent,
         )
 
+    @Suppress("UnusedPrivateProperty")
     private val workspace =
         children(
             source = workspaceNavigation,
@@ -135,6 +137,7 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
             childFactory = ::createWorkspacePaneComponent,
         )
 
+    @Suppress("UnusedPrivateProperty")
     private val panels:
         Value<ChildPanels<PanelMainConfig, Any, PanelDetailsConfig, Any, PanelExtraConfig, Any>> =
         childPanels(
@@ -270,47 +273,49 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
     override fun handleDeepLink(url: String): Boolean {
         val path = url.toDeepLinkPath()
         val parts = path.split("/").filter(String::isNotBlank)
-        val handled =
-            when {
-                parts.size == 3 && parts[0] == "examples" && parts[1] == "item" -> {
-                    val itemId = parts[2]
-                    if (itemId in mutableState.value.itemIds) {
-                        openDetail(itemId)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                parts.size == 3 && parts[0] == "examples" && parts[1] == "panel" -> {
-                    val itemId = parts[2]
-                    if (itemId in mutableState.value.itemIds) {
-                        openPanelDetails(itemId)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                parts.size == 2 && parts[0] == "examples" && parts[1] == "confirmation" -> {
-                    showConfirmation()
-                    true
-                }
-                parts.size == 3 && parts[0] == "examples" && parts[1] == "workspace" -> {
-                    val paneId = parts[2]
-                    if (paneId in mutableState.value.workspacePaneIds) {
-                        activateWorkspacePane(paneId)
-                        true
-                    } else {
-                        false
-                    }
-                }
-                else -> false
-            }
+        val handled = handleDeepLinkParts(parts)
 
         mutableState.value =
             mutableState.value.copy(lastDeepLinkPath = path, lastDeepLinkHandled = handled)
 
         return handled
     }
+
+    private fun handleDeepLinkParts(parts: List<String>): Boolean =
+        when {
+            parts.matchesDeepLink(ItemPath) -> handleItemDeepLink(parts[ItemIdIndex])
+            parts.matchesDeepLink(PanelPath) -> handlePanelDeepLink(parts[ItemIdIndex])
+            parts.matchesConfirmationDeepLink() -> {
+                showConfirmation()
+                true
+            }
+            parts.matchesDeepLink(WorkspacePath) -> handleWorkspaceDeepLink(parts[ItemIdIndex])
+            else -> false
+        }
+
+    private fun handleItemDeepLink(itemId: String): Boolean =
+        if (itemId in mutableState.value.itemIds) {
+            openDetail(itemId)
+            true
+        } else {
+            false
+        }
+
+    private fun handlePanelDeepLink(itemId: String): Boolean =
+        if (itemId in mutableState.value.itemIds) {
+            openPanelDetails(itemId)
+            true
+        } else {
+            false
+        }
+
+    private fun handleWorkspaceDeepLink(paneId: String): Boolean =
+        if (paneId in mutableState.value.workspacePaneIds) {
+            activateWorkspacePane(paneId)
+            true
+        } else {
+            false
+        }
 
     private fun createChild(
         configuration: Configuration,
@@ -385,6 +390,7 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
 
     private fun mapWorkspaceState(
         state: WorkspaceNavigationState,
+        @Suppress("UNUSED_PARAMETER")
         children:
             List<com.arkivanov.decompose.Child<WorkspacePaneConfig, DefaultWorkspacePaneComponent>>,
     ): WorkspaceRuntimeState =
@@ -406,6 +412,16 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
 
     private fun String.toDeepLinkPath(): String =
         substringAfter("://", this).substringBefore("?").trim('/')
+
+    private fun List<String>.matchesDeepLink(action: String): Boolean =
+        size == DeepLinkItemParts &&
+            this[RootPathIndex] == ExamplesPath &&
+            this[ActionPathIndex] == action
+
+    private fun List<String>.matchesConfirmationDeepLink(): Boolean =
+        size == DeepLinkConfirmationParts &&
+            this[RootPathIndex] == ExamplesPath &&
+            this[ActionPathIndex] == ConfirmationPath
 
     @Serializable
     private sealed interface Configuration {
@@ -494,13 +510,13 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
 
         private val mutableState =
             MutableValue(
-                SampleItemComponent.State(
+                SampleItemComponent.UiState(
                     id = itemId,
                     title = itemId.replaceFirstChar { it.uppercase() },
                     count = 0,
                 )
             )
-        override val state: Value<SampleItemComponent.State> = mutableState
+        override val uiState: Value<SampleItemComponent.UiState> = mutableState
 
         override fun increment() {
             mutableState.value = mutableState.value.copy(count = mutableState.value.count + 1)
@@ -508,6 +524,16 @@ internal class DefaultExamplesComponent(componentContext: ComponentContext) :
     }
 
     private companion object {
+        const val ExamplesPath = "examples"
+        const val ItemPath = "item"
+        const val PanelPath = "panel"
+        const val WorkspacePath = "workspace"
+        const val ConfirmationPath = "confirmation"
+        const val RootPathIndex = 0
+        const val ActionPathIndex = 1
+        const val ItemIdIndex = 2
+        const val DeepLinkConfirmationParts = 2
+        const val DeepLinkItemParts = 3
         val initialItemIds = listOf("sample-1", "sample-2", "sample-3")
         val initialWorkspacePaneIds = listOf("pane-1", "pane-2")
     }

@@ -11,7 +11,7 @@ class PostsViewTest {
 
     @Test
     fun verifyLoadingIndicatorIsDisplayed() {
-        component.setState(PostsUiState.Loading)
+        component.setUiState(PostsComponent.UiState.Loading)
         composeTestRule.launchPostsView(component) verify { loadingIndicatorIsDisplayed() }
     }
 
@@ -29,19 +29,19 @@ class PostsViewTest {
 
     @Test
     fun verifyErrorViewIsDisplayedWhenErrorState() {
-        component.setState(PostsUiState.Error("Something went wrong."))
+        component.setUiState(PostsComponent.UiState.Error("Something went wrong."))
         composeTestRule.launchPostsView(component) verify { errorViewIsDisplayed() }
     }
 
     @Test
     fun verifyRetryButtonIsDisplayedOnError() {
-        component.setState(PostsUiState.Error("Something went wrong."))
+        component.setUiState(PostsComponent.UiState.Error("Something went wrong."))
         composeTestRule.launchPostsView(component) verify { retryButtonIsDisplayed() }
     }
 
     @Test
     fun verifyRetryCallbackIsInvokedOnRetryClick() {
-        component.setState(PostsUiState.Error("Something went wrong."))
+        component.setUiState(PostsComponent.UiState.Error("Something went wrong."))
         composeTestRule.launchPostsView(component) { clickRetry() } verify { retryWasCalled() }
     }
 }

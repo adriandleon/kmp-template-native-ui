@@ -6,6 +6,7 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
+@Suppress("TooManyFunctions")
 class PreviewExamplesComponent : ExamplesComponent {
 
     private val componentsById = mutableMapOf<String, PreviewSampleItemComponent>()
@@ -27,7 +28,7 @@ class PreviewExamplesComponent : ExamplesComponent {
                 lastDeepLinkHandled = null,
             )
         )
-    override val state: Value<ExamplesComponent.UiState> = mutableState
+    override val uiState: Value<ExamplesComponent.UiState> = mutableState
 
     private val mutableStack =
         MutableValue(
@@ -181,21 +182,21 @@ class PreviewExamplesComponent : ExamplesComponent {
         val parts = path.split("/").filter(String::isNotBlank)
         val handled =
             when {
-                parts.size == 3 && parts[0] == "examples" && parts[1] == "item" -> {
-                    openDetail(parts[2])
+                parts.matchesDeepLink(ItemPath) -> {
+                    openDetail(parts[ItemIdIndex])
                     true
                 }
-                parts.size == 3 && parts[0] == "examples" && parts[1] == "panel" -> {
-                    openPanelDetails(parts[2])
+                parts.matchesDeepLink(PanelPath) -> {
+                    openPanelDetails(parts[ItemIdIndex])
                     true
                 }
-                parts.size == 2 && parts[0] == "examples" && parts[1] == "confirmation" -> {
+                parts.matchesConfirmationDeepLink() -> {
                     showConfirmation()
                     true
                 }
-                parts.size == 3 && parts[0] == "examples" && parts[1] == "workspace" -> {
-                    activateWorkspacePane(parts[2])
-                    parts[2] in mutableState.value.workspacePaneIds
+                parts.matchesDeepLink(WorkspacePath) -> {
+                    activateWorkspacePane(parts[ItemIdIndex])
+                    parts[ItemIdIndex] in mutableState.value.workspacePaneIds
                 }
                 else -> false
             }
@@ -224,6 +225,16 @@ class PreviewExamplesComponent : ExamplesComponent {
             )
     }
 
+    private fun List<String>.matchesDeepLink(action: String): Boolean =
+        size == DeepLinkItemParts &&
+            this[RootPathIndex] == ExamplesPath &&
+            this[ActionPathIndex] == action
+
+    private fun List<String>.matchesConfirmationDeepLink(): Boolean =
+        size == DeepLinkConfirmationParts &&
+            this[RootPathIndex] == ExamplesPath &&
+            this[ActionPathIndex] == ConfirmationPath
+
     private object PreviewListComponent : ExamplesComponent.ListComponent
 
     private class PreviewDetailComponent(override val itemId: String) :
@@ -234,16 +245,29 @@ class PreviewExamplesComponent : ExamplesComponent {
     private class PreviewSampleItemComponent(itemId: String) : SampleItemComponent {
         private val mutableState =
             MutableValue(
-                SampleItemComponent.State(
+                SampleItemComponent.UiState(
                     id = itemId,
                     title = itemId.replaceFirstChar { it.uppercase() },
                     count = 0,
                 )
             )
-        override val state: Value<SampleItemComponent.State> = mutableState
+        override val uiState: Value<SampleItemComponent.UiState> = mutableState
 
         override fun increment() {
             mutableState.value = mutableState.value.copy(count = mutableState.value.count + 1)
         }
+    }
+
+    private companion object {
+        const val ExamplesPath = "examples"
+        const val ItemPath = "item"
+        const val PanelPath = "panel"
+        const val WorkspacePath = "workspace"
+        const val ConfirmationPath = "confirmation"
+        const val RootPathIndex = 0
+        const val ActionPathIndex = 1
+        const val ItemIdIndex = 2
+        const val DeepLinkConfirmationParts = 2
+        const val DeepLinkItemParts = 3
     }
 }

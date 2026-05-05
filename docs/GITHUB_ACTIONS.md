@@ -44,6 +44,7 @@ GitHub Actions is a continuous integration and continuous deployment (CI/CD) pla
 
 **Jobs**:
 - **Test Shared Module**: Run unit tests across all platforms
+- **Konsist Tests**: Run executable architecture and encapsulation rules
 - **Lint Code**: Run Detekt static analysis
 - **Format Check**: Verify code formatting with Ktfmt
 
@@ -73,7 +74,7 @@ GitHub Actions is a continuous integration and continuous deployment (CI/CD) pla
 - Manual workflow dispatch
 
 **Jobs**:
-- **Build & Test**: Compile app and run tests
+- **Build & Test**: Compile app and run Swift Testing tests with `xcodebuild`
 - **Upload to TestFlight**: Deploy to Apple's testing platform
 
 ## ⚙️ Configuration
@@ -162,13 +163,19 @@ To migrate these workflows to a new repository:
      run: ${{ env.GRADLE_WRAPPER }} :shared:kotest
    ```
 
-5. **Run Linting**
+5. **Run Architecture Tests**
+   ```yaml
+   - name: Konsist Tests
+     run: ${{ env.GRADLE_WRAPPER }} :konsistTest:test
+   ```
+
+6. **Run Linting**
    ```yaml
    - name: Lint Code
      run: ${{ env.GRADLE_WRAPPER }} :shared:detektMain
    ```
 
-6. **Check Formatting**
+7. **Check Formatting**
    ```yaml
    - name: Check Formatting
      run: ${{ env.GRADLE_WRAPPER }} :shared:ktfmtCheck

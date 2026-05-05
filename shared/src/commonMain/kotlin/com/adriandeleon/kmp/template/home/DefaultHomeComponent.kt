@@ -1,6 +1,8 @@
 package com.adriandeleon.kmp.template.home
 
 import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.value.MutableValue
+import com.arkivanov.decompose.value.Value
 
 /**
  * Default implementation of [HomeComponent]
@@ -11,5 +13,6 @@ import com.arkivanov.decompose.ComponentContext
 internal class DefaultHomeComponent(componentContext: ComponentContext) :
     HomeComponent, ComponentContext by componentContext {
 
-    override val title: String = "Home Screen"
+    override val uiState: Value<HomeComponent.UiState> =
+        MutableValue(HomeComponent.UiState(title = "Home Screen"))
 }

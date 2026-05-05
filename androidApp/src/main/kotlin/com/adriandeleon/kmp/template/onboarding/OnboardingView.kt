@@ -31,7 +31,7 @@ import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun OnboardingView(component: OnboardingComponent, modifier: Modifier = Modifier) {
-    val state by component.state.subscribeAsState()
+    val uiState by component.uiState.subscribeAsState()
 
     Column(
         modifier =
@@ -50,9 +50,9 @@ fun OnboardingView(component: OnboardingComponent, modifier: Modifier = Modifier
             Text(stringResource(R.string.onboarding_skip_button))
         }
 
-        OnboardingPageContent(state.selectedPage, Modifier.weight(1f))
+        OnboardingPageContent(uiState.selectedPage, Modifier.weight(1f))
 
-        OnboardingControls(state = state, component = component)
+        OnboardingControls(uiState = uiState, component = component)
     }
 }
 
@@ -82,7 +82,7 @@ private fun OnboardingPageContent(
 
 @Composable
 private fun OnboardingControls(
-    state: OnboardingComponent.State,
+    uiState: OnboardingComponent.UiState,
     component: OnboardingComponent,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(24.dp)) {
@@ -92,9 +92,9 @@ private fun OnboardingControls(
                 Modifier.fillMaxWidth()
                     .testTag(stringResource(R.string.tag_onboarding_page_indicator)),
         ) {
-            repeat(state.pageCount) { index ->
+            repeat(uiState.pageCount) { index ->
                 val color =
-                    if (index == state.selectedIndex) {
+                    if (index == uiState.selectedIndex) {
                         MaterialTheme.colorScheme.primary
                     } else {
                         MaterialTheme.colorScheme.outlineVariant
@@ -116,7 +116,7 @@ private fun OnboardingControls(
         ) {
             OutlinedButton(
                 onClick = component::previous,
-                enabled = state.canGoPrevious,
+                enabled = uiState.canGoPrevious,
                 modifier =
                     Modifier.weight(1f)
                         .testTag(stringResource(R.string.tag_onboarding_previous_button)),
@@ -131,7 +131,7 @@ private fun OnboardingControls(
             ) {
                 Text(
                     stringResource(
-                        if (state.isLastPage) {
+                        if (uiState.isLastPage) {
                             R.string.onboarding_finish_button
                         } else {
                             R.string.onboarding_next_button

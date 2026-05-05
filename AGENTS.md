@@ -246,7 +246,7 @@ iOS. Keep implementation details hidden with `internal` or `private`.
 
 Public component contracts may expose:
 - Decompose component interfaces used by native navigation rendering.
-- Native-friendly `UiState` models for screen rendering.
+- Native-friendly `Component.UiState` models for screen rendering.
 - User action methods, such as `openDetail`, `dismissConfirmation`, and
   `handleDeepLink`.
 - UI-only child component interfaces for active Decompose children.
@@ -260,9 +260,15 @@ Shared code must not expose these details to Android or iOS:
 - Business rules, route transforms, deep-link parsing internals, or persistence
   decisions.
 
-When a platform UI needs information, add it to a `UiState` model or expose a
-small component method. Do not make an internal model public to make UI code
-compile.
+When a platform UI needs information, add it to a nested
+`Component.UiState` model or expose a small component method. Do not make an
+internal model public to make UI code compile.
+
+Use `docs/COMPONENT_UI_STATE_PATTERN.md` as the source of truth for screen
+state. Platform UI renders `component.uiState` and sends events back through
+component methods. It must not import or depend on `Store.State`, store
+intents, domain entities, repositories, data sources, mappers, or persistence
+models.
 
 ### Navigation Showcase Patterns
 
@@ -292,6 +298,8 @@ Use these existing recipes as the source of truth:
 - **Deep links**: examples demonstrate shared URL parsing through
   `handleDeepLink(url)`. Android intents and iOS universal links must pass
   URLs into shared code instead of resolving routes separately per platform.
+  Native code captures links; shared code interprets links. See
+  `docs/NATIVE_DEEPLINKS.md`.
 
 When adding or changing navigation:
 1. Start in `shared/src/commonMain/kotlin`.
@@ -304,6 +312,25 @@ When adding or changing navigation:
    rules.
 7. Extract every new visible string to Android and iOS localization files.
 8. Run the shared, Android, and iOS verification commands before committing.
+
+### Agent Architecture Checklist
+
+Before adding or changing a screen, route, or deeplink, read these files:
+- `docs/NAVIGATION_SHOWCASE.md`
+- `docs/COMPONENT_UI_STATE_PATTERN.md`
+- `docs/NATIVE_DEEPLINKS.md`
+
+Then verify these constraints:
+- Public shared APIs expose only component contracts, nested
+  `Component.UiState` models, UI child component interfaces, and user action
+  methods.
+- Default components and navigation configuration stay `internal`.
+- Preview components stay public and are used by Compose previews, SwiftUI
+  previews, Android UI tests, and Swift Testing component tests.
+- Android and iOS don't parse app routes, inspect shared store state, or import
+  shared data/domain/store internals.
+- Shared tests cover Decompose navigation behavior before platform UI is
+  changed.
 
 ### Data Layer Patterns
 - Use `*Entity.kt` for domain models
