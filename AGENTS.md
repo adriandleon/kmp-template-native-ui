@@ -239,6 +239,31 @@ interface HomeComponent {
 }
 ```
 
+### Shared Module Encapsulation
+
+The shared module must expose only the public contract needed by Android and
+iOS. Keep implementation details hidden with `internal` or `private`.
+
+Public component contracts may expose:
+- Decompose component interfaces used by native navigation rendering.
+- Native-friendly `UiState` models for screen rendering.
+- User action methods, such as `openDetail`, `dismissConfirmation`, and
+  `handleDeepLink`.
+- UI-only child component interfaces for active Decompose children.
+
+Shared code must not expose these details to Android or iOS:
+- Navigation configuration classes and serializers.
+- Repository, data source, store message, effect, or action types.
+- Domain entities or persistence models when a UI model is enough.
+- Decompose implementation models such as `ChildPanels`, `LazyChildItems`, or
+  custom `children(...)` navigation state.
+- Business rules, route transforms, deep-link parsing internals, or persistence
+  decisions.
+
+When a platform UI needs information, add it to a `UiState` model or expose a
+small component method. Do not make an internal model public to make UI code
+compile.
+
 ### Navigation Showcase Patterns
 
 Before implementing a new screen, flow, tab, modal, pane, dynamic child list, or

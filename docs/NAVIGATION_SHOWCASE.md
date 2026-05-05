@@ -38,7 +38,7 @@ event entry points.
 
 - Shared component contract:
   `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/main/examples/ExamplesComponent.kt`
-- Shared component implementation:
+- Internal shared component implementation:
   `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/main/examples/DefaultExamplesComponent.kt`
 - Shared preview component:
   `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/main/examples/PreviewExamplesComponent.kt`
@@ -48,6 +48,26 @@ event entry points.
   `androidApp/src/main/kotlin/com/adriandeleon/kmp/template/main/examples/ExamplesView.kt`
 - iOS UI:
   `iosApp/KMP-Template/MainFlow/ExamplesView.swift`
+
+## Public API boundary
+
+Shared components must expose only what native UI needs to render and send
+user actions. Internal navigation configuration, serializers, child item
+collections, panel state, generic navigation state, repositories, stores,
+domain models, and persistence models must stay `internal` or `private`.
+
+Use this public API shape for new screens:
+
+- `val state: Value<FeatureComponent.UiState>` for renderable screen state.
+- Decompose child component values only when native UI must render native
+  navigation, such as `ChildStack` or `ChildSlot`.
+- Small intent-style methods for user actions and platform events.
+- UI child component interfaces only for active native destinations.
+
+Do not expose internal Decompose models such as `ChildPanels`,
+`LazyChildItems`, or custom `children(...)` state to Android or iOS unless the
+native UI needs that exact Decompose type to render navigation. Prefer mapping
+those models into `UiState`.
 
 ## Root flow
 

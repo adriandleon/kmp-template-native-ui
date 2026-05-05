@@ -1,5 +1,3 @@
-@file:OptIn(com.arkivanov.decompose.ExperimentalDecomposeApi::class)
-
 package com.adriandeleon.kmp.template.main.examples
 
 import android.content.res.Configuration
@@ -25,7 +23,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
-import com.arkivanov.decompose.router.panels.ChildPanelsMode
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -119,8 +116,8 @@ private fun ExamplesListView(component: ExamplesComponent) {
 @Composable
 private fun PanelsShowcaseView(
     component: ExamplesComponent,
-    state: ExamplesComponent.State,
-    mode: ChildPanelsMode,
+    state: ExamplesComponent.UiState,
+    mode: ExamplesComponent.PanelMode,
     hasDetails: Boolean,
     hasExtra: Boolean,
 ) {
@@ -141,19 +138,19 @@ private fun PanelsShowcaseView(
         )
         Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
             OutlinedButton(
-                onClick = { component.setPanelsMode(ChildPanelsMode.SINGLE) },
+                onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.SINGLE) },
                 modifier = Modifier.weight(1f),
             ) {
                 Text(stringResource(R.string.examples_panels_single_mode))
             }
             OutlinedButton(
-                onClick = { component.setPanelsMode(ChildPanelsMode.DUAL) },
+                onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.DUAL) },
                 modifier = Modifier.weight(1f),
             ) {
                 Text(stringResource(R.string.examples_panels_dual_mode))
             }
             OutlinedButton(
-                onClick = { component.setPanelsMode(ChildPanelsMode.TRIPLE) },
+                onClick = { component.setPanelsMode(ExamplesComponent.PanelMode.TRIPLE) },
                 modifier = Modifier.weight(1f),
             ) {
                 Text(stringResource(R.string.examples_panels_triple_mode))
@@ -226,7 +223,7 @@ private fun PanelsShowcaseView(
 @Composable
 private fun GenericNavigationShowcaseView(
     component: ExamplesComponent,
-    state: ExamplesComponent.State,
+    state: ExamplesComponent.UiState,
 ) {
     Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
         Text(
@@ -276,7 +273,7 @@ private fun GenericNavigationShowcaseView(
 @Composable
 private fun DeepLinkShowcaseView(
     component: ExamplesComponent,
-    state: ExamplesComponent.State,
+    state: ExamplesComponent.UiState,
 ) {
     val lastDeepLinkPath = state.lastDeepLinkPath
 

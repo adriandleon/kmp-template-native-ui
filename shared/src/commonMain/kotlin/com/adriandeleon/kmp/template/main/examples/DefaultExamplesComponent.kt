@@ -36,28 +36,24 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalDecomposeApi::class)
-class DefaultExamplesComponent(componentContext: ComponentContext) :
+internal class DefaultExamplesComponent(componentContext: ComponentContext) :
     ExamplesComponent, ComponentContext by componentContext {
 
     private val stackNavigation = StackNavigation<Configuration>()
     private val modalNavigation = SlotNavigation<ModalConfiguration>()
-    private val itemsNavigation = ItemsNavigation<ExamplesComponent.ItemConfig>()
+    private val itemsNavigation = ItemsNavigation<ItemConfig>()
     private val workspaceNavigation = SimpleNavigation<WorkspaceEvent>()
     private val panelsNavigation =
-        PanelsNavigation<
-            ExamplesComponent.PanelMainConfig,
-            ExamplesComponent.PanelDetailsConfig,
-            ExamplesComponent.PanelExtraConfig,
-        >()
+        PanelsNavigation<PanelMainConfig, PanelDetailsConfig, PanelExtraConfig>()
 
     private val mutableState =
         MutableValue(
-            ExamplesComponent.State(
+            ExamplesComponent.UiState(
                 itemIds = initialItemIds,
                 selectedItemId = initialItemIds.firstOrNull(),
                 nextItemNumber = initialItemIds.size + 1,
                 panelItemId = null,
-                panelsMode = ChildPanelsMode.SINGLE,
+                panelsMode = ExamplesComponent.PanelMode.SINGLE,
                 hasPanelDetails = false,
                 hasPanelExtra = false,
                 workspacePaneIds = initialWorkspacePaneIds,
@@ -67,7 +63,7 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 lastDeepLinkHandled = null,
             )
         )
-    override val state: Value<ExamplesComponent.State> = mutableState
+    override val state: Value<ExamplesComponent.UiState> = mutableState
 
     override val stack: Value<ChildStack<*, ExamplesComponent.Child>> =
         childStack(
@@ -86,10 +82,10 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
             childFactory = ::createModalChild,
         )
 
-    override val childItems =
+    private val childItems =
         childItems(
             source = itemsNavigation,
-            serializer = ExamplesComponent.ItemConfig.serializer(),
+            serializer = ItemConfig.serializer(),
             initialItems = {
                 Items(
                     items = initialItemIds.map(::itemConfig),
@@ -102,7 +98,7 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
             childFactory = ::createSampleItemComponent,
         )
 
-    override val workspace: Value<ExamplesComponent.WorkspaceState> =
+    private val workspace =
         children(
             source = workspaceNavigation,
             stateSerializer = WorkspaceNavigationState.serializer(),
@@ -139,34 +135,23 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
             childFactory = ::createWorkspacePaneComponent,
         )
 
-    override val panels:
-        Value<
-            ChildPanels<
-                ExamplesComponent.PanelMainConfig,
-                ExamplesComponent.PanelMainComponent,
-                ExamplesComponent.PanelDetailsConfig,
-                ExamplesComponent.PanelDetailsComponent,
-                ExamplesComponent.PanelExtraConfig,
-                ExamplesComponent.PanelExtraComponent,
-            >
-        > =
+    private val panels:
+        Value<ChildPanels<PanelMainConfig, Any, PanelDetailsConfig, Any, PanelExtraConfig, Any>> =
         childPanels(
             source = panelsNavigation,
             serializers =
                 Triple(
-                    ExamplesComponent.PanelMainConfig.serializer(),
-                    ExamplesComponent.PanelDetailsConfig.serializer(),
-                    ExamplesComponent.PanelExtraConfig.serializer(),
+                    PanelMainConfig.serializer(),
+                    PanelDetailsConfig.serializer(),
+                    PanelExtraConfig.serializer(),
                 ),
-            initialPanels = {
-                Panels(main = ExamplesComponent.PanelMainConfig, mode = ChildPanelsMode.SINGLE)
-            },
+            initialPanels = { Panels(main = PanelMainConfig, mode = ChildPanelsMode.SINGLE) },
             handleBackButton = true,
             onStateChanged = { newState, _ ->
                 mutableState.value =
                     mutableState.value.copy(
                         panelItemId = newState.extra?.itemId ?: newState.details?.itemId,
-                        panelsMode = newState.mode,
+                        panelsMode = newState.mode.toUiPanelMode(),
                         hasPanelDetails = newState.details != null,
                         hasPanelExtra = newState.extra != null,
                     )
@@ -244,10 +229,7 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     override fun openPanelDetails(itemId: String) {
         if (itemId in mutableState.value.itemIds) {
             selectItem(itemId)
-            panelsNavigation.navigate(
-                details = ExamplesComponent.PanelDetailsConfig(itemId),
-                extra = null,
-            )
+            panelsNavigation.navigate(details = PanelDetailsConfig(itemId), extra = null)
         }
     }
 
@@ -259,8 +241,8 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
         if (itemId in mutableState.value.itemIds) {
             selectItem(itemId)
             panelsNavigation.navigate(
-                details = ExamplesComponent.PanelDetailsConfig(itemId),
-                extra = ExamplesComponent.PanelExtraConfig(itemId),
+                details = PanelDetailsConfig(itemId),
+                extra = PanelExtraConfig(itemId),
             )
         }
     }
@@ -269,8 +251,8 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
         panelsNavigation.dismissExtra()
     }
 
-    override fun setPanelsMode(mode: ChildPanelsMode) {
-        panelsNavigation.setMode(mode)
+    override fun setPanelsMode(mode: ExamplesComponent.PanelMode) {
+        panelsNavigation.setMode(mode.toDecomposePanelMode())
     }
 
     override fun activateWorkspacePane(paneId: String) {
@@ -314,7 +296,7 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 }
                 parts.size == 3 && parts[0] == "examples" && parts[1] == "workspace" -> {
                     val paneId = parts[2]
-                    if (paneId in workspace.value.paneIds) {
+                    if (paneId in mutableState.value.workspacePaneIds) {
                         activateWorkspacePane(paneId)
                         true
                     } else {
@@ -352,18 +334,17 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
         }
 
     private fun createSampleItemComponent(
-        configuration: ExamplesComponent.ItemConfig,
+        configuration: ItemConfig,
         context: ComponentContext,
     ): SampleItemComponent =
         DefaultSampleItemComponent(itemId = configuration.id, componentContext = context)
 
-    private fun itemConfig(itemId: String) = ExamplesComponent.ItemConfig(itemId)
+    private fun itemConfig(itemId: String) = ItemConfig(itemId)
 
     private fun createWorkspacePaneComponent(
         configuration: WorkspacePaneConfig,
         context: ComponentContext,
-    ): ExamplesComponent.WorkspacePaneComponent =
-        DefaultWorkspacePaneComponent(configuration.id, context)
+    ): DefaultWorkspacePaneComponent = DefaultWorkspacePaneComponent(configuration.id, context)
 
     private fun transformWorkspace(
         state: WorkspaceNavigationState,
@@ -405,22 +386,23 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     private fun mapWorkspaceState(
         state: WorkspaceNavigationState,
         children:
-            List<
-                com.arkivanov.decompose.Child<
-                    WorkspacePaneConfig,
-                    ExamplesComponent.WorkspacePaneComponent,
-                >
-            >,
-    ): ExamplesComponent.WorkspaceState {
-        val activeTitle =
-            children.firstOrNull { it.configuration.id == state.activePaneId }?.instance?.title
+            List<com.arkivanov.decompose.Child<WorkspacePaneConfig, DefaultWorkspacePaneComponent>>,
+    ): WorkspaceRuntimeState =
+        WorkspaceRuntimeState(paneIds = state.paneIds, activePaneId = state.activePaneId)
 
-        return ExamplesComponent.WorkspaceState(
-            paneIds = state.paneIds,
-            activePaneId = state.activePaneId,
-            activePaneTitle = activeTitle,
-        )
-    }
+    private fun ChildPanelsMode.toUiPanelMode(): ExamplesComponent.PanelMode =
+        when (this) {
+            ChildPanelsMode.SINGLE -> ExamplesComponent.PanelMode.SINGLE
+            ChildPanelsMode.DUAL -> ExamplesComponent.PanelMode.DUAL
+            ChildPanelsMode.TRIPLE -> ExamplesComponent.PanelMode.TRIPLE
+        }
+
+    private fun ExamplesComponent.PanelMode.toDecomposePanelMode(): ChildPanelsMode =
+        when (this) {
+            ExamplesComponent.PanelMode.SINGLE -> ChildPanelsMode.SINGLE
+            ExamplesComponent.PanelMode.DUAL -> ChildPanelsMode.DUAL
+            ExamplesComponent.PanelMode.TRIPLE -> ChildPanelsMode.TRIPLE
+        }
 
     private fun String.toDeepLinkPath(): String =
         substringAfter("://", this).substringBefore("?").trim('/')
@@ -436,6 +418,16 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     private sealed interface ModalConfiguration {
         @Serializable data object Confirmation : ModalConfiguration
     }
+
+    @Serializable private data class ItemConfig(val id: String)
+
+    @Serializable private data object PanelMainConfig
+
+    @Serializable private data class PanelDetailsConfig(val itemId: String)
+
+    @Serializable private data class PanelExtraConfig(val itemId: String)
+
+    private data class WorkspaceRuntimeState(val paneIds: List<String>, val activePaneId: String?)
 
     @Serializable private data class WorkspacePaneConfig(val id: String)
 
@@ -480,24 +472,22 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
         ExamplesComponent.ConfirmationComponent, ComponentContext by componentContext
 
     private class DefaultPanelMainComponent(componentContext: ComponentContext) :
-        ExamplesComponent.PanelMainComponent, ComponentContext by componentContext
+        ComponentContext by componentContext
 
     private class DefaultPanelDetailsComponent(
-        override val itemId: String,
+        val itemId: String,
         componentContext: ComponentContext,
-    ) : ExamplesComponent.PanelDetailsComponent, ComponentContext by componentContext
+    ) : ComponentContext by componentContext
 
     private class DefaultPanelExtraComponent(
-        override val itemId: String,
+        val itemId: String,
         componentContext: ComponentContext,
-    ) : ExamplesComponent.PanelExtraComponent, ComponentContext by componentContext
+    ) : ComponentContext by componentContext
 
     private class DefaultWorkspacePaneComponent(
-        override val paneId: String,
+        val paneId: String,
         componentContext: ComponentContext,
-    ) : ExamplesComponent.WorkspacePaneComponent, ComponentContext by componentContext {
-        override val title: String = paneId.replace("pane-", "Pane ")
-    }
+    ) : ComponentContext by componentContext
 
     private class DefaultSampleItemComponent(itemId: String, componentContext: ComponentContext) :
         SampleItemComponent, ComponentContext by componentContext {

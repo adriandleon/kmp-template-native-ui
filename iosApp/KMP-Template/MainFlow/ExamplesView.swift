@@ -51,7 +51,7 @@ struct ExamplesView: View {
 
 private struct ExamplesListView: View {
     let component: ExamplesComponent
-    @StateObject private var stateObserver: ObservableValue<ExamplesComponentState>
+    @StateObject private var stateObserver: ObservableValue<ExamplesComponentUiState>
 
     init(component: ExamplesComponent) {
         self.component = component
@@ -173,7 +173,7 @@ private struct SampleItemRow: View {
 
 private struct PanelsShowcaseView: View {
     let component: ExamplesComponent
-    let state: ExamplesComponentState
+    let state: ExamplesComponentUiState
 
     private var selectedItemId: String? {
         state.selectedItemId ?? state.itemIds.first
@@ -288,7 +288,7 @@ private struct PanelsShowcaseView: View {
 
 private struct GenericNavigationShowcaseView: View {
     let component: ExamplesComponent
-    let state: ExamplesComponentState
+    let state: ExamplesComponentUiState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
@@ -336,7 +336,7 @@ private struct GenericNavigationShowcaseView: View {
 
 private struct DeepLinkShowcaseView: View {
     let component: ExamplesComponent
-    let state: ExamplesComponentState
+    let state: ExamplesComponentUiState
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {

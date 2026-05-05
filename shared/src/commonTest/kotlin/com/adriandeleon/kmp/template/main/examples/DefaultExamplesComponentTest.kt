@@ -1,14 +1,11 @@
 package com.adriandeleon.kmp.template.main.examples
 
 import com.adriandeleon.kmp.template.common.util.testComponentContext
-import com.arkivanov.decompose.ExperimentalDecomposeApi
-import com.arkivanov.decompose.router.panels.ChildPanelsMode
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
-@OptIn(ExperimentalDecomposeApi::class)
 class DefaultExamplesComponentTest :
     FunSpec({
         test("starts on list with sample child items") {
@@ -94,12 +91,10 @@ class DefaultExamplesComponentTest :
         test("panels start with main only") {
             val component = examplesComponent()
 
-            component.panels.value.main.instance.shouldBeInstanceOf<
-                ExamplesComponent.PanelMainComponent
-            >()
-            component.panels.value.details shouldBe null
-            component.panels.value.extra shouldBe null
-            component.panels.value.mode shouldBe ChildPanelsMode.SINGLE
+            component.state.value.panelsMode shouldBe ExamplesComponent.PanelMode.SINGLE
+            component.state.value.hasPanelDetails shouldBe false
+            component.state.value.hasPanelExtra shouldBe false
+            component.state.value.panelItemId shouldBe null
         }
 
         test("panels open details and extra for an item") {
@@ -108,15 +103,9 @@ class DefaultExamplesComponentTest :
             component.openPanelDetails("sample-2")
             component.openPanelExtra("sample-2")
 
-            component.panels.value.details
-                ?.instance
-                .shouldBeInstanceOf<ExamplesComponent.PanelDetailsComponent>()
-                .itemId shouldBe "sample-2"
-            component.panels.value.extra
-                ?.instance
-                .shouldBeInstanceOf<ExamplesComponent.PanelExtraComponent>()
-                .itemId shouldBe "sample-2"
             component.state.value.panelItemId shouldBe "sample-2"
+            component.state.value.hasPanelDetails shouldBe true
+            component.state.value.hasPanelExtra shouldBe true
         }
 
         test("panels can dismiss extra and details independently") {
@@ -126,32 +115,28 @@ class DefaultExamplesComponentTest :
             component.openPanelExtra("sample-2")
             component.dismissPanelExtra()
 
-            component.panels.value.details
-                ?.instance
-                .shouldBeInstanceOf<ExamplesComponent.PanelDetailsComponent>()
-            component.panels.value.extra shouldBe null
+            component.state.value.hasPanelDetails shouldBe true
+            component.state.value.hasPanelExtra shouldBe false
 
             component.dismissPanelDetails()
 
-            component.panels.value.details shouldBe null
             component.state.value.panelItemId shouldBe null
+            component.state.value.hasPanelDetails shouldBe false
         }
 
         test("panels mode can be changed") {
             val component = examplesComponent()
 
-            component.setPanelsMode(ChildPanelsMode.TRIPLE)
+            component.setPanelsMode(ExamplesComponent.PanelMode.TRIPLE)
 
-            component.panels.value.mode shouldBe ChildPanelsMode.TRIPLE
-            component.state.value.panelsMode shouldBe ChildPanelsMode.TRIPLE
+            component.state.value.panelsMode shouldBe ExamplesComponent.PanelMode.TRIPLE
         }
 
         test("generic workspace starts with one active pane") {
             val component = examplesComponent()
 
-            component.workspace.value.paneIds shouldContainExactly listOf("pane-1", "pane-2")
-            component.workspace.value.activePaneId shouldBe "pane-1"
-            component.workspace.value.activePaneTitle shouldBe "Pane 1"
+            component.state.value.workspacePaneIds shouldContainExactly listOf("pane-1", "pane-2")
+            component.state.value.activeWorkspacePaneId shouldBe "pane-1"
         }
 
         test("generic workspace can add activate and close panes") {
@@ -161,9 +146,8 @@ class DefaultExamplesComponentTest :
             component.activateWorkspacePane("pane-2")
             component.closeWorkspacePane("pane-1")
 
-            component.workspace.value.paneIds shouldContainExactly listOf("pane-2", "pane-3")
-            component.workspace.value.activePaneId shouldBe "pane-2"
             component.state.value.workspacePaneIds shouldContainExactly listOf("pane-2", "pane-3")
+            component.state.value.activeWorkspacePaneId shouldBe "pane-2"
         }
 
         test("deep link opens an item detail") {
@@ -184,11 +168,9 @@ class DefaultExamplesComponentTest :
             component.handleDeepLink("template://examples/panel/sample-2") shouldBe true
             component.handleDeepLink("template://examples/workspace/pane-2") shouldBe true
 
-            component.panels.value.details
-                ?.instance
-                .shouldBeInstanceOf<ExamplesComponent.PanelDetailsComponent>()
-                .itemId shouldBe "sample-2"
-            component.workspace.value.activePaneId shouldBe "pane-2"
+            component.state.value.panelItemId shouldBe "sample-2"
+            component.state.value.hasPanelDetails shouldBe true
+            component.state.value.activeWorkspacePaneId shouldBe "pane-2"
         }
 
         test("unknown deep link is reported but ignored") {
