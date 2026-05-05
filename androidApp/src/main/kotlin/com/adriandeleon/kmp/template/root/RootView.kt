@@ -10,6 +10,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import com.adriandeleon.kmp.template.R
+import com.adriandeleon.kmp.template.auth.AuthView
 import com.adriandeleon.kmp.template.onboarding.OnboardingView
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -21,7 +22,7 @@ fun RootView(component: RootComponent, modifier: Modifier = Modifier) {
         Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
             when (val child = slot.child?.instance) {
                 is RootComponent.Child.Onboarding -> OnboardingView(component = child.component)
-                is RootComponent.Child.Auth -> Text(stringResource(R.string.root_auth_placeholder))
+                is RootComponent.Child.Auth -> AuthView(component = child.component)
                 is RootComponent.Child.Main -> Text(stringResource(R.string.root_main_placeholder))
                 null -> Text(stringResource(R.string.root_starting_placeholder))
             }

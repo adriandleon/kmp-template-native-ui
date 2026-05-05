@@ -34,8 +34,8 @@ private struct RootSlotView: View {
             switch slotValue.child?.instance {
             case let child as RootComponentChildOnboarding:
                 OnboardingView(child.component)
-            case is RootComponentChildAuth:
-                Text(NSLocalizedString("root_auth_placeholder", comment: ""))
+            case let child as RootComponentChildAuth:
+                AuthView(child.component)
             case is RootComponentChildMain:
                 Text(NSLocalizedString("root_main_placeholder", comment: ""))
             default:

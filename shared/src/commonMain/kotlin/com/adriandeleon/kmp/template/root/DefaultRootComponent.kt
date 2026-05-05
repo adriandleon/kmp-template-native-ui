@@ -1,10 +1,11 @@
 package com.adriandeleon.kmp.template.root
 
+import com.adriandeleon.kmp.template.auth.AuthComponent.Output
+import com.adriandeleon.kmp.template.auth.DefaultAuthComponent
 import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.AppStateRepository
 import com.adriandeleon.kmp.template.onboarding.DefaultOnboardingComponent
-import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output
-import com.adriandeleon.kmp.template.root.RootComponent.AuthComponent
+import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output as OnboardingOutput
 import com.adriandeleon.kmp.template.root.RootComponent.Child
 import com.adriandeleon.kmp.template.root.RootComponent.MainComponent
 import com.arkivanov.decompose.ComponentContext
@@ -54,7 +55,7 @@ class DefaultRootComponent(
     private fun createChild(configuration: Configuration, context: ComponentContext): Child =
         when (configuration) {
             is Configuration.Onboarding -> Child.Onboarding(onboardingComponent(context))
-            is Configuration.Auth -> Child.Auth(DefaultAuthComponent(context))
+            is Configuration.Auth -> Child.Auth(authComponent(context))
             is Configuration.Main -> Child.Main(DefaultMainComponent(context))
         }
 
@@ -64,9 +65,21 @@ class DefaultRootComponent(
             onOutput = ::onOnboardingOutput,
         )
 
-    private fun onOnboardingOutput(output: Output) {
+    private fun authComponent(componentContext: ComponentContext) =
+        DefaultAuthComponent(
+            componentContext = componentContext,
+            onOutput = ::onAuthOutput,
+        )
+
+    private fun onOnboardingOutput(output: OnboardingOutput) {
         when (output) {
-            Output.Completed -> completeOnboarding()
+            OnboardingOutput.Completed -> completeOnboarding()
+        }
+    }
+
+    private fun onAuthOutput(output: Output) {
+        when (output) {
+            Output.Authenticated -> completeAuthentication()
         }
     }
 
@@ -114,9 +127,6 @@ class DefaultRootComponent(
 
         @Serializable data object Main : Configuration
     }
-
-    private class DefaultAuthComponent(componentContext: ComponentContext) :
-        AuthComponent, ComponentContext by componentContext
 
     private class DefaultMainComponent(componentContext: ComponentContext) :
         MainComponent, ComponentContext by componentContext

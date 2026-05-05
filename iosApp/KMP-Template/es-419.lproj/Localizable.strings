@@ -28,3 +28,22 @@
 "onboarding_organize_body" = "Mantén el orden de páginas y las reglas de finalización en componentes Kotlin compartidos.";
 "onboarding_customize_title" = "Personaliza";
 "onboarding_customize_body" = "Reemplaza los textos y pantallas sin perder el patrón Child Pages.";
+
+"auth_sign_in_title" = "Iniciar sesión";
+"auth_sign_in_body" = "Usa esta pantalla como entrada para cualquier proveedor de autenticación.";
+"auth_sign_in_button" = "Iniciar sesión";
+"auth_create_account_button" = "Crear cuenta";
+"auth_forgot_button" = "¿Olvidaste?";
+"auth_sign_up_title" = "Crear cuenta";
+"auth_sign_up_body" = "Reemplaza esta acción falsa por el flujo de registro de tu proveedor.";
+"auth_sign_up_button" = "Crear cuenta";
+"auth_terms_button" = "Ver términos";
+"auth_forgot_title" = "Recuperar acceso";
+"auth_forgot_body" = "Esta ruta demuestra navegación de pila antes de un paso de verificación.";
+"auth_send_verification_button" = "Enviar verificación";
+"auth_verification_title" = "Verificación";
+"auth_verification_body" = "Usa esta ruta para confirmación, códigos o completar un restablecimiento.";
+"auth_verification_done_button" = "Listo";
+"auth_terms_title" = "Términos";
+"auth_terms_body" = "Este modal demuestra navegación Child Slot para contenido opcional de autenticación.";
+"auth_terms_close_button" = "Cerrar";

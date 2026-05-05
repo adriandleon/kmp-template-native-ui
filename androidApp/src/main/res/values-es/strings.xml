@@ -33,4 +33,25 @@
     <string name="onboarding_organize_body">Mantén el orden de páginas y las reglas de finalización en componentes Kotlin compartidos.</string>
     <string name="onboarding_customize_title">Personaliza</string>
     <string name="onboarding_customize_body">Reemplaza los textos y pantallas sin perder el patrón Child Pages.</string>
+
+    <!-- Auth flow -->
+    <string name="auth_back_button">Atrás</string>
+    <string name="auth_sign_in_title">Iniciar sesión</string>
+    <string name="auth_sign_in_body">Usa esta pantalla como entrada para cualquier proveedor de autenticación.</string>
+    <string name="auth_sign_in_button">Iniciar sesión</string>
+    <string name="auth_create_account_button">Crear cuenta</string>
+    <string name="auth_forgot_button">¿Olvidaste?</string>
+    <string name="auth_sign_up_title">Crear cuenta</string>
+    <string name="auth_sign_up_body">Reemplaza esta acción falsa por el flujo de registro de tu proveedor.</string>
+    <string name="auth_sign_up_button">Crear cuenta</string>
+    <string name="auth_terms_button">Ver términos</string>
+    <string name="auth_forgot_title">Recuperar acceso</string>
+    <string name="auth_forgot_body">Esta ruta demuestra navegación de pila antes de un paso de verificación.</string>
+    <string name="auth_send_verification_button">Enviar verificación</string>
+    <string name="auth_verification_title">Verificación</string>
+    <string name="auth_verification_body">Usa esta ruta para confirmación, códigos o completar un restablecimiento.</string>
+    <string name="auth_verification_done_button">Listo</string>
+    <string name="auth_terms_title">Términos</string>
+    <string name="auth_terms_body">Este modal demuestra navegación Child Slot para contenido opcional de autenticación.</string>
+    <string name="auth_terms_close_button">Cerrar</string>
 </resources>

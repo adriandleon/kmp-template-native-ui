@@ -40,3 +40,23 @@
 "onboarding_organize_body" = "Keep page order and completion rules in shared Kotlin components.";
 "onboarding_customize_title" = "Customize";
 "onboarding_customize_body" = "Replace the copy and screens while preserving the Child Pages pattern.";
+
+// Auth flow
+"auth_sign_in_title" = "Sign in";
+"auth_sign_in_body" = "Use this screen as the entry point for any authentication provider.";
+"auth_sign_in_button" = "Sign in";
+"auth_create_account_button" = "Create account";
+"auth_forgot_button" = "Forgot?";
+"auth_sign_up_title" = "Create account";
+"auth_sign_up_body" = "Replace this fake action with your provider registration flow.";
+"auth_sign_up_button" = "Create account";
+"auth_terms_button" = "View terms";
+"auth_forgot_title" = "Recover access";
+"auth_forgot_body" = "This route demonstrates stack navigation before a verification step.";
+"auth_send_verification_button" = "Send verification";
+"auth_verification_title" = "Verification";
+"auth_verification_body" = "Use this route for confirmation, codes, or password reset completion.";
+"auth_verification_done_button" = "Done";
+"auth_terms_title" = "Terms";
+"auth_terms_body" = "This modal demonstrates Child Slot navigation for optional authentication content.";
+"auth_terms_close_button" = "Close";
