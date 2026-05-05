@@ -68,4 +68,23 @@
     <string name="main_adaptive_body">Esta aba receberá o exemplo de layout adaptável com Child Panels.</string>
     <string name="main_settings_title">Ajustes</string>
     <string name="main_settings_body">Esta aba é o lugar do template para conta, preferências e reinicializações.</string>
+
+    <!-- Navigation examples -->
+    <string name="examples_title">Exemplos de navegação</string>
+    <string name="examples_body">Esta tela demonstra stack, slot e child item navigation em um fluxo neutro.</string>
+    <string name="examples_add_item_button">Adicionar item</string>
+    <string name="examples_show_modal_button">Mostrar modal</string>
+    <string name="examples_item_title_format">%1$s · contador %2$d</string>
+    <string name="examples_item_selected">Selecionado</string>
+    <string name="examples_item_not_selected">Não selecionado</string>
+    <string name="examples_select_item_button">Selecionar</string>
+    <string name="examples_increment_item_button">Incrementar</string>
+    <string name="examples_open_detail_button">Abrir detalhe</string>
+    <string name="examples_remove_item_button">Remover</string>
+    <string name="examples_back_button">Voltar</string>
+    <string name="examples_detail_title">Detalhe de stack</string>
+    <string name="examples_detail_body_format">%1$s tem contador independente %2$d.</string>
+    <string name="examples_confirmation_title">Modal de slot</string>
+    <string name="examples_confirmation_body">Este diálogo vive em um Child Slot e pode ser substituído por qualquer fluxo opcional.</string>
+    <string name="examples_confirmation_close_button">Fechar</string>
 </resources>

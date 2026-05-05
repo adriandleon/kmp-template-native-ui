@@ -1,5 +1,7 @@
 package com.adriandeleon.kmp.template.main
 
+import com.adriandeleon.kmp.template.main.examples.DefaultExamplesComponent
+import com.adriandeleon.kmp.template.main.examples.ExamplesComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.router.pages.Pages
@@ -23,6 +25,12 @@ class DefaultMainComponent(
             childFactory = ::createPageComponent,
         )
 
+    override val examples: ExamplesComponent
+        get() =
+            (pages.value.items.first { it.configuration == MainComponent.Page.Examples }.instance
+                    as MainComponent.PageComponent.Examples)
+                .component
+
     private val mutableState = MutableValue(pages.value.toState())
     override val state: Value<MainComponent.State> = mutableState
 
@@ -38,7 +46,12 @@ class DefaultMainComponent(
     private fun createPageComponent(
         page: MainComponent.Page,
         context: ComponentContext,
-    ): MainComponent.PageComponent = DefaultPageComponent(page = page, componentContext = context)
+    ): MainComponent.PageComponent =
+        when (page) {
+            MainComponent.Page.Examples ->
+                MainComponent.PageComponent.Examples(DefaultExamplesComponent(context))
+            else -> MainComponent.PageComponent.Generic(page)
+        }
 
     private fun Pages<MainComponent.Page>.toState(): MainComponent.State =
         items.toState(selectedIndex = selectedIndex)
@@ -53,11 +66,6 @@ class DefaultMainComponent(
             selectedIndex = selectedIndex,
             pageCount = size,
         )
-
-    private class DefaultPageComponent(
-        override val page: MainComponent.Page,
-        componentContext: ComponentContext,
-    ) : MainComponent.PageComponent, ComponentContext by componentContext
 
     private companion object {
         val mainPages =

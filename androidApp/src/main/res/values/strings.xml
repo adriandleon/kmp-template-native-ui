@@ -74,6 +74,25 @@
     <string name="main_settings_title">Settings</string>
     <string name="main_settings_body">This tab is the template place for account, preferences, and reset actions.</string>
 
+    <!-- Navigation examples -->
+    <string name="examples_title">Navigation examples</string>
+    <string name="examples_body">This screen demonstrates stack, slot, and child item navigation in one neutral flow.</string>
+    <string name="examples_add_item_button">Add item</string>
+    <string name="examples_show_modal_button">Show modal</string>
+    <string name="examples_item_title_format">%1$s · count %2$d</string>
+    <string name="examples_item_selected">Selected</string>
+    <string name="examples_item_not_selected">Not selected</string>
+    <string name="examples_select_item_button">Select</string>
+    <string name="examples_increment_item_button">Increment</string>
+    <string name="examples_open_detail_button">Open detail</string>
+    <string name="examples_remove_item_button">Remove</string>
+    <string name="examples_back_button">Back</string>
+    <string name="examples_detail_title">Stack detail</string>
+    <string name="examples_detail_body_format">%1$s has independent count %2$d.</string>
+    <string name="examples_confirmation_title">Slot modal</string>
+    <string name="examples_confirmation_body">This dialog is hosted by a Child Slot and can be replaced with any optional child flow.</string>
+    <string name="examples_confirmation_close_button">Close</string>
+
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
     <string name="tag_onboarding_screen" translatable="false">onboarding_screen</string>
     <string name="tag_onboarding_skip_button" translatable="false">onboarding_skip_button</string>
@@ -93,6 +112,10 @@
     <string name="tag_auth_terms_close_button" translatable="false">auth_terms_close_button</string>
     <string name="tag_main_screen" translatable="false">main_screen</string>
     <string name="tag_main_page_content" translatable="false">main_page_content</string>
+    <string name="tag_examples_screen" translatable="false">examples_screen</string>
+    <string name="tag_examples_add_button" translatable="false">examples_add_button</string>
+    <string name="tag_examples_modal_button" translatable="false">examples_modal_button</string>
+    <string name="tag_examples_item" translatable="false">examples_item</string>
     <string name="tag_posts_loading" translatable="false">posts_loading</string>
     <string name="tag_posts_list" translatable="false">posts_list</string>
     <string name="tag_posts_item" translatable="false">posts_item</string>

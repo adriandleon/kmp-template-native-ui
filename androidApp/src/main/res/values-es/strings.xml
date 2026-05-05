@@ -68,4 +68,23 @@
     <string name="main_adaptive_body">Esta pestaña alojará el ejemplo de layout adaptable con Child Panels.</string>
     <string name="main_settings_title">Ajustes</string>
     <string name="main_settings_body">Esta pestaña es el lugar de la plantilla para cuenta, preferencias y reinicios.</string>
+
+    <!-- Navigation examples -->
+    <string name="examples_title">Ejemplos de navegación</string>
+    <string name="examples_body">Esta pantalla demuestra stack, slot y child item navigation en un flujo neutral.</string>
+    <string name="examples_add_item_button">Agregar item</string>
+    <string name="examples_show_modal_button">Mostrar modal</string>
+    <string name="examples_item_title_format">%1$s · contador %2$d</string>
+    <string name="examples_item_selected">Seleccionado</string>
+    <string name="examples_item_not_selected">No seleccionado</string>
+    <string name="examples_select_item_button">Seleccionar</string>
+    <string name="examples_increment_item_button">Incrementar</string>
+    <string name="examples_open_detail_button">Abrir detalle</string>
+    <string name="examples_remove_item_button">Eliminar</string>
+    <string name="examples_back_button">Atrás</string>
+    <string name="examples_detail_title">Detalle de stack</string>
+    <string name="examples_detail_body_format">%1$s tiene contador independiente %2$d.</string>
+    <string name="examples_confirmation_title">Modal de slot</string>
+    <string name="examples_confirmation_body">Este diálogo vive en un Child Slot y puede reemplazarse por cualquier flujo opcional.</string>
+    <string name="examples_confirmation_close_button">Cerrar</string>
 </resources>

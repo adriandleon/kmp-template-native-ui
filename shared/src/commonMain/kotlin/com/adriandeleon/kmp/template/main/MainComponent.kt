@@ -1,5 +1,6 @@
 package com.adriandeleon.kmp.template.main
 
+import com.adriandeleon.kmp.template.main.examples.ExamplesComponent
 import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
@@ -8,6 +9,8 @@ import kotlinx.serialization.Serializable
 interface MainComponent {
 
     val pages: Value<ChildPages<Page, PageComponent>>
+
+    val examples: ExamplesComponent
 
     val state: Value<State>
 
@@ -29,7 +32,13 @@ interface MainComponent {
         val pageCount: Int,
     )
 
-    interface PageComponent {
+    sealed interface PageComponent {
         val page: Page
+
+        data class Generic(override val page: Page) : PageComponent
+
+        data class Examples(val component: ExamplesComponent) : PageComponent {
+            override val page: Page = Page.Examples
+        }
     }
 }

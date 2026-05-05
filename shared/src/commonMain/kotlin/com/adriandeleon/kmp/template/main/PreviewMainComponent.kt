@@ -1,5 +1,6 @@
 package com.adriandeleon.kmp.template.main
 
+import com.adriandeleon.kmp.template.main.examples.PreviewExamplesComponent
 import com.arkivanov.decompose.Child
 import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.value.MutableValue
@@ -9,9 +10,11 @@ class PreviewMainComponent(
     initialPage: MainComponent.Page = MainComponent.Page.Home
 ) : MainComponent {
 
+    override val examples = PreviewExamplesComponent()
+
     private val items =
         MainComponent.Page.entries.map { page ->
-            Child.Created(configuration = page, instance = PreviewPageComponent(page))
+            Child.Created(configuration = page, instance = previewPageComponent(page))
         }
 
     private val mutablePages =
@@ -43,6 +46,10 @@ class PreviewMainComponent(
             pageCount = items.size,
         )
 
-    private class PreviewPageComponent(override val page: MainComponent.Page) :
-        MainComponent.PageComponent
+    private fun previewPageComponent(page: MainComponent.Page): MainComponent.PageComponent =
+        when (page) {
+            MainComponent.Page.Examples ->
+                MainComponent.PageComponent.Examples(examples)
+            else -> MainComponent.PageComponent.Generic(page)
+        }
 }

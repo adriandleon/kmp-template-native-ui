@@ -19,6 +19,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
+import com.adriandeleon.kmp.template.main.examples.ExamplesView
 import com.arkivanov.decompose.extensions.compose.pages.ChildPages
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -47,7 +48,12 @@ fun MainView(component: MainComponent, modifier: Modifier = Modifier) {
                 onPageSelected = component::selectPage,
                 modifier = Modifier.fillMaxSize(),
             ) { _, pageComponent ->
-                MainPageContent(pageComponent.page)
+                when (pageComponent) {
+                    is MainComponent.PageComponent.Examples ->
+                        ExamplesView(pageComponent.component)
+                    is MainComponent.PageComponent.Generic ->
+                        MainPageContent(pageComponent.page)
+                }
             }
         }
     }

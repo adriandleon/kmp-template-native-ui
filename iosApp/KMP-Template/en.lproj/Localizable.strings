@@ -74,3 +74,22 @@
 "main_adaptive_body" = "This tab will host the Child Panels adaptive layout example.";
 "main_settings_title" = "Settings";
 "main_settings_body" = "This tab is the template place for account, preferences, and reset actions.";
+
+// Navigation examples
+"examples_title" = "Navigation examples";
+"examples_body" = "This screen demonstrates stack, slot, and child item navigation in one neutral flow.";
+"examples_add_item_button" = "Add item";
+"examples_show_modal_button" = "Show modal";
+"examples_item_title_format" = "%@ · count %d";
+"examples_item_selected" = "Selected";
+"examples_item_not_selected" = "Not selected";
+"examples_select_item_button" = "Select";
+"examples_increment_item_button" = "Increment";
+"examples_open_detail_button" = "Open detail";
+"examples_remove_item_button" = "Remove";
+"examples_back_button" = "Back";
+"examples_detail_title" = "Stack detail";
+"examples_detail_body_format" = "%@ has independent count %d.";
+"examples_confirmation_title" = "Slot modal";
+"examples_confirmation_body" = "This dialog is hosted by a Child Slot and can be replaced with any optional child flow.";
+"examples_confirmation_close_button" = "Close";

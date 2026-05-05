@@ -60,3 +60,21 @@
 "main_adaptive_body" = "Esta pestaña alojará el ejemplo de layout adaptable con Child Panels.";
 "main_settings_title" = "Ajustes";
 "main_settings_body" = "Esta pestaña es el lugar de la plantilla para cuenta, preferencias y reinicios.";
+
+"examples_title" = "Ejemplos de navegación";
+"examples_body" = "Esta pantalla demuestra stack, slot y child item navigation en un flujo neutral.";
+"examples_add_item_button" = "Agregar item";
+"examples_show_modal_button" = "Mostrar modal";
+"examples_item_title_format" = "%@ · contador %d";
+"examples_item_selected" = "Seleccionado";
+"examples_item_not_selected" = "No seleccionado";
+"examples_select_item_button" = "Seleccionar";
+"examples_increment_item_button" = "Incrementar";
+"examples_open_detail_button" = "Abrir detalle";
+"examples_remove_item_button" = "Eliminar";
+"examples_back_button" = "Atrás";
+"examples_detail_title" = "Detalle de stack";
+"examples_detail_body_format" = "%@ tiene contador independiente %d.";
+"examples_confirmation_title" = "Modal de slot";
+"examples_confirmation_body" = "Este diálogo vive en un Child Slot y puede reemplazarse por cualquier flujo opcional.";
+"examples_confirmation_close_button" = "Cerrar";

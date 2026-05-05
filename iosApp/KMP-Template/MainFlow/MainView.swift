@@ -31,7 +31,7 @@ struct MainView: View {
                 .tag(0)
                 .tabItem { Label(NSLocalizedString("main_home_tab", comment: ""), systemImage: "house") }
 
-            MainPageView(page: .examples)
+            ExamplesView(component.examples)
                 .tag(1)
                 .tabItem { Label(NSLocalizedString("main_examples_tab", comment: ""), systemImage: "square.stack.3d.up") }
 
