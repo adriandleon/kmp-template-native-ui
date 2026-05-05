@@ -47,3 +47,16 @@
 "auth_terms_title" = "Termos";
 "auth_terms_body" = "Este modal demonstra navegação Child Slot para conteúdo opcional de autenticação.";
 "auth_terms_close_button" = "Fechar";
+
+"main_home_tab" = "Início";
+"main_examples_tab" = "Exemplos";
+"main_adaptive_tab" = "Adaptável";
+"main_settings_tab" = "Ajustes";
+"main_home_title" = "Início";
+"main_home_body" = "Esta aba é o ponto inicial com sessão para conteúdo próprio do app.";
+"main_examples_title" = "Exemplos";
+"main_examples_body" = "Esta aba receberá exemplos de stack, slot e child item navigation.";
+"main_adaptive_title" = "Adaptável";
+"main_adaptive_body" = "Esta aba receberá o exemplo de layout adaptável com Child Panels.";
+"main_settings_title" = "Ajustes";
+"main_settings_body" = "Esta aba é o lugar do template para conta, preferências e reinicializações.";

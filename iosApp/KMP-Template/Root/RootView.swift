@@ -36,8 +36,8 @@ private struct RootSlotView: View {
                 OnboardingView(child.component)
             case let child as RootComponentChildAuth:
                 AuthView(child.component)
-            case is RootComponentChildMain:
-                Text(NSLocalizedString("root_main_placeholder", comment: ""))
+            case let child as RootComponentChildMain:
+                MainView(child.component)
             default:
                 Text(NSLocalizedString("root_starting_placeholder", comment: ""))
             }

@@ -54,4 +54,18 @@
     <string name="auth_terms_title">Termos</string>
     <string name="auth_terms_body">Este modal demonstra navegação Child Slot para conteúdo opcional de autenticação.</string>
     <string name="auth_terms_close_button">Fechar</string>
+
+    <!-- Main tabs -->
+    <string name="main_home_tab">Início</string>
+    <string name="main_examples_tab">Exemplos</string>
+    <string name="main_adaptive_tab">Adaptável</string>
+    <string name="main_settings_tab">Ajustes</string>
+    <string name="main_home_title">Início</string>
+    <string name="main_home_body">Esta aba é o ponto inicial com sessão para conteúdo próprio do app.</string>
+    <string name="main_examples_title">Exemplos</string>
+    <string name="main_examples_body">Esta aba receberá exemplos de stack, slot e child item navigation.</string>
+    <string name="main_adaptive_title">Adaptável</string>
+    <string name="main_adaptive_body">Esta aba receberá o exemplo de layout adaptável com Child Panels.</string>
+    <string name="main_settings_title">Ajustes</string>
+    <string name="main_settings_body">Esta aba é o lugar do template para conta, preferências e reinicializações.</string>
 </resources>

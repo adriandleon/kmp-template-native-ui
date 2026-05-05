@@ -60,3 +60,17 @@
 "auth_terms_title" = "Terms";
 "auth_terms_body" = "This modal demonstrates Child Slot navigation for optional authentication content.";
 "auth_terms_close_button" = "Close";
+
+// Main tabs
+"main_home_tab" = "Home";
+"main_examples_tab" = "Examples";
+"main_adaptive_tab" = "Adaptive";
+"main_settings_tab" = "Settings";
+"main_home_title" = "Home";
+"main_home_body" = "This tab is the signed-in starting point for app-specific content.";
+"main_examples_title" = "Examples";
+"main_examples_body" = "This tab will host stack, slot, and child item navigation examples.";
+"main_adaptive_title" = "Adaptive";
+"main_adaptive_body" = "This tab will host the Child Panels adaptive layout example.";
+"main_settings_title" = "Settings";
+"main_settings_body" = "This tab is the template place for account, preferences, and reset actions.";

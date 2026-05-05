@@ -60,6 +60,20 @@
     <string name="auth_terms_body">This modal demonstrates Child Slot navigation for optional authentication content.</string>
     <string name="auth_terms_close_button">Close</string>
 
+    <!-- Main tabs -->
+    <string name="main_home_tab">Home</string>
+    <string name="main_examples_tab">Examples</string>
+    <string name="main_adaptive_tab">Adaptive</string>
+    <string name="main_settings_tab">Settings</string>
+    <string name="main_home_title">Home</string>
+    <string name="main_home_body">This tab is the signed-in starting point for app-specific content.</string>
+    <string name="main_examples_title">Examples</string>
+    <string name="main_examples_body">This tab will host stack, slot, and child item navigation examples.</string>
+    <string name="main_adaptive_title">Adaptive</string>
+    <string name="main_adaptive_body">This tab will host the Child Panels adaptive layout example.</string>
+    <string name="main_settings_title">Settings</string>
+    <string name="main_settings_body">This tab is the template place for account, preferences, and reset actions.</string>
+
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
     <string name="tag_onboarding_screen" translatable="false">onboarding_screen</string>
     <string name="tag_onboarding_skip_button" translatable="false">onboarding_skip_button</string>
@@ -77,6 +91,8 @@
     <string name="tag_auth_forgot_button" translatable="false">auth_forgot_button</string>
     <string name="tag_auth_terms_button" translatable="false">auth_terms_button</string>
     <string name="tag_auth_terms_close_button" translatable="false">auth_terms_close_button</string>
+    <string name="tag_main_screen" translatable="false">main_screen</string>
+    <string name="tag_main_page_content" translatable="false">main_page_content</string>
     <string name="tag_posts_loading" translatable="false">posts_loading</string>
     <string name="tag_posts_list" translatable="false">posts_list</string>
     <string name="tag_posts_item" translatable="false">posts_item</string>

@@ -4,10 +4,10 @@ import com.adriandeleon.kmp.template.auth.AuthComponent.Output
 import com.adriandeleon.kmp.template.auth.DefaultAuthComponent
 import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.AppStateRepository
+import com.adriandeleon.kmp.template.main.DefaultMainComponent
 import com.adriandeleon.kmp.template.onboarding.DefaultOnboardingComponent
 import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output as OnboardingOutput
 import com.adriandeleon.kmp.template.root.RootComponent.Child
-import com.adriandeleon.kmp.template.root.RootComponent.MainComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
@@ -127,7 +127,4 @@ class DefaultRootComponent(
 
         @Serializable data object Main : Configuration
     }
-
-    private class DefaultMainComponent(componentContext: ComponentContext) :
-        MainComponent, ComponentContext by componentContext
 }
