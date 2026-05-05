@@ -21,6 +21,12 @@
     <string name="home_screen_title">Home Screen</string>
     <string name="home_log_button">Log Message</string>
 
+    <!-- Root placeholders -->
+    <string name="root_onboarding_placeholder">Onboarding</string>
+    <string name="root_auth_placeholder">Authentication</string>
+    <string name="root_main_placeholder">Main</string>
+    <string name="root_starting_placeholder">Starting</string>
+
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
     <string name="tag_posts_loading" translatable="false">posts_loading</string>
     <string name="tag_posts_list" translatable="false">posts_list</string>

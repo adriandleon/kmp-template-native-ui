@@ -1,30 +1,29 @@
 package com.adriandeleon.kmp.template.root
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import com.adriandeleon.kmp.template.home.HomeView
-import com.adriandeleon.kmp.template.posts.PostsView
-import com.arkivanov.decompose.extensions.compose.stack.Children
-import com.arkivanov.decompose.extensions.compose.stack.animation.fade
-import com.arkivanov.decompose.extensions.compose.stack.animation.stackAnimation
+import androidx.compose.ui.res.stringResource
+import com.adriandeleon.kmp.template.R
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun RootView(component: RootComponent, modifier: Modifier = Modifier) {
-    val childStack by component.stack.subscribeAsState()
+    val slot by component.slot.subscribeAsState()
 
     MaterialTheme {
-        Children(
-            stack = childStack,
-            modifier = modifier.fillMaxSize(),
-            animation = stackAnimation(fade()),
-        ) { child ->
-            when (val instance = child.instance) {
-                is RootComponent.Child.Home -> HomeView(instance.component)
-                is RootComponent.Child.Posts -> PostsView(instance.component)
+        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+            // Temporary placeholders until the platform UI flow tasks provide real screens.
+            when (slot.child?.instance) {
+                is RootComponent.Child.Onboarding -> Text(stringResource(R.string.root_onboarding_placeholder))
+                is RootComponent.Child.Auth -> Text(stringResource(R.string.root_auth_placeholder))
+                is RootComponent.Child.Main -> Text(stringResource(R.string.root_main_placeholder))
+                null -> Text(stringResource(R.string.root_starting_placeholder))
             }
         }
     }

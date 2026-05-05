@@ -17,23 +17,31 @@ struct RootView: View {
     }
 
     var body: some View {
-        StackView(
-            stackValue: StateValue(component.stack),
-            getTitle: {
-                switch $0 {
-                case is RootComponentChildHome: ""
-                case is RootComponentChildPosts: ""
-                default: ""
-                }
-            },
-            onBack: { _ in },
-            childContent: {
-                switch $0 {
-                case let child as RootComponentChildHome: HomeView(child.component)
-                case let posts as RootComponentChildPosts: PostsView(posts.component)
-                default: EmptyView()
-                }
-            },
-        )
+        RootSlotView(component)
+    }
+}
+
+private struct RootSlotView: View {
+    @StateValue
+    private var slotValue: ChildSlot<AnyObject, RootComponentChild>
+
+    init(_ component: RootComponent) {
+        _slotValue = StateValue(component.slot)
+    }
+
+    var body: some View {
+        VStack {
+            // Temporary placeholders until the platform UI flow tasks provide real screens.
+            switch slotValue.child?.instance {
+            case is RootComponentChildOnboarding:
+                Text(NSLocalizedString("root_onboarding_placeholder", comment: ""))
+            case is RootComponentChildAuth:
+                Text(NSLocalizedString("root_auth_placeholder", comment: ""))
+            case is RootComponentChildMain:
+                Text(NSLocalizedString("root_main_placeholder", comment: ""))
+            default:
+                Text(NSLocalizedString("root_starting_placeholder", comment: ""))
+            }
+        }
     }
 }

@@ -1,8 +1,6 @@
 package com.adriandeleon.kmp.template.root
 
-import com.adriandeleon.kmp.template.home.HomeComponent
-import com.adriandeleon.kmp.template.posts.PostsComponent
-import com.arkivanov.decompose.router.stack.ChildStack
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 
@@ -13,14 +11,37 @@ import com.arkivanov.essenty.backhandler.BackHandlerOwner
  */
 interface RootComponent : BackHandlerOwner {
 
-    val stack: Value<ChildStack<*, Child>>
+    val slot: Value<ChildSlot<*, Child>>
+
+    fun completeOnboarding()
+
+    fun completeAuthentication()
+
+    fun signOut()
+
+    fun resetOnboarding()
+
+    fun setAuthRequired(authRequired: Boolean)
 
     sealed interface Child {
 
-        /** @param component Child component for the home screen */
-        data class Home(val component: HomeComponent) : Child
+        data class Onboarding(val component: OnboardingComponent) : Child
 
-        /** @param component Child component for the posts screen */
-        data class Posts(val component: PostsComponent) : Child
+        data class Auth(val component: AuthComponent) : Child
+
+        data class Main(val component: MainComponent) : Child
     }
+
+    /** Placeholder for the onboarding flow component; later tasks replace it with the real flow. */
+    interface OnboardingComponent
+
+    /**
+     * Placeholder for the authentication flow component; later tasks replace it with the real flow.
+     */
+    interface AuthComponent
+
+    /**
+     * Placeholder for the signed-in main flow component; later tasks replace it with the real flow.
+     */
+    interface MainComponent
 }

@@ -22,3 +22,9 @@
 // Home screen
 "home_screen_title" = "Home Screen";
 "home_log_button" = "Log Message";
+
+// Root placeholders
+"root_onboarding_placeholder" = "Onboarding";
+"root_auth_placeholder" = "Authentication";
+"root_main_placeholder" = "Main";
+"root_starting_placeholder" = "Starting";

@@ -15,4 +15,10 @@
     <!-- Home screen -->
     <string name="home_screen_title">Pantalla de Inicio</string>
     <string name="home_log_button">Registrar Mensaje</string>
+
+    <!-- Root placeholders -->
+    <string name="root_onboarding_placeholder">Introducción</string>
+    <string name="root_auth_placeholder">Autenticación</string>
+    <string name="root_main_placeholder">Principal</string>
+    <string name="root_starting_placeholder">Iniciando</string>
 </resources>

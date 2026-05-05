@@ -12,3 +12,8 @@
 
 "home_screen_title" = "Pantalla de Inicio";
 "home_log_button" = "Registrar Mensaje";
+
+"root_onboarding_placeholder" = "Introducción";
+"root_auth_placeholder" = "Autenticación";
+"root_main_placeholder" = "Principal";
+"root_starting_placeholder" = "Iniciando";

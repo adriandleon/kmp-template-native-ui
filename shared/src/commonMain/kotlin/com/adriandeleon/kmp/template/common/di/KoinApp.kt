@@ -4,6 +4,8 @@ import co.touchlab.crashkios.crashlytics.CrashlyticsKotlin
 import co.touchlab.kermit.koin.KermitKoinLogger
 import com.adriandeleon.kmp.template.BuildKonfig
 import com.adriandeleon.kmp.template.analytics.analyticsModule
+import com.adriandeleon.kmp.template.appstate.appStateModule
+import com.adriandeleon.kmp.template.appstate.platformAppStateModule
 import com.adriandeleon.kmp.template.common.commonModule
 import com.adriandeleon.kmp.template.common.platformDatabaseModule
 import com.adriandeleon.kmp.template.features.featureFlagModule
@@ -25,6 +27,8 @@ fun initKoin(config: KoinAppDeclaration? = null) {
         modules(
             // Here the list of shared modules
             commonModule,
+            appStateModule,
+            platformAppStateModule,
             platformDatabaseModule,
             networkModule,
             featureFlagModule,
