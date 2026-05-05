@@ -239,6 +239,47 @@ interface HomeComponent {
 }
 ```
 
+### Navigation Showcase Patterns
+
+Before implementing a new screen, flow, tab, modal, pane, dynamic child list, or
+deep link, read `docs/NAVIGATION_SHOWCASE.md` and inspect the corresponding
+shared component tests.
+
+Use these existing recipes as the source of truth:
+- **Root state gate**: `RootComponent` and `DefaultRootComponent` decide whether
+  the app shows onboarding, auth, or main. Do not duplicate this launch logic in
+  Android or iOS.
+- **Child Pages**: onboarding and main tabs demonstrate page selection flows.
+  Use this for peer destinations such as onboarding pages, tabs, or paged
+  sections.
+- **Child Stack**: auth and examples demonstrate push/pop flows. Use this for
+  detail routes and forward navigation with back behavior.
+- **Child Slot**: root, auth, and examples demonstrate optional children. Use
+  this for modals, dialogs, terms screens, and single replacement flows.
+- **Child Items**: examples demonstrate dynamic child components with
+  independent state. Use this for lists whose children need lifecycle and saved
+  state.
+- **Child Panels**: examples demonstrate main/details/extra panes. Use this for
+  adaptive layouts that can show one or more panes depending on platform UI.
+- **Generic Navigation**: examples demonstrate `children(...)`. Use this only
+  when Stack, Slot, Pages, Panels, and Items do not fit the navigation state
+  shape.
+- **Deep links**: examples demonstrate shared URL parsing through
+  `handleDeepLink(url)`. Android intents and iOS universal links must pass
+  URLs into shared code instead of resolving routes separately per platform.
+
+When adding or changing navigation:
+1. Start in `shared/src/commonMain/kotlin`.
+2. Add or update the component interface with a small native-friendly API.
+3. Add a failing shared unit test in `shared/src/commonTest/kotlin`.
+4. Implement the Decompose navigation model in the default component.
+5. Update the preview component so Compose previews and SwiftUI previews keep
+   working.
+6. Render state in Android Compose and iOS SwiftUI without duplicating business
+   rules.
+7. Extract every new visible string to Android and iOS localization files.
+8. Run the shared, Android, and iOS verification commands before committing.
+
 ### Data Layer Patterns
 - Use `*Entity.kt` for domain models
 - Create `*DataSource.kt` for data sources

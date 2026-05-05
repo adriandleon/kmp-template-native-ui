@@ -179,6 +179,32 @@ To add a new navigation scenario:
 6. Localize every visible string in Android and iOS resources.
 7. Run shared tests, Android compilation, and iOS compilation.
 
+## Agent implementation checklist
+
+AI coding agents must treat this file and `AGENTS.md` as required context
+before adding screens, navigation routes, or deep links. The safest workflow is
+shared first, native UI second.
+
+Use this checklist for agentic implementation:
+
+1. Identify the navigation model from the covered patterns above.
+2. Reuse the closest existing component as the implementation reference.
+3. Keep route parsing, app-state decisions, and navigation transforms in
+   shared Kotlin.
+4. Expose small component methods for native UI, such as `openDetail`,
+   `showConfirmation`, or `handleDeepLink`.
+5. Avoid exposing Decompose internals to SwiftUI when a simple state field or
+   method gives native code the same behavior.
+6. Add shared unit tests for each route, dismissal, back action, and invalid
+   deep link.
+7. Add platform UI only after the shared tests describe the behavior.
+8. Keep examples domain-neutral unless the app consuming the template already
+   has a real domain model.
+
+When an agent is unsure which pattern to use, prefer the most specific
+predefined model. Use Generic Navigation only after ruling out Stack, Slot,
+Pages, Panels, and Items.
+
 ## Verification
 
 Run these commands after changing the showcase:
