@@ -45,8 +45,7 @@ interface ExamplesComponent {
         val nextItemNumber: Int,
     )
 
-    @Serializable
-    data class ItemConfig(val id: String)
+    @Serializable data class ItemConfig(val id: String)
 
     sealed interface Child {
         data class List(val component: ListComponent) : Child

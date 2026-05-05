@@ -10,8 +10,10 @@ import platform.Foundation.NSHomeDirectory
 internal actual val platformDatabaseModule: Module = module {
     single<AppDatabase> {
         Room.databaseBuilder<AppDatabase>(
-            name = NSHomeDirectory() + "/app.db",
-            // Room on iOS needs an explicit SQLite driver.
-        ).setDriver(BundledSQLiteDriver()).build()
+                name = NSHomeDirectory() + "/app.db"
+                // Room on iOS needs an explicit SQLite driver.
+            )
+            .setDriver(BundledSQLiteDriver())
+            .build()
     }
 }

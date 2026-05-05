@@ -6,17 +6,11 @@ import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class PreviewAuthComponent(
-    initialScreen: AuthComponent.Screen = AuthComponent.Screen.SignIn,
-) : AuthComponent {
+class PreviewAuthComponent(initialScreen: AuthComponent.Screen = AuthComponent.Screen.SignIn) :
+    AuthComponent {
 
     private val mutableStack =
-        MutableValue(
-            ChildStack(
-                configuration = initialScreen,
-                instance = childFor(initialScreen),
-            )
-        )
+        MutableValue(ChildStack(configuration = initialScreen, instance = childFor(initialScreen)))
     override val stack: Value<ChildStack<AuthComponent.Screen, AuthComponent.Child>> = mutableStack
 
     private val mutableModalSlot =
@@ -66,26 +60,21 @@ class PreviewAuthComponent(
         val currentItems = mutableStack.value.items
         val selectedItems = currentItems.take((index + 1).coerceIn(1, currentItems.size))
         mutableStack.value =
-            ChildStack(
-                active = selectedItems.last(),
-                backStack = selectedItems.dropLast(1),
-            )
+            ChildStack(active = selectedItems.last(), backStack = selectedItems.dropLast(1))
     }
 
     private fun push(screen: AuthComponent.Screen) {
         val currentItems = mutableStack.value.items
         val child = Child.Created(configuration = screen, instance = childFor(screen))
-        mutableStack.value =
-            ChildStack(
-                active = child,
-                backStack = currentItems,
-            )
+        mutableStack.value = ChildStack(active = child, backStack = currentItems)
     }
 
     private fun childFor(screen: AuthComponent.Screen): AuthComponent.Child =
         when (screen) {
-            AuthComponent.Screen.SignIn -> AuthComponent.Child.SignIn(PreviewScreenComponent(screen))
-            AuthComponent.Screen.SignUp -> AuthComponent.Child.SignUp(PreviewScreenComponent(screen))
+            AuthComponent.Screen.SignIn ->
+                AuthComponent.Child.SignIn(PreviewScreenComponent(screen))
+            AuthComponent.Screen.SignUp ->
+                AuthComponent.Child.SignUp(PreviewScreenComponent(screen))
             AuthComponent.Screen.ForgotPassword ->
                 AuthComponent.Child.ForgotPassword(PreviewScreenComponent(screen))
             AuthComponent.Screen.Verification ->

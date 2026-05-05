@@ -9,9 +9,5 @@ interface SampleItemComponent {
 
     fun increment()
 
-    data class State(
-        val id: String,
-        val title: String,
-        val count: Int,
-    )
+    data class State(val id: String, val title: String, val count: Int)
 }

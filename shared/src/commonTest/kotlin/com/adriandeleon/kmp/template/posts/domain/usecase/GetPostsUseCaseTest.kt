@@ -11,18 +11,19 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.runTest
 
-class GetPostsUseCaseTest : FunSpec({
-    val mockRepository = mock<PostsRepository>()
+class GetPostsUseCaseTest :
+    FunSpec({
+        val mockRepository = mock<PostsRepository>()
 
-    test("delegates to repository and returns its flow") {
-        runTest {
-            val expected = listOf(Post("1", "Title", "Body"))
-            every { mockRepository.getPosts() } returns flowOf(expected)
+        test("delegates to repository and returns its flow") {
+            runTest {
+                val expected = listOf(Post("1", "Title", "Body"))
+                every { mockRepository.getPosts() } returns flowOf(expected)
 
-            val useCase = GetPostsUseCase(mockRepository)
-            val result = useCase().first()
+                val useCase = GetPostsUseCase(mockRepository)
+                val result = useCase().first()
 
-            result shouldBe expected
+                result shouldBe expected
+            }
         }
-    }
-})
+    })

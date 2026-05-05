@@ -26,11 +26,7 @@ interface MainComponent {
         Settings,
     }
 
-    data class State(
-        val selectedPage: Page,
-        val selectedIndex: Int,
-        val pageCount: Int,
-    )
+    data class State(val selectedPage: Page, val selectedIndex: Int, val pageCount: Int)
 
     sealed interface PageComponent {
         val page: Page

@@ -22,7 +22,8 @@ class DefaultExamplesComponentTest :
 
             component.openDetail("sample-2")
 
-            val detail = component.activeChild().shouldBeInstanceOf<ExamplesComponent.Child.Detail>()
+            val detail =
+                component.activeChild().shouldBeInstanceOf<ExamplesComponent.Child.Detail>()
             detail.component.itemId shouldBe "sample-2"
             component.state.value.selectedItemId shouldBe "sample-2"
 
@@ -91,5 +92,4 @@ class DefaultExamplesComponentTest :
 private fun examplesComponent(): ExamplesComponent =
     DefaultExamplesComponent(testComponentContext())
 
-private fun ExamplesComponent.activeChild(): ExamplesComponent.Child =
-    stack.value.active.instance
+private fun ExamplesComponent.activeChild(): ExamplesComponent.Child = stack.value.active.instance

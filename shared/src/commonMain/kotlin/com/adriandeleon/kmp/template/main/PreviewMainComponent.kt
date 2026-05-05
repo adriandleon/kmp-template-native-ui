@@ -6,9 +6,8 @@ import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class PreviewMainComponent(
-    initialPage: MainComponent.Page = MainComponent.Page.Home
-) : MainComponent {
+class PreviewMainComponent(initialPage: MainComponent.Page = MainComponent.Page.Home) :
+    MainComponent {
 
     override val examples = PreviewExamplesComponent()
 
@@ -48,8 +47,7 @@ class PreviewMainComponent(
 
     private fun previewPageComponent(page: MainComponent.Page): MainComponent.PageComponent =
         when (page) {
-            MainComponent.Page.Examples ->
-                MainComponent.PageComponent.Examples(examples)
+            MainComponent.Page.Examples -> MainComponent.PageComponent.Examples(examples)
             else -> MainComponent.PageComponent.Generic(page)
         }
 }

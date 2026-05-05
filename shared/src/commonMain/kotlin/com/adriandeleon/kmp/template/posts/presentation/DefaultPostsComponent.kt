@@ -8,8 +8,8 @@ import com.adriandeleon.kmp.template.posts.presentation.store.PostsStoreFactory
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
-import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import com.arkivanov.essenty.lifecycle.doOnDestroy
 import com.arkivanov.mvikotlin.extensions.coroutines.stateFlow
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -29,9 +29,7 @@ internal class DefaultPostsComponent(
         lifecycle.doOnDestroy(store::dispose)
         val scope = coroutineScope()
         scope.launch {
-            store.stateFlow.collect { storeState ->
-                _state.value = uiMapper.map(storeState)
-            }
+            store.stateFlow.collect { storeState -> _state.value = uiMapper.map(storeState) }
         }
     }
 

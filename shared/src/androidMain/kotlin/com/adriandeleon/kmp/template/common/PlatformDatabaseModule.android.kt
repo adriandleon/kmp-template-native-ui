@@ -8,9 +8,6 @@ import org.koin.dsl.module
 
 internal actual val platformDatabaseModule: Module = module {
     single<AppDatabase> {
-        Room.databaseBuilder<AppDatabase>(
-            context = androidContext(),
-            name = "app.db",
-        ).build()
+        Room.databaseBuilder<AppDatabase>(context = androidContext(), name = "app.db").build()
     }
 }

@@ -23,9 +23,8 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.serialization.Serializable
 
 @OptIn(ExperimentalDecomposeApi::class)
-class DefaultExamplesComponent(
-    componentContext: ComponentContext
-) : ExamplesComponent, ComponentContext by componentContext {
+class DefaultExamplesComponent(componentContext: ComponentContext) :
+    ExamplesComponent, ComponentContext by componentContext {
 
     private val stackNavigation = StackNavigation<Configuration>()
     private val modalNavigation = SlotNavigation<ModalConfiguration>()
@@ -129,8 +128,7 @@ class DefaultExamplesComponent(
         itemComponent(itemId).increment()
     }
 
-    override fun itemComponent(itemId: String): SampleItemComponent =
-        childItems[itemConfig(itemId)]
+    override fun itemComponent(itemId: String): SampleItemComponent = childItems[itemConfig(itemId)]
 
     private fun createChild(
         configuration: Configuration,
@@ -139,7 +137,9 @@ class DefaultExamplesComponent(
         when (configuration) {
             Configuration.List -> ExamplesComponent.Child.List(DefaultListComponent(context))
             is Configuration.Detail ->
-                ExamplesComponent.Child.Detail(DefaultDetailComponent(configuration.itemId, context))
+                ExamplesComponent.Child.Detail(
+                    DefaultDetailComponent(configuration.itemId, context)
+                )
         }
 
     private fun createModalChild(
@@ -182,10 +182,8 @@ class DefaultExamplesComponent(
     private class DefaultConfirmationComponent(componentContext: ComponentContext) :
         ExamplesComponent.ConfirmationComponent, ComponentContext by componentContext
 
-    private class DefaultSampleItemComponent(
-        itemId: String,
-        componentContext: ComponentContext,
-    ) : SampleItemComponent, ComponentContext by componentContext {
+    private class DefaultSampleItemComponent(itemId: String, componentContext: ComponentContext) :
+        SampleItemComponent, ComponentContext by componentContext {
 
         private val mutableState =
             MutableValue(

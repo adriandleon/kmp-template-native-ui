@@ -107,10 +107,8 @@ class DefaultAuthComponent(
                 AuthComponent.ModalChild.Terms(screenComponent(AuthComponent.Screen.Terms, context))
         }
 
-    private fun screenComponent(
-        screen: AuthComponent.Screen,
-        componentContext: ComponentContext,
-    ) = DefaultScreenComponent(screen = screen, componentContext = componentContext)
+    private fun screenComponent(screen: AuthComponent.Screen, componentContext: ComponentContext) =
+        DefaultScreenComponent(screen = screen, componentContext = componentContext)
 
     @Serializable
     private sealed interface Configuration {

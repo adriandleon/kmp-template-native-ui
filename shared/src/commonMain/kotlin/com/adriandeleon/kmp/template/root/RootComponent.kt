@@ -34,5 +34,4 @@ interface RootComponent : BackHandlerOwner {
 
         data class Main(val component: MainComponent) : Child
     }
-
 }

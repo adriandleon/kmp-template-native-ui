@@ -75,10 +75,7 @@ class DefaultAuthComponentTest :
             val sessionRepository = FakeSessionRepository()
             val outputs = mutableListOf<AuthComponent.Output>()
             val component =
-                authComponent(
-                    sessionRepository = sessionRepository,
-                    onOutput = outputs::add,
-                )
+                authComponent(sessionRepository = sessionRepository, onOutput = outputs::add)
 
             component.signIn()
 
@@ -94,10 +91,7 @@ class DefaultAuthComponentTest :
             val sessionRepository = FakeSessionRepository()
             val outputs = mutableListOf<AuthComponent.Output>()
             val component =
-                authComponent(
-                    sessionRepository = sessionRepository,
-                    onOutput = outputs::add,
-                )
+                authComponent(sessionRepository = sessionRepository, onOutput = outputs::add)
 
             component.openSignUp()
             component.signUp()
@@ -121,8 +115,7 @@ private fun authComponent(
         onOutput = onOutput,
     )
 
-private fun AuthComponent.activeChild(): AuthComponent.Child =
-    stack.value.active.instance
+private fun AuthComponent.activeChild(): AuthComponent.Child = stack.value.active.instance
 
 private fun AuthComponent.Child.screen(): AuthComponent.Screen =
     when (this) {

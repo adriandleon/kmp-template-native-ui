@@ -1,9 +1,9 @@
 package com.adriandeleon.kmp.template.root
 
-import com.adriandeleon.kmp.template.auth.AuthComponent.Output
-import com.adriandeleon.kmp.template.auth.DefaultAuthComponent
 import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.AppStateRepository
+import com.adriandeleon.kmp.template.auth.AuthComponent.Output
+import com.adriandeleon.kmp.template.auth.DefaultAuthComponent
 import com.adriandeleon.kmp.template.main.DefaultMainComponent
 import com.adriandeleon.kmp.template.onboarding.DefaultOnboardingComponent
 import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output as OnboardingOutput
@@ -66,10 +66,7 @@ class DefaultRootComponent(
         )
 
     private fun authComponent(componentContext: ComponentContext) =
-        DefaultAuthComponent(
-            componentContext = componentContext,
-            onOutput = ::onAuthOutput,
-        )
+        DefaultAuthComponent(componentContext = componentContext, onOutput = ::onAuthOutput)
 
     private fun onOnboardingOutput(output: OnboardingOutput) {
         when (output) {

@@ -47,8 +47,7 @@ class PreviewExamplesComponent : ExamplesComponent {
                 active =
                     Child.Created<Any, ExamplesComponent.Child>(
                         configuration = itemId,
-                        instance =
-                            ExamplesComponent.Child.Detail(PreviewDetailComponent(itemId)),
+                        instance = ExamplesComponent.Child.Detail(PreviewDetailComponent(itemId)),
                     ),
                 backStack = mutableStack.value.items,
             )
@@ -59,8 +58,10 @@ class PreviewExamplesComponent : ExamplesComponent {
     }
 
     override fun backTo(index: Int) {
-        val selectedItems = mutableStack.value.items.take((index + 1).coerceIn(1, mutableStack.value.items.size))
-        mutableStack.value = ChildStack(active = selectedItems.last(), backStack = selectedItems.dropLast(1))
+        val selectedItems =
+            mutableStack.value.items.take((index + 1).coerceIn(1, mutableStack.value.items.size))
+        mutableStack.value =
+            ChildStack(active = selectedItems.last(), backStack = selectedItems.dropLast(1))
     }
 
     override fun showConfirmation() {
@@ -68,7 +69,8 @@ class PreviewExamplesComponent : ExamplesComponent {
             ChildSlot(
                 Child.Created<Any, ExamplesComponent.ModalChild>(
                     configuration = "confirmation",
-                    instance = ExamplesComponent.ModalChild.Confirmation(PreviewConfirmationComponent),
+                    instance =
+                        ExamplesComponent.ModalChild.Confirmation(PreviewConfirmationComponent),
                 )
             )
     }
@@ -130,25 +132,24 @@ class PreviewExamplesComponent : ExamplesComponent {
         }
     }
 
-    private class PreviewLazyChildItems(
-        private val component: PreviewExamplesComponent
-    ) : LazyChildItems<ExamplesComponent.ItemConfig, SampleItemComponent>() {
+    private class PreviewLazyChildItems(private val component: PreviewExamplesComponent) :
+        LazyChildItems<ExamplesComponent.ItemConfig, SampleItemComponent>() {
         override val value: ChildItems<ExamplesComponent.ItemConfig, SampleItemComponent>
-            get() = ChildItems(component.state.value.itemIds.map { ExamplesComponent.ItemConfig(it) })
+            get() =
+                ChildItems(component.state.value.itemIds.map { ExamplesComponent.ItemConfig(it) })
 
-        override fun subscribe(observer: (ChildItems<ExamplesComponent.ItemConfig, SampleItemComponent>) -> Unit) =
-            component.state.subscribe { observer(value) }
+        override fun subscribe(
+            observer: (ChildItems<ExamplesComponent.ItemConfig, SampleItemComponent>) -> Unit
+        ) = component.state.subscribe { observer(value) }
 
         override fun get(configuration: ExamplesComponent.ItemConfig): SampleItemComponent =
             component.itemComponent(configuration.id)
 
         override fun navigate(
-            transformer: (Items<ExamplesComponent.ItemConfig>) -> Items<ExamplesComponent.ItemConfig>,
+            transformer:
+                (Items<ExamplesComponent.ItemConfig>) -> Items<ExamplesComponent.ItemConfig>,
             onComplete:
-                (
-                    Items<ExamplesComponent.ItemConfig>,
-                    Items<ExamplesComponent.ItemConfig>,
-                ) -> Unit,
+                (Items<ExamplesComponent.ItemConfig>, Items<ExamplesComponent.ItemConfig>) -> Unit,
         ) = Unit
     }
 }

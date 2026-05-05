@@ -11,9 +11,8 @@ import com.arkivanov.decompose.router.pages.select
 import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.Value
 
-class DefaultMainComponent(
-    componentContext: ComponentContext
-) : MainComponent, ComponentContext by componentContext {
+class DefaultMainComponent(componentContext: ComponentContext) :
+    MainComponent, ComponentContext by componentContext {
 
     private val navigation = PagesNavigation<MainComponent.Page>()
 
@@ -57,8 +56,7 @@ class DefaultMainComponent(
         items.toState(selectedIndex = selectedIndex)
 
     private fun ChildPages<MainComponent.Page, MainComponent.PageComponent>.toState():
-        MainComponent.State =
-        items.map { it.configuration }.toState(selectedIndex = selectedIndex)
+        MainComponent.State = items.map { it.configuration }.toState(selectedIndex = selectedIndex)
 
     private fun List<MainComponent.Page>.toState(selectedIndex: Int): MainComponent.State =
         MainComponent.State(

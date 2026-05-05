@@ -26,10 +26,7 @@ class FakeSessionRepository(initialState: State = State()) {
         mutableState.value = State()
     }
 
-    data class State(
-        val isAuthenticated: Boolean = false,
-        val method: Method? = null,
-    )
+    data class State(val isAuthenticated: Boolean = false, val method: Method? = null)
 
     enum class Method {
         SignIn,
