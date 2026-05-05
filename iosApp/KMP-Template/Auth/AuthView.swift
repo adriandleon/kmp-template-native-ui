@@ -2,7 +2,7 @@
 //  AuthView.swift
 //  KMP-Template
 //
-//  Created by OpenAI Codex on 5/4/26.
+//  Created by Adrian De León on 5/4/26.
 //  Copyright © 2026 KMP-Template. All rights reserved.
 //
 
