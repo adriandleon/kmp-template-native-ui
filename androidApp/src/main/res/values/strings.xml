@@ -92,6 +92,22 @@
     <string name="examples_confirmation_title">Slot modal</string>
     <string name="examples_confirmation_body">This dialog is hosted by a Child Slot and can be replaced with any optional child flow.</string>
     <string name="examples_confirmation_close_button">Close</string>
+    <string name="examples_panels_title">Panels</string>
+    <string name="examples_panels_body">This area demonstrates one main panel with optional details and extra panels.</string>
+    <string name="examples_panels_mode_format">Mode: %1$s</string>
+    <string name="examples_panels_single_mode">Single</string>
+    <string name="examples_panels_dual_mode">Dual</string>
+    <string name="examples_panels_triple_mode">Triple</string>
+    <string name="examples_panels_main_title">Main panel</string>
+    <string name="examples_panels_main_body">The main panel remains the stable entry point for selecting a child.</string>
+    <string name="examples_panels_open_details_button">Open details</string>
+    <string name="examples_panels_open_extra_button">Open extra</string>
+    <string name="examples_panels_details_body_format">Details panel is showing %1$s.</string>
+    <string name="examples_panels_details_empty">Details panel is closed.</string>
+    <string name="examples_panels_dismiss_details_button">Close details</string>
+    <string name="examples_panels_extra_body_format">Extra panel is showing more context for %1$s.</string>
+    <string name="examples_panels_extra_empty">Extra panel is closed.</string>
+    <string name="examples_panels_dismiss_extra_button">Close extra</string>
 
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
     <string name="tag_onboarding_screen" translatable="false">onboarding_screen</string>

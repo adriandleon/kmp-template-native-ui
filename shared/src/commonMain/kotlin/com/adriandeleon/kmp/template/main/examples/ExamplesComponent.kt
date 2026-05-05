@@ -2,6 +2,8 @@ package com.adriandeleon.kmp.template.main.examples
 
 import com.arkivanov.decompose.ExperimentalDecomposeApi
 import com.arkivanov.decompose.router.items.LazyChildItems
+import com.arkivanov.decompose.router.panels.ChildPanels
+import com.arkivanov.decompose.router.panels.ChildPanelsMode
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.stack.ChildStack
 import com.arkivanov.decompose.value.Value
@@ -16,6 +18,18 @@ interface ExamplesComponent {
     val modalSlot: Value<ChildSlot<*, ModalChild>>
 
     val childItems: LazyChildItems<ItemConfig, SampleItemComponent>
+
+    val panels:
+        Value<
+            ChildPanels<
+                PanelMainConfig,
+                PanelMainComponent,
+                PanelDetailsConfig,
+                PanelDetailsComponent,
+                PanelExtraConfig,
+                PanelExtraComponent,
+            >
+        >
 
     val state: Value<State>
 
@@ -39,13 +53,33 @@ interface ExamplesComponent {
 
     fun itemComponent(itemId: String): SampleItemComponent
 
+    fun openPanelDetails(itemId: String)
+
+    fun dismissPanelDetails()
+
+    fun openPanelExtra(itemId: String)
+
+    fun dismissPanelExtra()
+
+    fun setPanelsMode(mode: ChildPanelsMode)
+
     data class State(
         val itemIds: List<String>,
         val selectedItemId: String?,
         val nextItemNumber: Int,
+        val panelItemId: String?,
+        val panelsMode: ChildPanelsMode,
+        val hasPanelDetails: Boolean,
+        val hasPanelExtra: Boolean,
     )
 
     @Serializable data class ItemConfig(val id: String)
+
+    @Serializable data object PanelMainConfig
+
+    @Serializable data class PanelDetailsConfig(val itemId: String)
+
+    @Serializable data class PanelExtraConfig(val itemId: String)
 
     sealed interface Child {
         data class List(val component: ListComponent) : Child
@@ -64,4 +98,14 @@ interface ExamplesComponent {
     }
 
     interface ConfirmationComponent
+
+    interface PanelMainComponent
+
+    interface PanelDetailsComponent {
+        val itemId: String
+    }
+
+    interface PanelExtraComponent {
+        val itemId: String
+    }
 }

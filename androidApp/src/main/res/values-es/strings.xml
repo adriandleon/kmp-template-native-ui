@@ -87,4 +87,20 @@
     <string name="examples_confirmation_title">Modal de slot</string>
     <string name="examples_confirmation_body">Este diálogo vive en un Child Slot y puede reemplazarse por cualquier flujo opcional.</string>
     <string name="examples_confirmation_close_button">Cerrar</string>
+    <string name="examples_panels_title">Paneles</string>
+    <string name="examples_panels_body">Esta área demuestra un panel principal con paneles opcionales de detalle y contexto extra.</string>
+    <string name="examples_panels_mode_format">Modo: %1$s</string>
+    <string name="examples_panels_single_mode">Simple</string>
+    <string name="examples_panels_dual_mode">Doble</string>
+    <string name="examples_panels_triple_mode">Triple</string>
+    <string name="examples_panels_main_title">Panel principal</string>
+    <string name="examples_panels_main_body">El panel principal permanece como entrada estable para seleccionar un hijo.</string>
+    <string name="examples_panels_open_details_button">Abrir detalle</string>
+    <string name="examples_panels_open_extra_button">Abrir extra</string>
+    <string name="examples_panels_details_body_format">El panel de detalle muestra %1$s.</string>
+    <string name="examples_panels_details_empty">El panel de detalle está cerrado.</string>
+    <string name="examples_panels_dismiss_details_button">Cerrar detalle</string>
+    <string name="examples_panels_extra_body_format">El panel extra muestra más contexto para %1$s.</string>
+    <string name="examples_panels_extra_empty">El panel extra está cerrado.</string>
+    <string name="examples_panels_dismiss_extra_button">Cerrar extra</string>
 </resources>

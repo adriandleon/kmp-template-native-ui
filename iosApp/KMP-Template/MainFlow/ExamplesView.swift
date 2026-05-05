@@ -92,6 +92,8 @@ private struct ExamplesListView: View {
                         onRemove: { component.removeItem(itemId: itemId) },
                     )
                 }
+
+                PanelsShowcaseView(component: component, state: state)
             }
             .padding(24)
         }
@@ -162,6 +164,121 @@ private struct SampleItemRow: View {
         }
         .padding(.vertical, 10)
         .accessibilityIdentifier("examples_item")
+    }
+}
+
+private struct PanelsShowcaseView: View {
+    let component: ExamplesComponent
+    let state: ExamplesComponentState
+
+    private var selectedItemId: String? {
+        state.selectedItemId ?? state.itemIds.first
+    }
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(NSLocalizedString("examples_panels_title", comment: ""))
+                .font(.title3)
+                .fontWeight(.semibold)
+
+            Text(NSLocalizedString("examples_panels_body", comment: ""))
+                .font(.body)
+                .foregroundStyle(.secondary)
+
+            Text(
+                String(
+                    format: NSLocalizedString("examples_panels_mode_format", comment: ""),
+                    state.panelsMode.name
+                )
+            )
+            .font(.caption)
+            .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                Button(NSLocalizedString("examples_panels_single_mode", comment: "")) {
+                    component.setPanelsMode(mode: .single)
+                }
+                .buttonStyle(.bordered)
+
+                Button(NSLocalizedString("examples_panels_dual_mode", comment: "")) {
+                    component.setPanelsMode(mode: .dual)
+                }
+                .buttonStyle(.bordered)
+
+                Button(NSLocalizedString("examples_panels_triple_mode", comment: "")) {
+                    component.setPanelsMode(mode: .triple)
+                }
+                .buttonStyle(.bordered)
+            }
+
+            Text(NSLocalizedString("examples_panels_main_title", comment: ""))
+                .font(.headline)
+
+            Text(NSLocalizedString("examples_panels_main_body", comment: ""))
+                .font(.caption)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                Button(NSLocalizedString("examples_panels_open_details_button", comment: "")) {
+                    if let selectedItemId {
+                        component.openPanelDetails(itemId: selectedItemId)
+                    }
+                }
+                .buttonStyle(.borderedProminent)
+                .disabled(selectedItemId == nil)
+
+                Button(NSLocalizedString("examples_panels_open_extra_button", comment: "")) {
+                    if let selectedItemId {
+                        component.openPanelExtra(itemId: selectedItemId)
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(selectedItemId == nil)
+            }
+
+            Text(panelText(
+                isVisible: state.hasPanelDetails,
+                formatKey: "examples_panels_details_body_format",
+                emptyKey: "examples_panels_details_empty"
+            ))
+            .font(.caption)
+            .foregroundStyle(.secondary)
+
+            if state.hasPanelDetails {
+                Button(
+                    NSLocalizedString("examples_panels_dismiss_details_button", comment: ""),
+                    action: component.dismissPanelDetails
+                )
+                .buttonStyle(.plain)
+            }
+
+            Text(panelText(
+                isVisible: state.hasPanelExtra,
+                formatKey: "examples_panels_extra_body_format",
+                emptyKey: "examples_panels_extra_empty"
+            ))
+            .font(.caption)
+            .foregroundStyle(.secondary)
+
+            if state.hasPanelExtra {
+                Button(
+                    NSLocalizedString("examples_panels_dismiss_extra_button", comment: ""),
+                    action: component.dismissPanelExtra
+                )
+                .buttonStyle(.plain)
+            }
+        }
+    }
+
+    private func panelText(isVisible: Bool, formatKey: String, emptyKey: String) -> String {
+        if isVisible {
+            return String(
+                format: NSLocalizedString(formatKey, comment: ""),
+                state.panelItemId ?? ""
+            )
+        }
+
+        return NSLocalizedString(emptyKey, comment: "")
     }
 }
 

@@ -1,3 +1,5 @@
+@file:OptIn(com.arkivanov.decompose.ExperimentalDecomposeApi::class)
+
 package com.adriandeleon.kmp.template.main.examples
 
 import android.content.res.Configuration
@@ -23,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
+import com.arkivanov.decompose.router.panels.ChildPanelsMode
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -97,6 +100,121 @@ private fun ExamplesListView(component: ExamplesComponent) {
                 onOpenDetail = { component.openDetail(itemId) },
                 onRemove = { component.removeItem(itemId) },
             )
+        }
+
+        PanelsShowcaseView(
+            component = component,
+            state = state,
+            mode = state.panelsMode,
+            hasDetails = state.hasPanelDetails,
+            hasExtra = state.hasPanelExtra,
+        )
+    }
+}
+
+@Composable
+private fun PanelsShowcaseView(
+    component: ExamplesComponent,
+    state: ExamplesComponent.State,
+    mode: ChildPanelsMode,
+    hasDetails: Boolean,
+    hasExtra: Boolean,
+) {
+    val selectedItemId = state.selectedItemId ?: state.itemIds.firstOrNull()
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            text = stringResource(R.string.examples_panels_title),
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Text(
+            text = stringResource(R.string.examples_panels_body),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            text = stringResource(R.string.examples_panels_mode_format, mode.name),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(
+                onClick = { component.setPanelsMode(ChildPanelsMode.SINGLE) },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_panels_single_mode))
+            }
+            OutlinedButton(
+                onClick = { component.setPanelsMode(ChildPanelsMode.DUAL) },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_panels_dual_mode))
+            }
+            OutlinedButton(
+                onClick = { component.setPanelsMode(ChildPanelsMode.TRIPLE) },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_panels_triple_mode))
+            }
+        }
+
+        Text(
+            text = stringResource(R.string.examples_panels_main_title),
+            style = MaterialTheme.typography.titleMedium,
+        )
+        Text(
+            text = stringResource(R.string.examples_panels_main_body),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                onClick = { selectedItemId?.let(component::openPanelDetails) },
+                enabled = selectedItemId != null,
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_panels_open_details_button))
+            }
+            OutlinedButton(
+                onClick = { selectedItemId?.let(component::openPanelExtra) },
+                enabled = selectedItemId != null,
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_panels_open_extra_button))
+            }
+        }
+
+        Text(
+            text =
+                if (hasDetails) {
+                    stringResource(
+                        R.string.examples_panels_details_body_format,
+                        state.panelItemId.orEmpty(),
+                    )
+                } else {
+                    stringResource(R.string.examples_panels_details_empty)
+                },
+            style = MaterialTheme.typography.bodySmall,
+        )
+        if (hasDetails) {
+            TextButton(onClick = component::dismissPanelDetails) {
+                Text(stringResource(R.string.examples_panels_dismiss_details_button))
+            }
+        }
+
+        Text(
+            text =
+                if (hasExtra) {
+                    stringResource(
+                        R.string.examples_panels_extra_body_format,
+                        state.panelItemId.orEmpty(),
+                    )
+                } else {
+                    stringResource(R.string.examples_panels_extra_empty)
+                },
+            style = MaterialTheme.typography.bodySmall,
+        )
+        if (hasExtra) {
+            TextButton(onClick = component::dismissPanelExtra) {
+                Text(stringResource(R.string.examples_panels_dismiss_extra_button))
+            }
         }
     }
 }

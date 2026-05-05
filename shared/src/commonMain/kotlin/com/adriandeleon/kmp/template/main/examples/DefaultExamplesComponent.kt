@@ -7,6 +7,14 @@ import com.arkivanov.decompose.router.items.Items.ActiveLifecycleState
 import com.arkivanov.decompose.router.items.ItemsNavigation
 import com.arkivanov.decompose.router.items.childItems
 import com.arkivanov.decompose.router.items.setItems
+import com.arkivanov.decompose.router.panels.ChildPanels
+import com.arkivanov.decompose.router.panels.ChildPanelsMode
+import com.arkivanov.decompose.router.panels.Panels
+import com.arkivanov.decompose.router.panels.PanelsNavigation
+import com.arkivanov.decompose.router.panels.childPanels
+import com.arkivanov.decompose.router.panels.dismissExtra
+import com.arkivanov.decompose.router.panels.navigate
+import com.arkivanov.decompose.router.panels.setMode
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
@@ -29,6 +37,12 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     private val stackNavigation = StackNavigation<Configuration>()
     private val modalNavigation = SlotNavigation<ModalConfiguration>()
     private val itemsNavigation = ItemsNavigation<ExamplesComponent.ItemConfig>()
+    private val panelsNavigation =
+        PanelsNavigation<
+            ExamplesComponent.PanelMainConfig,
+            ExamplesComponent.PanelDetailsConfig,
+            ExamplesComponent.PanelExtraConfig,
+        >()
 
     private val mutableState =
         MutableValue(
@@ -36,6 +50,10 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 itemIds = initialItemIds,
                 selectedItemId = initialItemIds.firstOrNull(),
                 nextItemNumber = initialItemIds.size + 1,
+                panelItemId = null,
+                panelsMode = ChildPanelsMode.SINGLE,
+                hasPanelDetails = false,
+                hasPanelExtra = false,
             )
         )
     override val state: Value<ExamplesComponent.State> = mutableState
@@ -71,6 +89,47 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 )
             },
             childFactory = ::createSampleItemComponent,
+        )
+
+    override val panels:
+        Value<
+            ChildPanels<
+                ExamplesComponent.PanelMainConfig,
+                ExamplesComponent.PanelMainComponent,
+                ExamplesComponent.PanelDetailsConfig,
+                ExamplesComponent.PanelDetailsComponent,
+                ExamplesComponent.PanelExtraConfig,
+                ExamplesComponent.PanelExtraComponent,
+            >
+        > =
+        childPanels(
+            source = panelsNavigation,
+            serializers =
+                Triple(
+                    ExamplesComponent.PanelMainConfig.serializer(),
+                    ExamplesComponent.PanelDetailsConfig.serializer(),
+                    ExamplesComponent.PanelExtraConfig.serializer(),
+                ),
+            initialPanels = {
+                Panels(main = ExamplesComponent.PanelMainConfig, mode = ChildPanelsMode.SINGLE)
+            },
+            handleBackButton = true,
+            onStateChanged = { newState, _ ->
+                mutableState.value =
+                    mutableState.value.copy(
+                        panelItemId = newState.extra?.itemId ?: newState.details?.itemId,
+                        panelsMode = newState.mode,
+                        hasPanelDetails = newState.details != null,
+                        hasPanelExtra = newState.extra != null,
+                    )
+            },
+            mainFactory = { _, context -> DefaultPanelMainComponent(context) },
+            detailsFactory = { configuration, context ->
+                DefaultPanelDetailsComponent(configuration.itemId, context)
+            },
+            extraFactory = { configuration, context ->
+                DefaultPanelExtraComponent(configuration.itemId, context)
+            },
         )
 
     override fun openDetail(itemId: String) {
@@ -116,6 +175,10 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 selectedItemId = mutableState.value.selectedItemId?.takeIf { it in updatedIds },
             )
         itemsNavigation.setItems { updatedIds.map(::itemConfig) }
+
+        if (mutableState.value.panelItemId == itemId) {
+            panelsNavigation.navigate(details = null, extra = null)
+        }
     }
 
     override fun selectItem(itemId: String) {
@@ -129,6 +192,38 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     }
 
     override fun itemComponent(itemId: String): SampleItemComponent = childItems[itemConfig(itemId)]
+
+    override fun openPanelDetails(itemId: String) {
+        if (itemId in mutableState.value.itemIds) {
+            selectItem(itemId)
+            panelsNavigation.navigate(
+                details = ExamplesComponent.PanelDetailsConfig(itemId),
+                extra = null,
+            )
+        }
+    }
+
+    override fun dismissPanelDetails() {
+        panelsNavigation.navigate(details = null, extra = null)
+    }
+
+    override fun openPanelExtra(itemId: String) {
+        if (itemId in mutableState.value.itemIds) {
+            selectItem(itemId)
+            panelsNavigation.navigate(
+                details = ExamplesComponent.PanelDetailsConfig(itemId),
+                extra = ExamplesComponent.PanelExtraConfig(itemId),
+            )
+        }
+    }
+
+    override fun dismissPanelExtra() {
+        panelsNavigation.dismissExtra()
+    }
+
+    override fun setPanelsMode(mode: ChildPanelsMode) {
+        panelsNavigation.setMode(mode)
+    }
 
     private fun createChild(
         configuration: Configuration,
@@ -181,6 +276,19 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
 
     private class DefaultConfirmationComponent(componentContext: ComponentContext) :
         ExamplesComponent.ConfirmationComponent, ComponentContext by componentContext
+
+    private class DefaultPanelMainComponent(componentContext: ComponentContext) :
+        ExamplesComponent.PanelMainComponent, ComponentContext by componentContext
+
+    private class DefaultPanelDetailsComponent(
+        override val itemId: String,
+        componentContext: ComponentContext,
+    ) : ExamplesComponent.PanelDetailsComponent, ComponentContext by componentContext
+
+    private class DefaultPanelExtraComponent(
+        override val itemId: String,
+        componentContext: ComponentContext,
+    ) : ExamplesComponent.PanelExtraComponent, ComponentContext by componentContext
 
     private class DefaultSampleItemComponent(itemId: String, componentContext: ComponentContext) :
         SampleItemComponent, ComponentContext by componentContext {

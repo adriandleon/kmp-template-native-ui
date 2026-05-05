@@ -1,11 +1,14 @@
 package com.adriandeleon.kmp.template.main.examples
 
 import com.adriandeleon.kmp.template.common.util.testComponentContext
+import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.router.panels.ChildPanelsMode
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeInstanceOf
 
+@OptIn(ExperimentalDecomposeApi::class)
 class DefaultExamplesComponentTest :
     FunSpec({
         test("starts on list with sample child items") {
@@ -86,6 +89,61 @@ class DefaultExamplesComponentTest :
             component.itemComponent("sample-1").state.value.count shouldBe 2
             component.itemComponent("sample-2").state.value.count shouldBe 1
             component.itemComponent("sample-3").state.value.count shouldBe 0
+        }
+
+        test("panels start with main only") {
+            val component = examplesComponent()
+
+            component.panels.value.main.instance.shouldBeInstanceOf<
+                ExamplesComponent.PanelMainComponent
+            >()
+            component.panels.value.details shouldBe null
+            component.panels.value.extra shouldBe null
+            component.panels.value.mode shouldBe ChildPanelsMode.SINGLE
+        }
+
+        test("panels open details and extra for an item") {
+            val component = examplesComponent()
+
+            component.openPanelDetails("sample-2")
+            component.openPanelExtra("sample-2")
+
+            component.panels.value.details
+                ?.instance
+                .shouldBeInstanceOf<ExamplesComponent.PanelDetailsComponent>()
+                .itemId shouldBe "sample-2"
+            component.panels.value.extra
+                ?.instance
+                .shouldBeInstanceOf<ExamplesComponent.PanelExtraComponent>()
+                .itemId shouldBe "sample-2"
+            component.state.value.panelItemId shouldBe "sample-2"
+        }
+
+        test("panels can dismiss extra and details independently") {
+            val component = examplesComponent()
+
+            component.openPanelDetails("sample-2")
+            component.openPanelExtra("sample-2")
+            component.dismissPanelExtra()
+
+            component.panels.value.details
+                ?.instance
+                .shouldBeInstanceOf<ExamplesComponent.PanelDetailsComponent>()
+            component.panels.value.extra shouldBe null
+
+            component.dismissPanelDetails()
+
+            component.panels.value.details shouldBe null
+            component.state.value.panelItemId shouldBe null
+        }
+
+        test("panels mode can be changed") {
+            val component = examplesComponent()
+
+            component.setPanelsMode(ChildPanelsMode.TRIPLE)
+
+            component.panels.value.mode shouldBe ChildPanelsMode.TRIPLE
+            component.state.value.panelsMode shouldBe ChildPanelsMode.TRIPLE
         }
     })
 
