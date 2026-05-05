@@ -94,6 +94,10 @@ private struct ExamplesListView: View {
                 }
 
                 PanelsShowcaseView(component: component, state: state)
+
+                GenericNavigationShowcaseView(component: component, state: state)
+
+                DeepLinkShowcaseView(component: component, state: state)
             }
             .padding(24)
         }
@@ -279,6 +283,111 @@ private struct PanelsShowcaseView: View {
         }
 
         return NSLocalizedString(emptyKey, comment: "")
+    }
+}
+
+private struct GenericNavigationShowcaseView: View {
+    let component: ExamplesComponent
+    let state: ExamplesComponentState
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(NSLocalizedString("examples_generic_title", comment: ""))
+                .font(.title3)
+                .fontWeight(.semibold)
+
+            Text(NSLocalizedString("examples_generic_body", comment: ""))
+                .font(.body)
+                .foregroundStyle(.secondary)
+
+            Text(
+                String(
+                    format: NSLocalizedString("examples_generic_active_format", comment: ""),
+                    state.activeWorkspacePaneId ?? ""
+                )
+            )
+            .font(.caption)
+            .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                ForEach(state.workspacePaneIds, id: \.self) { paneId in
+                    Button(paneId) {
+                        component.activateWorkspacePane(paneId: paneId)
+                    }
+                    .buttonStyle(.bordered)
+                }
+            }
+
+            HStack(spacing: 8) {
+                Button(NSLocalizedString("examples_generic_add_button", comment: ""), action: component.addWorkspacePane)
+                    .buttonStyle(.borderedProminent)
+
+                Button(NSLocalizedString("examples_generic_close_button", comment: "")) {
+                    if let activePaneId = state.activeWorkspacePaneId {
+                        component.closeWorkspacePane(paneId: activePaneId)
+                    }
+                }
+                .buttonStyle(.bordered)
+                .disabled(state.activeWorkspacePaneId == nil || state.workspacePaneIds.count <= 1)
+            }
+        }
+    }
+}
+
+private struct DeepLinkShowcaseView: View {
+    let component: ExamplesComponent
+    let state: ExamplesComponentState
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text(NSLocalizedString("examples_deeplink_title", comment: ""))
+                .font(.title3)
+                .fontWeight(.semibold)
+
+            Text(NSLocalizedString("examples_deeplink_body", comment: ""))
+                .font(.body)
+                .foregroundStyle(.secondary)
+
+            HStack(spacing: 8) {
+                Button(NSLocalizedString("examples_deeplink_item_button", comment: "")) {
+                    _ = component.handleDeepLink(url: "template://examples/item/sample-3")
+                }
+                .buttonStyle(.borderedProminent)
+
+                Button(NSLocalizedString("examples_deeplink_panel_button", comment: "")) {
+                    _ = component.handleDeepLink(url: "template://examples/panel/sample-2")
+                }
+                .buttonStyle(.bordered)
+            }
+
+            HStack(spacing: 8) {
+                Button(NSLocalizedString("examples_deeplink_workspace_button", comment: "")) {
+                    _ = component.handleDeepLink(url: "template://examples/workspace/pane-2")
+                }
+                .buttonStyle(.bordered)
+
+                Button(NSLocalizedString("examples_deeplink_modal_button", comment: "")) {
+                    _ = component.handleDeepLink(url: "template://examples/confirmation")
+                }
+                .buttonStyle(.plain)
+            }
+
+            Text(statusText)
+                .font(.caption)
+                .foregroundStyle(.secondary)
+        }
+    }
+
+    private var statusText: String {
+        guard let lastDeepLinkPath = state.lastDeepLinkPath else {
+            return NSLocalizedString("examples_deeplink_empty", comment: "")
+        }
+
+        return String(
+            format: NSLocalizedString("examples_deeplink_status_format", comment: ""),
+            lastDeepLinkPath,
+            String(state.lastDeepLinkHandled?.boolValue ?? false)
+        )
     }
 }
 

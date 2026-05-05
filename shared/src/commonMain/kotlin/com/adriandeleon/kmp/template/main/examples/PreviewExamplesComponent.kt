@@ -27,9 +27,24 @@ class PreviewExamplesComponent : ExamplesComponent {
                 panelsMode = ChildPanelsMode.SINGLE,
                 hasPanelDetails = false,
                 hasPanelExtra = false,
+                workspacePaneIds = listOf("pane-1", "pane-2"),
+                activeWorkspacePaneId = "pane-1",
+                nextWorkspacePaneNumber = 3,
+                lastDeepLinkPath = null,
+                lastDeepLinkHandled = null,
             )
         )
     override val state: Value<ExamplesComponent.State> = mutableState
+
+    private val mutableWorkspace =
+        MutableValue(
+            ExamplesComponent.WorkspaceState(
+                paneIds = listOf("pane-1", "pane-2"),
+                activePaneId = "pane-1",
+                activePaneTitle = "Pane 1",
+            )
+        )
+    override val workspace: Value<ExamplesComponent.WorkspaceState> = mutableWorkspace
 
     private val mutableStack =
         MutableValue(
@@ -179,6 +194,83 @@ class PreviewExamplesComponent : ExamplesComponent {
         mutableState.value = mutableState.value.copy(panelsMode = mode)
     }
 
+    override fun activateWorkspacePane(paneId: String) {
+        if (paneId in mutableWorkspace.value.paneIds) {
+            updateWorkspace(
+                paneIds = mutableWorkspace.value.paneIds,
+                activePaneId = paneId,
+                nextPaneNumber = mutableState.value.nextWorkspacePaneNumber,
+            )
+        }
+    }
+
+    override fun addWorkspacePane() {
+        val paneId = "pane-${mutableState.value.nextWorkspacePaneNumber}"
+        updateWorkspace(
+            paneIds = mutableWorkspace.value.paneIds + paneId,
+            activePaneId = paneId,
+            nextPaneNumber = mutableState.value.nextWorkspacePaneNumber + 1,
+        )
+    }
+
+    override fun closeWorkspacePane(paneId: String) {
+        if (paneId in mutableWorkspace.value.paneIds && mutableWorkspace.value.paneIds.size > 1) {
+            val updatedPaneIds = mutableWorkspace.value.paneIds.filterNot { it == paneId }
+            updateWorkspace(
+                paneIds = updatedPaneIds,
+                activePaneId =
+                    mutableWorkspace.value.activePaneId?.takeIf { it != paneId }
+                        ?: updatedPaneIds.firstOrNull(),
+                nextPaneNumber = mutableState.value.nextWorkspacePaneNumber,
+            )
+        }
+    }
+
+    override fun handleDeepLink(url: String): Boolean {
+        val path = url.substringAfter("://", url).substringBefore("?").trim('/')
+        val parts = path.split("/").filter(String::isNotBlank)
+        val handled =
+            when {
+                parts.size == 3 && parts[0] == "examples" && parts[1] == "item" -> {
+                    openDetail(parts[2])
+                    true
+                }
+                parts.size == 3 && parts[0] == "examples" && parts[1] == "panel" -> {
+                    openPanelDetails(parts[2])
+                    true
+                }
+                parts.size == 2 && parts[0] == "examples" && parts[1] == "confirmation" -> {
+                    showConfirmation()
+                    true
+                }
+                parts.size == 3 && parts[0] == "examples" && parts[1] == "workspace" -> {
+                    activateWorkspacePane(parts[2])
+                    parts[2] in mutableWorkspace.value.paneIds
+                }
+                else -> false
+            }
+
+        mutableState.value =
+            mutableState.value.copy(lastDeepLinkPath = path, lastDeepLinkHandled = handled)
+
+        return handled
+    }
+
+    private fun updateWorkspace(paneIds: List<String>, activePaneId: String?, nextPaneNumber: Int) {
+        mutableWorkspace.value =
+            ExamplesComponent.WorkspaceState(
+                paneIds = paneIds,
+                activePaneId = activePaneId,
+                activePaneTitle = activePaneId?.replace("pane-", "Pane "),
+            )
+        mutableState.value =
+            mutableState.value.copy(
+                workspacePaneIds = paneIds,
+                activeWorkspacePaneId = activePaneId,
+                nextWorkspacePaneNumber = nextPaneNumber,
+            )
+    }
+
     private fun updatePanels(detailsItemId: String?, extraItemId: String?) {
         mutablePanels.value =
             ChildPanels(
@@ -225,6 +317,11 @@ class PreviewExamplesComponent : ExamplesComponent {
 
     private class PreviewPanelExtraComponent(override val itemId: String) :
         ExamplesComponent.PanelExtraComponent
+
+    private class PreviewWorkspacePaneComponent(
+        override val paneId: String,
+        override val title: String,
+    ) : ExamplesComponent.WorkspacePaneComponent
 
     private class PreviewSampleItemComponent(itemId: String) : SampleItemComponent {
         private val mutableState =

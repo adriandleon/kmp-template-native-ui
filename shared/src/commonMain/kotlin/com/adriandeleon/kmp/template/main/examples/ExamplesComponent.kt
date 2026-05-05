@@ -19,6 +19,8 @@ interface ExamplesComponent {
 
     val childItems: LazyChildItems<ItemConfig, SampleItemComponent>
 
+    val workspace: Value<WorkspaceState>
+
     val panels:
         Value<
             ChildPanels<
@@ -63,6 +65,14 @@ interface ExamplesComponent {
 
     fun setPanelsMode(mode: ChildPanelsMode)
 
+    fun activateWorkspacePane(paneId: String)
+
+    fun addWorkspacePane()
+
+    fun closeWorkspacePane(paneId: String)
+
+    fun handleDeepLink(url: String): Boolean
+
     data class State(
         val itemIds: List<String>,
         val selectedItemId: String?,
@@ -71,6 +81,17 @@ interface ExamplesComponent {
         val panelsMode: ChildPanelsMode,
         val hasPanelDetails: Boolean,
         val hasPanelExtra: Boolean,
+        val workspacePaneIds: List<String>,
+        val activeWorkspacePaneId: String?,
+        val nextWorkspacePaneNumber: Int,
+        val lastDeepLinkPath: String?,
+        val lastDeepLinkHandled: Boolean?,
+    )
+
+    data class WorkspaceState(
+        val paneIds: List<String>,
+        val activePaneId: String?,
+        val activePaneTitle: String?,
     )
 
     @Serializable data class ItemConfig(val id: String)
@@ -107,5 +128,11 @@ interface ExamplesComponent {
 
     interface PanelExtraComponent {
         val itemId: String
+    }
+
+    interface WorkspacePaneComponent {
+        val paneId: String
+
+        val title: String
     }
 }

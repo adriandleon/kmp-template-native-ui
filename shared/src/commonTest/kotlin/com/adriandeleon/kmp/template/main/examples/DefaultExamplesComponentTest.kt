@@ -145,6 +145,60 @@ class DefaultExamplesComponentTest :
             component.panels.value.mode shouldBe ChildPanelsMode.TRIPLE
             component.state.value.panelsMode shouldBe ChildPanelsMode.TRIPLE
         }
+
+        test("generic workspace starts with one active pane") {
+            val component = examplesComponent()
+
+            component.workspace.value.paneIds shouldContainExactly listOf("pane-1", "pane-2")
+            component.workspace.value.activePaneId shouldBe "pane-1"
+            component.workspace.value.activePaneTitle shouldBe "Pane 1"
+        }
+
+        test("generic workspace can add activate and close panes") {
+            val component = examplesComponent()
+
+            component.addWorkspacePane()
+            component.activateWorkspacePane("pane-2")
+            component.closeWorkspacePane("pane-1")
+
+            component.workspace.value.paneIds shouldContainExactly listOf("pane-2", "pane-3")
+            component.workspace.value.activePaneId shouldBe "pane-2"
+            component.state.value.workspacePaneIds shouldContainExactly listOf("pane-2", "pane-3")
+        }
+
+        test("deep link opens an item detail") {
+            val component = examplesComponent()
+
+            component.handleDeepLink("template://examples/item/sample-3") shouldBe true
+
+            val detail =
+                component.activeChild().shouldBeInstanceOf<ExamplesComponent.Child.Detail>()
+            detail.component.itemId shouldBe "sample-3"
+            component.state.value.lastDeepLinkPath shouldBe "examples/item/sample-3"
+            component.state.value.lastDeepLinkHandled shouldBe true
+        }
+
+        test("deep link can target panels and generic workspace") {
+            val component = examplesComponent()
+
+            component.handleDeepLink("template://examples/panel/sample-2") shouldBe true
+            component.handleDeepLink("template://examples/workspace/pane-2") shouldBe true
+
+            component.panels.value.details
+                ?.instance
+                .shouldBeInstanceOf<ExamplesComponent.PanelDetailsComponent>()
+                .itemId shouldBe "sample-2"
+            component.workspace.value.activePaneId shouldBe "pane-2"
+        }
+
+        test("unknown deep link is reported but ignored") {
+            val component = examplesComponent()
+
+            component.handleDeepLink("template://examples/unknown") shouldBe false
+
+            component.state.value.lastDeepLinkPath shouldBe "examples/unknown"
+            component.state.value.lastDeepLinkHandled shouldBe false
+        }
     })
 
 private fun examplesComponent(): ExamplesComponent =

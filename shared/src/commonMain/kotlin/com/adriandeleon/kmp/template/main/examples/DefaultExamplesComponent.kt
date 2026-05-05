@@ -2,6 +2,11 @@ package com.adriandeleon.kmp.template.main.examples
 
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.ExperimentalDecomposeApi
+import com.arkivanov.decompose.router.children.ChildNavState
+import com.arkivanov.decompose.router.children.NavState
+import com.arkivanov.decompose.router.children.SimpleChildNavState
+import com.arkivanov.decompose.router.children.SimpleNavigation
+import com.arkivanov.decompose.router.children.children
 import com.arkivanov.decompose.router.items.Items
 import com.arkivanov.decompose.router.items.Items.ActiveLifecycleState
 import com.arkivanov.decompose.router.items.ItemsNavigation
@@ -37,6 +42,7 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     private val stackNavigation = StackNavigation<Configuration>()
     private val modalNavigation = SlotNavigation<ModalConfiguration>()
     private val itemsNavigation = ItemsNavigation<ExamplesComponent.ItemConfig>()
+    private val workspaceNavigation = SimpleNavigation<WorkspaceEvent>()
     private val panelsNavigation =
         PanelsNavigation<
             ExamplesComponent.PanelMainConfig,
@@ -54,6 +60,11 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 panelsMode = ChildPanelsMode.SINGLE,
                 hasPanelDetails = false,
                 hasPanelExtra = false,
+                workspacePaneIds = initialWorkspacePaneIds,
+                activeWorkspacePaneId = initialWorkspacePaneIds.firstOrNull(),
+                nextWorkspacePaneNumber = initialWorkspacePaneIds.size + 1,
+                lastDeepLinkPath = null,
+                lastDeepLinkHandled = null,
             )
         )
     override val state: Value<ExamplesComponent.State> = mutableState
@@ -89,6 +100,43 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
                 )
             },
             childFactory = ::createSampleItemComponent,
+        )
+
+    override val workspace: Value<ExamplesComponent.WorkspaceState> =
+        children(
+            source = workspaceNavigation,
+            stateSerializer = WorkspaceNavigationState.serializer(),
+            initialState = {
+                WorkspaceNavigationState(
+                    paneIds = initialWorkspacePaneIds,
+                    activePaneId = initialWorkspacePaneIds.firstOrNull(),
+                    nextPaneNumber = initialWorkspacePaneIds.size + 1,
+                )
+            },
+            key = "ExamplesWorkspace",
+            navTransformer = ::transformWorkspace,
+            stateMapper = ::mapWorkspaceState,
+            onStateChanged = { newState, _ ->
+                mutableState.value =
+                    mutableState.value.copy(
+                        workspacePaneIds = newState.paneIds,
+                        activeWorkspacePaneId = newState.activePaneId,
+                        nextWorkspacePaneNumber = newState.nextPaneNumber,
+                    )
+            },
+            backTransformer = { navState ->
+                navState.paneIds
+                    .takeIf { it.size > 1 }
+                    ?.let {
+                        {
+                            transformWorkspace(
+                                navState,
+                                WorkspaceEvent.Close(navState.activePaneId),
+                            )
+                        }
+                    }
+            },
+            childFactory = ::createWorkspacePaneComponent,
         )
 
     override val panels:
@@ -225,6 +273,63 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
         panelsNavigation.setMode(mode)
     }
 
+    override fun activateWorkspacePane(paneId: String) {
+        workspaceNavigation.navigate(WorkspaceEvent.Activate(paneId))
+    }
+
+    override fun addWorkspacePane() {
+        workspaceNavigation.navigate(WorkspaceEvent.Add)
+    }
+
+    override fun closeWorkspacePane(paneId: String) {
+        workspaceNavigation.navigate(WorkspaceEvent.Close(paneId))
+    }
+
+    override fun handleDeepLink(url: String): Boolean {
+        val path = url.toDeepLinkPath()
+        val parts = path.split("/").filter(String::isNotBlank)
+        val handled =
+            when {
+                parts.size == 3 && parts[0] == "examples" && parts[1] == "item" -> {
+                    val itemId = parts[2]
+                    if (itemId in mutableState.value.itemIds) {
+                        openDetail(itemId)
+                        true
+                    } else {
+                        false
+                    }
+                }
+                parts.size == 3 && parts[0] == "examples" && parts[1] == "panel" -> {
+                    val itemId = parts[2]
+                    if (itemId in mutableState.value.itemIds) {
+                        openPanelDetails(itemId)
+                        true
+                    } else {
+                        false
+                    }
+                }
+                parts.size == 2 && parts[0] == "examples" && parts[1] == "confirmation" -> {
+                    showConfirmation()
+                    true
+                }
+                parts.size == 3 && parts[0] == "examples" && parts[1] == "workspace" -> {
+                    val paneId = parts[2]
+                    if (paneId in workspace.value.paneIds) {
+                        activateWorkspacePane(paneId)
+                        true
+                    } else {
+                        false
+                    }
+                }
+                else -> false
+            }
+
+        mutableState.value =
+            mutableState.value.copy(lastDeepLinkPath = path, lastDeepLinkHandled = handled)
+
+        return handled
+    }
+
     private fun createChild(
         configuration: Configuration,
         context: ComponentContext,
@@ -254,6 +359,72 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
 
     private fun itemConfig(itemId: String) = ExamplesComponent.ItemConfig(itemId)
 
+    private fun createWorkspacePaneComponent(
+        configuration: WorkspacePaneConfig,
+        context: ComponentContext,
+    ): ExamplesComponent.WorkspacePaneComponent =
+        DefaultWorkspacePaneComponent(configuration.id, context)
+
+    private fun transformWorkspace(
+        state: WorkspaceNavigationState,
+        event: WorkspaceEvent,
+    ): WorkspaceNavigationState =
+        when (event) {
+            WorkspaceEvent.Add -> {
+                val paneId = "pane-${state.nextPaneNumber}"
+                state.copy(
+                    paneIds = state.paneIds + paneId,
+                    activePaneId = paneId,
+                    nextPaneNumber = state.nextPaneNumber + 1,
+                )
+            }
+            is WorkspaceEvent.Activate ->
+                if (event.paneId in state.paneIds) {
+                    state.copy(activePaneId = event.paneId)
+                } else {
+                    state
+                }
+            is WorkspaceEvent.Close -> {
+                val paneId = event.paneId ?: return state
+                val index = state.paneIds.indexOf(paneId)
+                if (index < 0 || state.paneIds.size == 1) {
+                    state
+                } else {
+                    val updatedIds = state.paneIds.filterNot { it == paneId }
+                    val activeId =
+                        if (state.activePaneId == paneId) {
+                            updatedIds.getOrNull(index.coerceAtMost(updatedIds.lastIndex))
+                        } else {
+                            state.activePaneId
+                        }
+                    state.copy(paneIds = updatedIds, activePaneId = activeId)
+                }
+            }
+        }
+
+    private fun mapWorkspaceState(
+        state: WorkspaceNavigationState,
+        children:
+            List<
+                com.arkivanov.decompose.Child<
+                    WorkspacePaneConfig,
+                    ExamplesComponent.WorkspacePaneComponent,
+                >
+            >,
+    ): ExamplesComponent.WorkspaceState {
+        val activeTitle =
+            children.firstOrNull { it.configuration.id == state.activePaneId }?.instance?.title
+
+        return ExamplesComponent.WorkspaceState(
+            paneIds = state.paneIds,
+            activePaneId = state.activePaneId,
+            activePaneTitle = activeTitle,
+        )
+    }
+
+    private fun String.toDeepLinkPath(): String =
+        substringAfter("://", this).substringBefore("?").trim('/')
+
     @Serializable
     private sealed interface Configuration {
         @Serializable data object List : Configuration
@@ -264,6 +435,37 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
     @Serializable
     private sealed interface ModalConfiguration {
         @Serializable data object Confirmation : ModalConfiguration
+    }
+
+    @Serializable private data class WorkspacePaneConfig(val id: String)
+
+    @Serializable
+    private data class WorkspaceNavigationState(
+        val paneIds: List<String>,
+        val activePaneId: String?,
+        val nextPaneNumber: Int,
+    ) : NavState<WorkspacePaneConfig> {
+
+        override val children: List<ChildNavState<WorkspacePaneConfig>>
+            get() = paneIds.map { paneId ->
+                SimpleChildNavState(
+                    configuration = WorkspacePaneConfig(paneId),
+                    status =
+                        if (paneId == activePaneId) {
+                            ChildNavState.Status.RESUMED
+                        } else {
+                            ChildNavState.Status.STARTED
+                        },
+                )
+            }
+    }
+
+    private sealed interface WorkspaceEvent {
+        data object Add : WorkspaceEvent
+
+        data class Activate(val paneId: String) : WorkspaceEvent
+
+        data class Close(val paneId: String?) : WorkspaceEvent
     }
 
     private class DefaultListComponent(componentContext: ComponentContext) :
@@ -290,6 +492,13 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
         componentContext: ComponentContext,
     ) : ExamplesComponent.PanelExtraComponent, ComponentContext by componentContext
 
+    private class DefaultWorkspacePaneComponent(
+        override val paneId: String,
+        componentContext: ComponentContext,
+    ) : ExamplesComponent.WorkspacePaneComponent, ComponentContext by componentContext {
+        override val title: String = paneId.replace("pane-", "Pane ")
+    }
+
     private class DefaultSampleItemComponent(itemId: String, componentContext: ComponentContext) :
         SampleItemComponent, ComponentContext by componentContext {
 
@@ -310,5 +519,6 @@ class DefaultExamplesComponent(componentContext: ComponentContext) :
 
     private companion object {
         val initialItemIds = listOf("sample-1", "sample-2", "sample-3")
+        val initialWorkspacePaneIds = listOf("pane-1", "pane-2")
     }
 }

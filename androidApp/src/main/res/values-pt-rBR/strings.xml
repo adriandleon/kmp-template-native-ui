@@ -103,4 +103,17 @@
     <string name="examples_panels_extra_body_format">O painel extra mostra mais contexto para %1$s.</string>
     <string name="examples_panels_extra_empty">O painel extra está fechado.</string>
     <string name="examples_panels_dismiss_extra_button">Fechar extra</string>
+    <string name="examples_generic_title">Navegação genérica</string>
+    <string name="examples_generic_body">Esta área usa Decompose children para um modelo de navegação personalizado com um conjunto arbitrário de painéis.</string>
+    <string name="examples_generic_active_format">Painel ativo: %1$s</string>
+    <string name="examples_generic_add_button">Adicionar painel</string>
+    <string name="examples_generic_close_button">Fechar ativo</string>
+    <string name="examples_deeplink_title">Deep links</string>
+    <string name="examples_deeplink_body">Estas ações simulam links de plataforma entrando na navegação compartilhada e resolvendo stack, slot, panels ou generic children.</string>
+    <string name="examples_deeplink_item_button">Link de item</string>
+    <string name="examples_deeplink_panel_button">Link de painel</string>
+    <string name="examples_deeplink_workspace_button">Link de painel genérico</string>
+    <string name="examples_deeplink_modal_button">Link de modal</string>
+    <string name="examples_deeplink_empty">Nenhum link foi processado ainda.</string>
+    <string name="examples_deeplink_status_format">Último link: %1$s · processado: %2$s</string>
 </resources>

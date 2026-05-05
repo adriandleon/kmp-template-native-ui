@@ -109,3 +109,16 @@
 "examples_panels_extra_body_format" = "Extra panel is showing more context for %@.";
 "examples_panels_extra_empty" = "Extra panel is closed.";
 "examples_panels_dismiss_extra_button" = "Close extra";
+"examples_generic_title" = "Generic navigation";
+"examples_generic_body" = "This area uses Decompose children for a custom navigation model with an arbitrary set of panes.";
+"examples_generic_active_format" = "Active pane: %@";
+"examples_generic_add_button" = "Add pane";
+"examples_generic_close_button" = "Close active";
+"examples_deeplink_title" = "Deep links";
+"examples_deeplink_body" = "These actions simulate platform links entering shared navigation and resolving to stack, slot, panels, or generic children.";
+"examples_deeplink_item_button" = "Item link";
+"examples_deeplink_panel_button" = "Panel link";
+"examples_deeplink_workspace_button" = "Pane link";
+"examples_deeplink_modal_button" = "Modal link";
+"examples_deeplink_empty" = "No link handled yet.";
+"examples_deeplink_status_format" = "Last link: %@ · handled: %@";

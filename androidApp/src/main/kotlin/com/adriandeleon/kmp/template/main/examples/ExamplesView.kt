@@ -109,6 +109,10 @@ private fun ExamplesListView(component: ExamplesComponent) {
             hasDetails = state.hasPanelDetails,
             hasExtra = state.hasPanelExtra,
         )
+
+        GenericNavigationShowcaseView(component = component, state = state)
+
+        DeepLinkShowcaseView(component = component, state = state)
     }
 }
 
@@ -216,6 +220,116 @@ private fun PanelsShowcaseView(
                 Text(stringResource(R.string.examples_panels_dismiss_extra_button))
             }
         }
+    }
+}
+
+@Composable
+private fun GenericNavigationShowcaseView(
+    component: ExamplesComponent,
+    state: ExamplesComponent.State,
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            text = stringResource(R.string.examples_generic_title),
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Text(
+            text = stringResource(R.string.examples_generic_body),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Text(
+            text =
+                stringResource(
+                    R.string.examples_generic_active_format,
+                    state.activeWorkspacePaneId.orEmpty(),
+                ),
+            style = MaterialTheme.typography.bodySmall,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            state.workspacePaneIds.forEach { paneId ->
+                OutlinedButton(
+                    onClick = { component.activateWorkspacePane(paneId) },
+                    modifier = Modifier.weight(1f),
+                ) {
+                    Text(paneId)
+                }
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                onClick = component::addWorkspacePane,
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_generic_add_button))
+            }
+            OutlinedButton(
+                onClick = { state.activeWorkspacePaneId?.let(component::closeWorkspacePane) },
+                enabled = state.activeWorkspacePaneId != null && state.workspacePaneIds.size > 1,
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_generic_close_button))
+            }
+        }
+    }
+}
+
+@Composable
+private fun DeepLinkShowcaseView(
+    component: ExamplesComponent,
+    state: ExamplesComponent.State,
+) {
+    val lastDeepLinkPath = state.lastDeepLinkPath
+
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        Text(
+            text = stringResource(R.string.examples_deeplink_title),
+            style = MaterialTheme.typography.titleLarge,
+        )
+        Text(
+            text = stringResource(R.string.examples_deeplink_body),
+            style = MaterialTheme.typography.bodyMedium,
+        )
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            Button(
+                onClick = { component.handleDeepLink("template://examples/item/sample-3") },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_deeplink_item_button))
+            }
+            OutlinedButton(
+                onClick = { component.handleDeepLink("template://examples/panel/sample-2") },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_deeplink_panel_button))
+            }
+        }
+        Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(
+                onClick = { component.handleDeepLink("template://examples/workspace/pane-2") },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_deeplink_workspace_button))
+            }
+            TextButton(
+                onClick = { component.handleDeepLink("template://examples/confirmation") },
+                modifier = Modifier.weight(1f),
+            ) {
+                Text(stringResource(R.string.examples_deeplink_modal_button))
+            }
+        }
+        Text(
+            text =
+                if (lastDeepLinkPath == null) {
+                    stringResource(R.string.examples_deeplink_empty)
+                } else {
+                    stringResource(
+                        R.string.examples_deeplink_status_format,
+                        lastDeepLinkPath,
+                        state.lastDeepLinkHandled.toString(),
+                    )
+                },
+            style = MaterialTheme.typography.bodySmall,
+        )
     }
 }
 

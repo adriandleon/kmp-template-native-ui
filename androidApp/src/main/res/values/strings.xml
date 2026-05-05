@@ -108,6 +108,19 @@
     <string name="examples_panels_extra_body_format">Extra panel is showing more context for %1$s.</string>
     <string name="examples_panels_extra_empty">Extra panel is closed.</string>
     <string name="examples_panels_dismiss_extra_button">Close extra</string>
+    <string name="examples_generic_title">Generic navigation</string>
+    <string name="examples_generic_body">This area uses Decompose children for a custom navigation model with an arbitrary set of panes.</string>
+    <string name="examples_generic_active_format">Active pane: %1$s</string>
+    <string name="examples_generic_add_button">Add pane</string>
+    <string name="examples_generic_close_button">Close active</string>
+    <string name="examples_deeplink_title">Deep links</string>
+    <string name="examples_deeplink_body">These actions simulate platform links entering shared navigation and resolving to stack, slot, panels, or generic children.</string>
+    <string name="examples_deeplink_item_button">Item link</string>
+    <string name="examples_deeplink_panel_button">Panel link</string>
+    <string name="examples_deeplink_workspace_button">Pane link</string>
+    <string name="examples_deeplink_modal_button">Modal link</string>
+    <string name="examples_deeplink_empty">No link handled yet.</string>
+    <string name="examples_deeplink_status_format">Last link: %1$s · handled: %2$s</string>
 
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
     <string name="tag_onboarding_screen" translatable="false">onboarding_screen</string>
