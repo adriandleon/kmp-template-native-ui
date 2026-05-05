@@ -1,9 +1,11 @@
 package com.adriandeleon.kmp.template.main
 
 import com.adriandeleon.kmp.template.common.util.testComponentContext
+import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
+import io.kotest.matchers.shouldNotBe
 
 class DefaultMainComponentTest :
     FunSpec({
@@ -51,6 +53,14 @@ class DefaultMainComponentTest :
 
             component.uiState.value.selectedPage shouldBe MainComponent.Page.Home
             component.pages.value.selectedIndex shouldBe 0
+        }
+
+        test("examples component remains available when another tab is selected") {
+            val component = mainComponent()
+
+            component.selectPage(MainComponent.Page.Settings)
+
+            shouldNotThrowAny { component.examples } shouldNotBe null
         }
     })
 

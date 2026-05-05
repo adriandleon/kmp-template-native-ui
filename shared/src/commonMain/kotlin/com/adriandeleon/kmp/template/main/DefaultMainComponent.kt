@@ -15,6 +15,7 @@ internal class DefaultMainComponent(componentContext: ComponentContext) :
     MainComponent, ComponentContext by componentContext {
 
     private val navigation = PagesNavigation<MainComponent.Page>()
+    private val examplesComponent = DefaultExamplesComponent(componentContext)
 
     override val pages: Value<ChildPages<MainComponent.Page, MainComponent.PageComponent>> =
         childPages(
@@ -24,11 +25,7 @@ internal class DefaultMainComponent(componentContext: ComponentContext) :
             childFactory = ::createPageComponent,
         )
 
-    override val examples: ExamplesComponent
-        get() =
-            (pages.value.items.first { it.configuration == MainComponent.Page.Examples }.instance
-                    as MainComponent.PageComponent.Examples)
-                .component
+    override val examples: ExamplesComponent = examplesComponent
 
     private val mutableUiState = MutableValue(pages.value.toUiState())
     override val uiState: Value<MainComponent.UiState> = mutableUiState
@@ -46,11 +43,10 @@ internal class DefaultMainComponent(componentContext: ComponentContext) :
 
     private fun createPageComponent(
         page: MainComponent.Page,
-        context: ComponentContext,
+        @Suppress("UNUSED_PARAMETER") context: ComponentContext,
     ): MainComponent.PageComponent =
         when (page) {
-            MainComponent.Page.Examples ->
-                MainComponent.PageComponent.Examples(DefaultExamplesComponent(context))
+            MainComponent.Page.Examples -> MainComponent.PageComponent.Examples(examplesComponent)
             else -> MainComponent.PageComponent.Generic(page)
         }
 
