@@ -27,7 +27,26 @@
     <string name="root_main_placeholder">Main</string>
     <string name="root_starting_placeholder">Starting</string>
 
+    <!-- Onboarding flow -->
+    <string name="onboarding_skip_button">Skip</string>
+    <string name="onboarding_previous_button">Previous</string>
+    <string name="onboarding_next_button">Next</string>
+    <string name="onboarding_finish_button">Finish</string>
+    <string name="onboarding_welcome_title">Welcome</string>
+    <string name="onboarding_welcome_body">Start with a shared flow that decides what the app shows first.</string>
+    <string name="onboarding_organize_title">Organize</string>
+    <string name="onboarding_organize_body">Keep page order and completion rules in shared Kotlin components.</string>
+    <string name="onboarding_customize_title">Customize</string>
+    <string name="onboarding_customize_body">Replace the copy and screens while preserving the Child Pages pattern.</string>
+
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
+    <string name="tag_onboarding_screen" translatable="false">onboarding_screen</string>
+    <string name="tag_onboarding_skip_button" translatable="false">onboarding_skip_button</string>
+    <string name="tag_onboarding_previous_button" translatable="false">onboarding_previous_button</string>
+    <string name="tag_onboarding_next_button" translatable="false">onboarding_next_button</string>
+    <string name="tag_onboarding_page_indicator" translatable="false">onboarding_page_indicator</string>
+    <string name="tag_onboarding_title" translatable="false">onboarding_title</string>
+    <string name="tag_onboarding_body" translatable="false">onboarding_body</string>
     <string name="tag_posts_loading" translatable="false">posts_loading</string>
     <string name="tag_posts_list" translatable="false">posts_list</string>
     <string name="tag_posts_item" translatable="false">posts_item</string>

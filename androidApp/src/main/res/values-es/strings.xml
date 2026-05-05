@@ -21,4 +21,16 @@
     <string name="root_auth_placeholder">Autenticación</string>
     <string name="root_main_placeholder">Principal</string>
     <string name="root_starting_placeholder">Iniciando</string>
+
+    <!-- Onboarding flow -->
+    <string name="onboarding_skip_button">Omitir</string>
+    <string name="onboarding_previous_button">Anterior</string>
+    <string name="onboarding_next_button">Siguiente</string>
+    <string name="onboarding_finish_button">Finalizar</string>
+    <string name="onboarding_welcome_title">Bienvenida</string>
+    <string name="onboarding_welcome_body">Comienza con un flujo compartido que decide qué muestra primero la app.</string>
+    <string name="onboarding_organize_title">Organiza</string>
+    <string name="onboarding_organize_body">Mantén el orden de páginas y las reglas de finalización en componentes Kotlin compartidos.</string>
+    <string name="onboarding_customize_title">Personaliza</string>
+    <string name="onboarding_customize_body">Reemplaza los textos y pantallas sin perder el patrón Child Pages.</string>
 </resources>

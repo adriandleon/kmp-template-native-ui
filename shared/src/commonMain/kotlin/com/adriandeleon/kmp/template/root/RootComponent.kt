@@ -1,5 +1,6 @@
 package com.adriandeleon.kmp.template.root
 
+import com.adriandeleon.kmp.template.onboarding.OnboardingComponent
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
@@ -31,9 +32,6 @@ interface RootComponent : BackHandlerOwner {
 
         data class Main(val component: MainComponent) : Child
     }
-
-    /** Placeholder for the onboarding flow component; later tasks replace it with the real flow. */
-    interface OnboardingComponent
 
     /**
      * Placeholder for the authentication flow component; later tasks replace it with the real flow.

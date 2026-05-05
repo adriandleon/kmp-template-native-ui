@@ -17,3 +17,14 @@
 "root_auth_placeholder" = "Autenticación";
 "root_main_placeholder" = "Principal";
 "root_starting_placeholder" = "Iniciando";
+
+"onboarding_skip_button" = "Omitir";
+"onboarding_previous_button" = "Anterior";
+"onboarding_next_button" = "Siguiente";
+"onboarding_finish_button" = "Finalizar";
+"onboarding_welcome_title" = "Bienvenida";
+"onboarding_welcome_body" = "Comienza con un flujo compartido que decide qué muestra primero la app.";
+"onboarding_organize_title" = "Organiza";
+"onboarding_organize_body" = "Mantén el orden de páginas y las reglas de finalización en componentes Kotlin compartidos.";
+"onboarding_customize_title" = "Personaliza";
+"onboarding_customize_body" = "Reemplaza los textos y pantallas sin perder el patrón Child Pages.";

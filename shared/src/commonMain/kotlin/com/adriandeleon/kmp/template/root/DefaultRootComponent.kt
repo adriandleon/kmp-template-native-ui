@@ -2,10 +2,11 @@ package com.adriandeleon.kmp.template.root
 
 import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.AppStateRepository
+import com.adriandeleon.kmp.template.onboarding.DefaultOnboardingComponent
+import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output
 import com.adriandeleon.kmp.template.root.RootComponent.AuthComponent
 import com.adriandeleon.kmp.template.root.RootComponent.Child
 import com.adriandeleon.kmp.template.root.RootComponent.MainComponent
-import com.adriandeleon.kmp.template.root.RootComponent.OnboardingComponent
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
@@ -52,10 +53,22 @@ class DefaultRootComponent(
 
     private fun createChild(configuration: Configuration, context: ComponentContext): Child =
         when (configuration) {
-            is Configuration.Onboarding -> Child.Onboarding(DefaultOnboardingComponent(context))
+            is Configuration.Onboarding -> Child.Onboarding(onboardingComponent(context))
             is Configuration.Auth -> Child.Auth(DefaultAuthComponent(context))
             is Configuration.Main -> Child.Main(DefaultMainComponent(context))
         }
+
+    private fun onboardingComponent(componentContext: ComponentContext) =
+        DefaultOnboardingComponent(
+            componentContext = componentContext,
+            onOutput = ::onOnboardingOutput,
+        )
+
+    private fun onOnboardingOutput(output: Output) {
+        when (output) {
+            Output.Completed -> completeOnboarding()
+        }
+    }
 
     override fun completeOnboarding() {
         stateRepository.setHasSeenOnboarding(true)
@@ -101,9 +114,6 @@ class DefaultRootComponent(
 
         @Serializable data object Main : Configuration
     }
-
-    private class DefaultOnboardingComponent(componentContext: ComponentContext) :
-        OnboardingComponent, ComponentContext by componentContext
 
     private class DefaultAuthComponent(componentContext: ComponentContext) :
         AuthComponent, ComponentContext by componentContext

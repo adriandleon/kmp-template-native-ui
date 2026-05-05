@@ -28,3 +28,15 @@
 "root_auth_placeholder" = "Authentication";
 "root_main_placeholder" = "Main";
 "root_starting_placeholder" = "Starting";
+
+// Onboarding flow
+"onboarding_skip_button" = "Skip";
+"onboarding_previous_button" = "Previous";
+"onboarding_next_button" = "Next";
+"onboarding_finish_button" = "Finish";
+"onboarding_welcome_title" = "Welcome";
+"onboarding_welcome_body" = "Start with a shared flow that decides what the app shows first.";
+"onboarding_organize_title" = "Organize";
+"onboarding_organize_body" = "Keep page order and completion rules in shared Kotlin components.";
+"onboarding_customize_title" = "Customize";
+"onboarding_customize_body" = "Replace the copy and screens while preserving the Child Pages pattern.";

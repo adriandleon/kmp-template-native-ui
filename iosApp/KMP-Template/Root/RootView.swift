@@ -31,10 +31,9 @@ private struct RootSlotView: View {
 
     var body: some View {
         VStack {
-            // Temporary placeholders until the platform UI flow tasks provide real screens.
             switch slotValue.child?.instance {
-            case is RootComponentChildOnboarding:
-                Text(NSLocalizedString("root_onboarding_placeholder", comment: ""))
+            case let child as RootComponentChildOnboarding:
+                OnboardingView(child.component)
             case is RootComponentChildAuth:
                 Text(NSLocalizedString("root_auth_placeholder", comment: ""))
             case is RootComponentChildMain:
