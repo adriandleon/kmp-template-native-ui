@@ -10,10 +10,12 @@ import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,7 +38,12 @@ fun MainView(component: MainComponent, modifier: Modifier = Modifier) {
                     NavigationBarItem(
                         selected = uiState.selectedPage == page,
                         onClick = { component.selectPage(page) },
-                        icon = { Text(page.iconLabel()) },
+                        icon = {
+                            Icon(
+                                painter = painterResource(page.iconRes()),
+                                contentDescription = null,
+                            )
+                        },
                         label = { Text(page.tabLabel()) },
                     )
                 }
@@ -107,12 +114,12 @@ private fun MainComponent.Page.body(): String =
         MainComponent.Page.Settings -> stringResource(R.string.main_settings_body)
     }
 
-private fun MainComponent.Page.iconLabel(): String =
+private fun MainComponent.Page.iconRes(): Int =
     when (this) {
-        MainComponent.Page.Home -> "H"
-        MainComponent.Page.Examples -> "E"
-        MainComponent.Page.Adaptive -> "A"
-        MainComponent.Page.Settings -> "S"
+        MainComponent.Page.Home -> R.drawable.ic_tab_home
+        MainComponent.Page.Examples -> R.drawable.ic_tab_examples
+        MainComponent.Page.Adaptive -> R.drawable.ic_tab_adaptive
+        MainComponent.Page.Settings -> R.drawable.ic_tab_settings
     }
 
 @Preview(name = "Main - Light - EN", locale = "en")
