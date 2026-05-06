@@ -42,7 +42,7 @@ fun ExamplesView(component: ExamplesComponent, modifier: Modifier = Modifier) {
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(24.dp),
+                .padding(start = 24.dp, top = 24.dp, end = 24.dp),
     ) { child ->
         when (val instance = child.instance) {
             is ExamplesComponent.Child.List -> ExamplesListView(component)
