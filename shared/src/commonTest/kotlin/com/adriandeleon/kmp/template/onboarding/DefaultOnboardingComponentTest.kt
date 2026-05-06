@@ -48,6 +48,29 @@ class DefaultOnboardingComponentTest :
             component.pages.value.selectedIndex shouldBe 0
         }
 
+        test("select page by index updates selected page") {
+            val component = onboardingComponent()
+
+            component.selectPage(2)
+
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Customize
+            component.pages.value.selectedIndex shouldBe 2
+        }
+
+        test("select page coerces out of range indexes") {
+            val component = onboardingComponent()
+
+            component.selectPage(99)
+
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Customize
+            component.pages.value.selectedIndex shouldBe 2
+
+            component.selectPage(-1)
+
+            component.uiState.value.selectedPage shouldBe OnboardingComponent.Page.Welcome
+            component.pages.value.selectedIndex shouldBe 0
+        }
+
         test("next remains on the last page") {
             val component = onboardingComponent()
 

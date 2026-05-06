@@ -1,6 +1,7 @@
 package com.adriandeleon.kmp.template.onboarding
 
 import android.content.res.Configuration
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +12,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
@@ -18,7 +21,9 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -29,10 +34,29 @@ import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
 import com.adriandeleon.kmp.template.theme.TemplateTheme
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
+import kotlinx.coroutines.flow.distinctUntilChanged
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun OnboardingView(component: OnboardingComponent, modifier: Modifier = Modifier) {
     val uiState by component.uiState.subscribeAsState()
+    val pagerState = rememberPagerState(pageCount = { uiState.pageCount })
+
+    LaunchedEffect(uiState.selectedIndex) {
+        if (pagerState.currentPage != uiState.selectedIndex) {
+            pagerState.animateScrollToPage(uiState.selectedIndex)
+        }
+    }
+
+    LaunchedEffect(pagerState) {
+        snapshotFlow { pagerState.currentPage }
+            .distinctUntilChanged()
+            .collect { page ->
+                if (page != component.uiState.value.selectedIndex) {
+                    component.selectPage(page)
+                }
+            }
+    }
 
     Column(
         modifier =
@@ -51,7 +75,15 @@ fun OnboardingView(component: OnboardingComponent, modifier: Modifier = Modifier
             Text(stringResource(R.string.onboarding_skip_button))
         }
 
-        OnboardingPageContent(uiState.selectedPage, Modifier.weight(1f))
+        HorizontalPager(
+            state = pagerState,
+            modifier = Modifier.fillMaxWidth().weight(1f),
+        ) { pageIndex ->
+            OnboardingPageContent(
+                page = OnboardingComponent.Page.entries[pageIndex],
+                modifier = Modifier.fillMaxSize(),
+            )
+        }
 
         OnboardingControls(uiState = uiState, component = component)
     }
