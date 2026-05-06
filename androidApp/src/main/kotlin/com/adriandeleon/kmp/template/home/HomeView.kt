@@ -25,7 +25,6 @@ fun HomeView(
         verticalArrangement = Arrangement.Center,
         modifier = modifier.fillMaxSize().padding(32.dp),
     ) {
-        Text(uiState.title, fontSize = 24.sp)
-
+        Text(uiState.title, fontSize = 24.sp, )
     }
 }

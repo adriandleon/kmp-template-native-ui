@@ -36,7 +36,7 @@ struct PostsView: View {
 
 private struct PostsLoadingView: View {
     var body: some View {
-        ProgressView()
+        ProgressView("Loading posts…")
             .frame(maxWidth: .infinity, maxHeight: .infinity)
             .accessibilityIdentifier("posts_loading")
     }
@@ -57,7 +57,7 @@ private struct PostsListView: View {
             .accessibilityIdentifier("posts_item_\(post.id)")
         }
         .accessibilityIdentifier("posts_list")
-        .navigationTitle(NSLocalizedString("posts_screen_title", comment: ""))
+        .navigationTitle("Posts")
     }
 }
 
@@ -69,7 +69,7 @@ private struct PostsErrorView: View {
         VStack(spacing: 16) {
             Text(message)
                 .multilineTextAlignment(.center)
-            Button(NSLocalizedString("posts_retry_button", comment: ""), action: onRetry)
+            Button("Retry", action: onRetry)
                 .accessibilityIdentifier("posts_retry_button")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

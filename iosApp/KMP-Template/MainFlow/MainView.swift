@@ -29,19 +29,19 @@ struct MainView: View {
         ) {
             MainPageView(page: .home)
                 .tag(0)
-                .tabItem { Label(NSLocalizedString("main_home_tab", comment: ""), systemImage: "house") }
+                .tabItem { Label("Home", systemImage: "house") }
 
             ExamplesView(component.examples)
                 .tag(1)
-                .tabItem { Label(NSLocalizedString("main_examples_tab", comment: ""), systemImage: "square.stack.3d.up") }
+                .tabItem { Label("Examples", systemImage: "square.stack.3d.up") }
 
             MainPageView(page: .adaptive)
                 .tag(2)
-                .tabItem { Label(NSLocalizedString("main_adaptive_tab", comment: ""), systemImage: "sidebar.left") }
+                .tabItem { Label("Adaptive", systemImage: "sidebar.left") }
 
             MainPageView(page: .settings)
                 .tag(3)
-                .tabItem { Label(NSLocalizedString("main_settings_tab", comment: ""), systemImage: "gearshape") }
+                .tabItem { Label("Settings", systemImage: "gearshape") }
         }
         .accessibilityIdentifier("main_screen")
     }
@@ -70,13 +70,13 @@ private struct MainPageView: View {
 private func title(for page: MainComponentPage) -> String {
     switch page {
     case .home:
-        return NSLocalizedString("main_home_title", comment: "")
+        return String(localized: "Home")
     case .examples:
-        return NSLocalizedString("main_examples_title", comment: "")
+        return String(localized: "Examples")
     case .adaptive:
-        return NSLocalizedString("main_adaptive_title", comment: "")
+        return String(localized: "Adaptive")
     case .settings:
-        return NSLocalizedString("main_settings_title", comment: "")
+        return String(localized: "Settings")
     default:
         return ""
     }
@@ -85,13 +85,13 @@ private func title(for page: MainComponentPage) -> String {
 private func message(for page: MainComponentPage) -> String {
     switch page {
     case .home:
-        return NSLocalizedString("main_home_body", comment: "")
+        return String(localized: "This tab is the signed-in starting point for app-specific content.")
     case .examples:
-        return NSLocalizedString("main_examples_body", comment: "")
+        return String(localized: "This tab will host stack, slot, and child item navigation examples.")
     case .adaptive:
-        return NSLocalizedString("main_adaptive_body", comment: "")
+        return String(localized: "This tab will host the Child Panels adaptive layout example.")
     case .settings:
-        return NSLocalizedString("main_settings_body", comment: "")
+        return String(localized: "This tab is the template place for account, preferences, and reset actions.")
     default:
         return ""
     }

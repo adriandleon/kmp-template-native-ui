@@ -39,7 +39,7 @@ private struct RootSlotView: View {
             case let child as RootComponentChildMain:
                 MainView(child.component)
             default:
-                Text(NSLocalizedString("root_starting_placeholder", comment: ""))
+                Text("Starting")
             }
         }
     }

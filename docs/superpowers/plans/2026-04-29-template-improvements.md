@@ -6,7 +6,7 @@
 
 **Architecture:** Infrastructure-first — fixes → Room → localization → Posts feature → UI tests. All shared business logic is `internal`; only the Decompose component interface, `PostsUiState`, and `PostUiModel` are public. Components are created by Koin via `parametersOf(ComponentContext)`. `PreviewComponent` classes live in `shared/commonMain` as the single source of truth for previews and tests.
 
-**Tech Stack:** Kotlin 2.3.20, KMP, Compose Multiplatform, SwiftUI, Decompose 3.5, MVIKotlin 4.3, Koin 4.2, Room 2.7 (KMP), Ktor 3.4, Kotest 6.1, Mokkery 3.3, Swift Testing, ViewInspector
+**Tech Stack:** Kotlin 2.3.21, KMP, Compose Multiplatform, SwiftUI, Decompose 3.5.0, MVIKotlin 4.4.0, Koin 4.2.1, Room 2.8.4 (KMP), Ktor 3.4.3, Kotest 6.1.11, Mokkery 3.3.0, Swift Testing, ViewInspector
 
 **Note on git:** Commits are left to the developer's discretion.
 
@@ -45,9 +45,7 @@
 | Create | `androidApp/src/main/res/values/strings.xml` |
 | Create | `androidApp/src/main/res/values-es-r419/strings.xml` |
 | Create | `androidApp/src/main/res/values-pt-rBR/strings.xml` |
-| Create | `iosApp/KMP-Template/en.lproj/Localizable.strings` |
-| Create | `iosApp/KMP-Template/es-419.lproj/Localizable.strings` |
-| Create | `iosApp/KMP-Template/pt-BR.lproj/Localizable.strings` |
+| Create | `iosApp/KMP-Template/Localizable.xcstrings` |
 
 ### Phase 4 — Posts Feature
 | Action | File |
@@ -701,80 +699,34 @@ Expected: `BUILD SUCCESSFUL`
 
 ---
 
-### Task 10: iOS localization files
+### Task 10: iOS string catalog
 
 **Files:**
-- Create: `iosApp/KMP-Template/en.lproj/Localizable.strings`
-- Create: `iosApp/KMP-Template/es-419.lproj/Localizable.strings`
-- Create: `iosApp/KMP-Template/pt-BR.lproj/Localizable.strings`
+- Create: `iosApp/KMP-Template/Localizable.xcstrings`
 
-Note: After creating these files, add them to the Xcode project target by opening `iosApp/KMP-Template.xcodeproj` in Xcode, selecting each `.lproj` folder, and adding the `Localizable.strings` file to the `KMP-Template` target.
+Note: String catalogs are the modern Xcode localization format. Keep all iOS app translations in a single `Localizable.xcstrings` file and use SwiftUI localized string literals or `String(localized:)` in code.
 
-- [ ] **Step 1: Create English strings**
+- [ ] **Step 1: Create the catalog**
 
 ```
-// iosApp/KMP-Template/en.lproj/Localizable.strings
-// English (default locale — always required as fallback)
-//
-// Localization note:
-// - en.lproj is the fallback for all unsupported locales.
-// - To add a language: duplicate this folder, change the locale code (e.g. fr.lproj/).
-// - To remove a language: delete its folder.
-// - To support only one language: delete all non-English folders.
-// - Always use NSLocalizedString("key", comment: "") in Swift code.
-// - See: https://developer.apple.com/documentation/xcode/localization
-
-// App
-"app_name" = "KMP Template";
-
-// Posts screen
-"posts_screen_title" = "Posts";
-"posts_loading_description" = "Loading posts…";
-"posts_empty_message" = "No posts available.";
-"posts_error_message" = "Something went wrong. Please try again.";
-"posts_retry_button" = "Retry";
-
-// Home screen
-"home_screen_title" = "Home Screen";
-"home_log_button" = "Log Message";
+iosApp/KMP-Template/Localizable.xcstrings
 ```
 
-- [ ] **Step 2: Create Spanish (Latin America) strings**
+- [ ] **Step 2: Add locales**
 
 ```
-// iosApp/KMP-Template/es-419.lproj/Localizable.strings
-// Spanish (Latin America) — es-419
-// Fallback: en.lproj (English)
-
-"app_name" = "KMP Template";
-
-"posts_screen_title" = "Publicaciones";
-"posts_loading_description" = "Cargando publicaciones…";
-"posts_empty_message" = "No hay publicaciones disponibles.";
-"posts_error_message" = "Algo salió mal. Por favor intenta de nuevo.";
-"posts_retry_button" = "Reintentar";
-
-"home_screen_title" = "Pantalla de Inicio";
-"home_log_button" = "Registrar Mensaje";
+Locales:
+- en
+- es-419
+- pt-BR
 ```
 
-- [ ] **Step 3: Create Portuguese (Brazil) strings**
+- [ ] **Step 3: Use modern Swift localization APIs**
 
 ```
-// iosApp/KMP-Template/pt-BR.lproj/Localizable.strings
-// Portuguese (Brazil) — pt-BR
-// Fallback: en.lproj (English)
-
-"app_name" = "KMP Template";
-
-"posts_screen_title" = "Publicações";
-"posts_loading_description" = "Carregando publicações…";
-"posts_empty_message" = "Nenhuma publicação disponível.";
-"posts_error_message" = "Algo deu errado. Por favor, tente novamente.";
-"posts_retry_button" = "Tentar novamente";
-
-"home_screen_title" = "Tela Inicial";
-"home_log_button" = "Registrar Mensagem";
+Button("Retry", action: onRetry)
+Text("Posts")
+String(localized: "Sign in")
 ```
 
 ---
@@ -2038,7 +1990,7 @@ private struct PostsListView: View {
             .accessibilityIdentifier("posts_item_\(post.id)")
         }
         .accessibilityIdentifier("posts_list")
-        .navigationTitle(NSLocalizedString("posts_screen_title", comment: ""))
+        .navigationTitle("Posts")
     }
 }
 
@@ -2050,7 +2002,7 @@ private struct PostsErrorView: View {
         VStack(spacing: 16) {
             Text(message)
                 .multilineTextAlignment(.center)
-            Button(NSLocalizedString("posts_retry_button", comment: ""), action: onRetry)
+            Button("Retry", action: onRetry)
                 .accessibilityIdentifier("posts_retry_button")
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

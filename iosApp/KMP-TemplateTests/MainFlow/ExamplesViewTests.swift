@@ -49,7 +49,7 @@ struct ExamplesViewTests {
         try modalButton.tap()
 
         let confirmationTitle = try sut.inspect()
-            .find(text: NSLocalizedString("examples_confirmation_title", comment: ""))
+            .find(text: "Slot modal")
 
         #expect(!confirmationTitle.isHidden())
     }

@@ -124,7 +124,7 @@ interface AnalyticsEvent {
 ```toml
 # In gradle/libs.versions.toml
 [versions]
-firebase-gitlive-sdk = "2.1.0"
+firebase-gitlive-sdk = "2.4.0"
 
 [libraries]
 gitlive-firebase-analytics = { module = "dev.gitlive:firebase-analytics", version.ref = "firebase-gitlive-sdk" }

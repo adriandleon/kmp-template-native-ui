@@ -68,7 +68,7 @@ pre-commit install
 ## Code Style & Conventions
 
 ### Kotlin Code Style (Shared Module)
-- **Language**: Kotlin 2.2.21 with strict mode
+- **Language**: Kotlin 2.3.21 with strict mode
 - **Formatting**: Use `ktfmt` with Kotlin style guide
 - **Linting**: Detekt with Compose rules
 - **Imports**: Single quotes, trailing commas, remove unused imports
@@ -103,8 +103,8 @@ pre-commit install
 - **Architecture**: MVVM with `@Observable` view models
 - **Navigation**: Decompose-based navigation
 - **State Management**: Use `@Observable` for view models, not `@State` for observation
-- **Internationalization**: Extract ALL text content to `Localizable.strings` files
-- **Supported Languages**: English (en), Spanish Latin America (es-r419), Portuguese Brazil (pt-rBR)
+- **Internationalization**: Extract ALL text content to `Localizable.xcstrings`
+- **Supported Languages**: English (en), Spanish Latin America (es-419), Portuguese Brazil (pt-BR)
 - **Previews**: Every SwiftUI View MUST have at least one `#Preview` macro
 - **Dependency Management**: Use Swift Package Manager (SPM) as primary tool
 
@@ -386,7 +386,7 @@ Then verify these constraints:
 - **State**: Use `@Observable` view models
 - **Testing**: Unit tests in `test`
 - **Previews**: Every composable MUST have `@Preview` annotations
-- **Multi-Locale Previews**: Create previews for all supported languages (en, es-r419, pt-rBR)
+- **Multi-Locale Previews**: Create previews for all supported languages (en, es-419, pt-BR)
 - **Theme Variations**: Include both light and dark theme previews
 - **String Resources**: Extract ALL text content to `strings.xml` resource files
 - **Accessibility**: Always provide `contentDescription` for non-text UI elements
@@ -399,9 +399,9 @@ Then verify these constraints:
 - **State**: Use `@Observable` for view models, not `@State` for observation
 - **Testing**: Unit tests in iOS test target
 - **Previews**: Every SwiftUI View MUST have at least one `#Preview` macro
-- **Multi-Locale Previews**: Create previews for all supported languages (en, es-r419, pt-rBR)
+- **Multi-Locale Previews**: Create previews for all supported languages (en, es-419, pt-BR)
 - **Theme Variations**: Include both light and dark mode previews
-- **String Resources**: Extract ALL text content to `Localizable.strings` files
+- **String Resources**: Extract ALL text content to `Localizable.xcstrings`
 - **Accessibility**: Use `accessibilityLabel` and `accessibilityHint` with localized strings
 - **Dependency Management**: Use Swift Package Manager (SPM) as primary tool
 - **Performance**: Use `LazyVStack`, `LazyHStack`, or `LazyVGrid` for lazy loading
@@ -438,7 +438,7 @@ CONFIGCAT_IOS_TEST_KEY=your_ios_test_key
 
 ### Android Compose Previews
 - **Mandatory**: Every composable function MUST have at least one `@Preview` annotation
-- **Multi-Locale**: Create previews for all supported languages (en, es-r419, pt-rBR)
+- **Multi-Locale**: Create previews for all supported languages (en, es-419, pt-BR)
 - **Theme Variations**: Include both light and dark theme previews
 - **Preview Structure**:
   ```kotlin
@@ -472,12 +472,12 @@ CONFIGCAT_IOS_TEST_KEY=your_ios_test_key
   
   #Preview("Login Screen - Spanish") {
       LoginScreen()
-          .environment(\.locale, .init(identifier: "es-r419"))
+          .environment(\.locale, .init(identifier: "es-419"))
   }
   
   #Preview("Login Screen - Portuguese") {
       LoginScreen()
-          .environment(\.locale, .init(identifier: "pt-rBR"))
+          .environment(\.locale, .init(identifier: "pt-BR"))
   }
   ```
 
@@ -496,16 +496,14 @@ CONFIGCAT_IOS_TEST_KEY=your_ios_test_key
 - **Naming Convention**: Use descriptive, hierarchical keys (e.g., `feature_login_button_text`, `error_network_unavailable`)
 
 ### iOS Localization
-- **String Resources**: Extract ALL text content to `Localizable.strings` files
+- **String Resources**: Extract ALL text content to `Localizable.xcstrings`
 - **Resource Structure**:
   ```
   iosApp/
-  ├── en.lproj/Localizable.strings     # English (default)
-  ├── es-r419.lproj/Localizable.strings # Spanish Latin America
-  └── pt-rBR.lproj/Localizable.strings  # Portuguese Brazil
+  └── KMP-Template/Localizable.xcstrings
   ```
 - **Content Types to Localize**: UI labels, buttons, error messages, accessibility labels/hints, placeholders, tooltips, navigation labels, form validation messages, alert and action sheet texts
-- **Implementation**: Always use `NSLocalizedString(key, comment: "")` for text
+- **Implementation**: Prefer SwiftUI localized string literals and `String(localized:)`
 
 ## Common Tasks
 

@@ -26,7 +26,7 @@ struct OnboardingView: View {
         VStack(spacing: 24) {
             HStack {
                 Spacer()
-                Button(NSLocalizedString("onboarding_skip_button", comment: ""), action: component.skip)
+                Button("Skip", action: component.skip)
                     .accessibilityIdentifier("onboarding_skip_button")
             }
 
@@ -59,19 +59,15 @@ struct OnboardingView: View {
             .accessibilityIdentifier("onboarding_page_indicator")
 
             HStack(spacing: 12) {
-                Button(NSLocalizedString("onboarding_previous_button", comment: ""), action: component.previous)
+                Button("Previous", action: component.previous)
                     .buttonStyle(.bordered)
                     .disabled(!state.canGoPrevious)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("onboarding_previous_button")
 
-                Button(
-                    NSLocalizedString(
-                        state.isLastPage ? "onboarding_finish_button" : "onboarding_next_button",
-                        comment: ""
-                    ),
-                    action: component.finish
-                )
+                Button(action: component.finish) {
+                    Text(state.isLastPage ? "Finish" : "Next")
+                }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)
                 .accessibilityIdentifier("onboarding_next_button")
@@ -83,27 +79,27 @@ struct OnboardingView: View {
     }
 }
 
-private func title(for page: OnboardingComponentPage) -> String {
+private func title(for page: OnboardingComponentPage) -> LocalizedStringResource {
     switch page {
     case .welcome:
-        return NSLocalizedString("onboarding_welcome_title", comment: "")
+        return "Welcome"
     case .organize:
-        return NSLocalizedString("onboarding_organize_title", comment: "")
+        return "Organize"
     case .customize:
-        return NSLocalizedString("onboarding_customize_title", comment: "")
+        return "Customize"
     default:
         return ""
     }
 }
 
-private func message(for page: OnboardingComponentPage) -> String {
+private func message(for page: OnboardingComponentPage) -> LocalizedStringResource {
     switch page {
     case .welcome:
-        return NSLocalizedString("onboarding_welcome_body", comment: "")
+        return "Start with a shared flow that decides what the app shows first."
     case .organize:
-        return NSLocalizedString("onboarding_organize_body", comment: "")
+        return "Keep page order and completion rules in shared Kotlin components."
     case .customize:
-        return NSLocalizedString("onboarding_customize_body", comment: "")
+        return "Replace the copy and screens while preserving the Child Pages pattern."
     default:
         return ""
     }

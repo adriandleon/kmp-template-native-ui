@@ -13,7 +13,7 @@ A structured set of improvements to the KMP template across five areas, executed
 **Improvement areas (in execution order):**
 1. Quick build fixes
 2. Room KMP integration (Koin-provided, platform-specific builders)
-3. Localization scaffold (en, es-r419, pt-rBR on Android and iOS)
+3. Localization scaffold (en, es-r419, pt-rBR on Android; en, es-419, pt-BR on iOS)
 4. Example feature — Posts (full end-to-end with strict API boundary)
 5. UI tests — Android Robot pattern + iOS Swift Testing
 
@@ -86,7 +86,7 @@ echo "$1" | tr '.' '\n' | awk '{lines[NR]=$0} END {for(i=NR;i>=1;i--) printf "%s
 
 ## Section 2: Room KMP Integration
 
-Room 2.7.0+ has official KMP support. All Room code lives in `shared` and is `internal`.
+Room 2.8.4+ has official KMP support. All Room code lives in `shared` and is `internal`.
 
 ### 2.1 Version catalog additions
 
@@ -194,22 +194,13 @@ Header comment in each file:
 
 ### 3.2 iOS
 
-Three `.lproj` directories under `iosApp/KMP-Template/`:
+One string catalog under `iosApp/KMP-Template/`:
 
 ```
-en.lproj/Localizable.strings
-es-419.lproj/Localizable.strings
-pt-BR.lproj/Localizable.strings
+Localizable.xcstrings
 ```
 
-Each file includes the same Posts feature strings. Header comment:
-```
-// Localization note:
-// - en.lproj is the fallback for all unsupported locales.
-// - To add a language: duplicate this folder and change the locale code (e.g. fr.lproj/).
-// - To remove a language: delete its folder.
-// - To add more languages: see https://developer.apple.com/documentation/xcode/localization
-```
+The catalog contains English source strings plus Spanish (Latin America) and Portuguese (Brazil) localizations. New text should be added to the catalog and consumed through SwiftUI localized string literals or `String(localized:)`.
 
 ---
 

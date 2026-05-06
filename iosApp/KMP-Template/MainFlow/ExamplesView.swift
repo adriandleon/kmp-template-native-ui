@@ -65,20 +65,20 @@ private struct ExamplesListView: View {
 
         ScrollView {
             VStack(alignment: .leading, spacing: 16) {
-                Text(NSLocalizedString("examples_title", comment: ""))
+                Text("Navigation examples")
                     .font(.title2)
                     .fontWeight(.semibold)
 
-                Text(NSLocalizedString("examples_body", comment: ""))
+                Text("This screen demonstrates stack, slot, and child item navigation in one neutral flow.")
                     .font(.body)
                     .foregroundStyle(.secondary)
 
                 HStack(spacing: 12) {
-                    Button(NSLocalizedString("examples_add_item_button", comment: ""), action: component.addItem)
+                    Button("Add item", action: component.addItem)
                         .buttonStyle(.borderedProminent)
                         .accessibilityIdentifier("examples_add_button")
 
-                    Button(NSLocalizedString("examples_show_modal_button", comment: ""), action: component.showConfirmation)
+                    Button("Show modal", action: component.showConfirmation)
                         .buttonStyle(.bordered)
                         .accessibilityIdentifier("examples_modal_button")
                 }
@@ -134,35 +134,24 @@ private struct SampleItemRow: View {
         let state = uiStateObserver.value
 
         VStack(alignment: .leading, spacing: 8) {
-            Text(
-                String(
-                    format: NSLocalizedString("examples_item_title_format", comment: ""),
-                    state.title,
-                    state.count
-                )
-            )
+            Text(localizedFormat("%@ · count %lld", state.title, Int64(state.count)))
             .font(.headline)
 
-            Text(
-                NSLocalizedString(
-                    isSelected ? "examples_item_selected" : "examples_item_not_selected",
-                    comment: ""
-                )
-            )
+            Text(isSelected ? "Selected" : "Not selected")
             .font(.caption)
             .foregroundStyle(.secondary)
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_select_item_button", comment: ""), action: onSelect)
+                Button("Select", action: onSelect)
                     .buttonStyle(.bordered)
-                Button(NSLocalizedString("examples_increment_item_button", comment: ""), action: component.increment)
+                Button("Increment", action: component.increment)
                     .buttonStyle(.bordered)
             }
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_open_detail_button", comment: ""), action: onOpenDetail)
+                Button("Open detail", action: onOpenDetail)
                     .buttonStyle(.borderedProminent)
-                Button(NSLocalizedString("examples_remove_item_button", comment: ""), action: onRemove)
+                Button("Remove", action: onRemove)
                     .buttonStyle(.plain)
             }
         }
@@ -181,49 +170,44 @@ private struct PanelsShowcaseView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("examples_panels_title", comment: ""))
+            Text("Panels")
                 .font(.title3)
                 .fontWeight(.semibold)
 
-            Text(NSLocalizedString("examples_panels_body", comment: ""))
+            Text("This area demonstrates one main panel with optional details and extra panels.")
                 .font(.body)
                 .foregroundStyle(.secondary)
 
-            Text(
-                String(
-                    format: NSLocalizedString("examples_panels_mode_format", comment: ""),
-                    state.panelsMode.name
-                )
-            )
+            Text(localizedFormat("Mode: %@", localizedPanelsModeName(state.panelsMode.name)))
             .font(.caption)
             .foregroundStyle(.secondary)
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_panels_single_mode", comment: "")) {
+                Button("Single") {
                     component.setPanelsMode(mode: .single)
                 }
                 .buttonStyle(.bordered)
 
-                Button(NSLocalizedString("examples_panels_dual_mode", comment: "")) {
+                Button("Dual") {
                     component.setPanelsMode(mode: .dual)
                 }
                 .buttonStyle(.bordered)
 
-                Button(NSLocalizedString("examples_panels_triple_mode", comment: "")) {
+                Button("Triple") {
                     component.setPanelsMode(mode: .triple)
                 }
                 .buttonStyle(.bordered)
             }
 
-            Text(NSLocalizedString("examples_panels_main_title", comment: ""))
+            Text("Main panel")
                 .font(.headline)
 
-            Text(NSLocalizedString("examples_panels_main_body", comment: ""))
+            Text("The main panel remains the stable entry point for selecting a child.")
                 .font(.caption)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_panels_open_details_button", comment: "")) {
+                Button("Open details") {
                     if let selectedItemId {
                         component.openPanelDetails(itemId: selectedItemId)
                     }
@@ -231,7 +215,7 @@ private struct PanelsShowcaseView: View {
                 .buttonStyle(.borderedProminent)
                 .disabled(selectedItemId == nil)
 
-                Button(NSLocalizedString("examples_panels_open_extra_button", comment: "")) {
+                Button("Open extra") {
                     if let selectedItemId {
                         component.openPanelExtra(itemId: selectedItemId)
                     }
@@ -242,15 +226,15 @@ private struct PanelsShowcaseView: View {
 
             Text(panelText(
                 isVisible: state.hasPanelDetails,
-                formatKey: "examples_panels_details_body_format",
-                emptyKey: "examples_panels_details_empty"
+                format: "Details panel is showing %@.",
+                empty: "Details panel is closed."
             ))
             .font(.caption)
             .foregroundStyle(.secondary)
 
             if state.hasPanelDetails {
                 Button(
-                    NSLocalizedString("examples_panels_dismiss_details_button", comment: ""),
+                    "Close details",
                     action: component.dismissPanelDetails
                 )
                 .buttonStyle(.plain)
@@ -258,15 +242,15 @@ private struct PanelsShowcaseView: View {
 
             Text(panelText(
                 isVisible: state.hasPanelExtra,
-                formatKey: "examples_panels_extra_body_format",
-                emptyKey: "examples_panels_extra_empty"
+                format: "Extra panel is showing more context for %@.",
+                empty: "Extra panel is closed."
             ))
             .font(.caption)
             .foregroundStyle(.secondary)
 
             if state.hasPanelExtra {
                 Button(
-                    NSLocalizedString("examples_panels_dismiss_extra_button", comment: ""),
+                    "Close extra",
                     action: component.dismissPanelExtra
                 )
                 .buttonStyle(.plain)
@@ -274,15 +258,16 @@ private struct PanelsShowcaseView: View {
         }
     }
 
-    private func panelText(isVisible: Bool, formatKey: String, emptyKey: String) -> String {
+    private func panelText(
+        isVisible: Bool,
+        format: LocalizedStringResource,
+        empty: LocalizedStringResource,
+    ) -> String {
         if isVisible {
-            return String(
-                format: NSLocalizedString(formatKey, comment: ""),
-                state.panelItemId ?? ""
-            )
+            return localizedFormat(format, state.panelItemId ?? "")
         }
 
-        return NSLocalizedString(emptyKey, comment: "")
+        return String(localized: empty)
     }
 }
 
@@ -292,20 +277,15 @@ private struct GenericNavigationShowcaseView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("examples_generic_title", comment: ""))
+            Text("Generic navigation")
                 .font(.title3)
                 .fontWeight(.semibold)
 
-            Text(NSLocalizedString("examples_generic_body", comment: ""))
+            Text("This area uses Decompose children for a custom navigation model with an arbitrary set of panes.")
                 .font(.body)
                 .foregroundStyle(.secondary)
 
-            Text(
-                String(
-                    format: NSLocalizedString("examples_generic_active_format", comment: ""),
-                    state.activeWorkspacePaneId ?? ""
-                )
-            )
+            Text(localizedFormat("Active pane: %@", state.activeWorkspacePaneId ?? ""))
             .font(.caption)
             .foregroundStyle(.secondary)
 
@@ -319,10 +299,10 @@ private struct GenericNavigationShowcaseView: View {
             }
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_generic_add_button", comment: ""), action: component.addWorkspacePane)
+                Button("Add pane", action: component.addWorkspacePane)
                     .buttonStyle(.borderedProminent)
 
-                Button(NSLocalizedString("examples_generic_close_button", comment: "")) {
+                Button("Close active") {
                     if let activePaneId = state.activeWorkspacePaneId {
                         component.closeWorkspacePane(paneId: activePaneId)
                     }
@@ -340,33 +320,33 @@ private struct DeepLinkShowcaseView: View {
 
     var body: some View {
         VStack(alignment: .leading, spacing: 12) {
-            Text(NSLocalizedString("examples_deeplink_title", comment: ""))
+            Text("Deep links")
                 .font(.title3)
                 .fontWeight(.semibold)
 
-            Text(NSLocalizedString("examples_deeplink_body", comment: ""))
+            Text("These actions simulate platform links entering shared navigation and resolving to stack, slot, panels, or generic children.")
                 .font(.body)
                 .foregroundStyle(.secondary)
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_deeplink_item_button", comment: "")) {
+                Button("Item link") {
                     _ = component.handleDeepLink(url: "template://examples/item/sample-3")
                 }
                 .buttonStyle(.borderedProminent)
 
-                Button(NSLocalizedString("examples_deeplink_panel_button", comment: "")) {
+                Button("Panel link") {
                     _ = component.handleDeepLink(url: "template://examples/panel/sample-2")
                 }
                 .buttonStyle(.bordered)
             }
 
             HStack(spacing: 8) {
-                Button(NSLocalizedString("examples_deeplink_workspace_button", comment: "")) {
+                Button("Pane link") {
                     _ = component.handleDeepLink(url: "template://examples/workspace/pane-2")
                 }
                 .buttonStyle(.bordered)
 
-                Button(NSLocalizedString("examples_deeplink_modal_button", comment: "")) {
+                Button("Modal link") {
                     _ = component.handleDeepLink(url: "template://examples/confirmation")
                 }
                 .buttonStyle(.plain)
@@ -380,13 +360,13 @@ private struct DeepLinkShowcaseView: View {
 
     private var statusText: String {
         guard let lastDeepLinkPath = state.lastDeepLinkPath else {
-            return NSLocalizedString("examples_deeplink_empty", comment: "")
+            return String(localized: "No link handled yet.")
         }
 
-        return String(
-            format: NSLocalizedString("examples_deeplink_status_format", comment: ""),
+        return localizedFormat(
+            "Last link: %@ · handled: %@",
             lastDeepLinkPath,
-            String(state.lastDeepLinkHandled?.boolValue ?? false)
+            localizedBoolean(state.lastDeepLinkHandled?.boolValue ?? false)
         )
     }
 }
@@ -399,16 +379,16 @@ private struct ExamplesDetailView: View {
         let item = component.itemComponent(itemId: detail.itemId)
 
         VStack(alignment: .leading, spacing: 16) {
-            Button(NSLocalizedString("examples_back_button", comment: ""), action: component.back)
+            Button("Back", action: component.back)
                 .buttonStyle(.plain)
 
-            Text(NSLocalizedString("examples_detail_title", comment: ""))
+            Text("Stack detail")
                 .font(.title2)
                 .fontWeight(.semibold)
 
             SampleDetailContent(component: item)
 
-            Button(NSLocalizedString("examples_increment_item_button", comment: ""), action: item.increment)
+            Button("Increment", action: item.increment)
                 .buttonStyle(.borderedProminent)
         }
         .padding(24)
@@ -430,13 +410,7 @@ private struct SampleDetailContent: View {
     var body: some View {
         let state = uiStateObserver.value
 
-        Text(
-            String(
-                format: NSLocalizedString("examples_detail_body_format", comment: ""),
-                state.title,
-                state.count
-            )
-        )
+        Text(localizedFormat("%@ has independent count %lld.", state.title, Int64(state.count)))
         .font(.body)
         .foregroundStyle(.secondary)
     }
@@ -451,15 +425,15 @@ private struct ExamplesConfirmationOverlay: View {
                 .ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 16) {
-                Text(NSLocalizedString("examples_confirmation_title", comment: ""))
+                Text("Slot modal")
                     .font(.headline)
 
-                Text(NSLocalizedString("examples_confirmation_body", comment: ""))
+                Text("This dialog is hosted by a Child Slot and can be replaced with any optional child flow.")
                     .font(.body)
                     .foregroundStyle(.secondary)
 
                 Button(
-                    NSLocalizedString("examples_confirmation_close_button", comment: ""),
+                    "Close",
                     action: component.dismissConfirmation
                 )
                 .buttonStyle(.borderedProminent)
@@ -477,12 +451,40 @@ private struct ExamplesConfirmationOverlay: View {
 private func title(for child: ExamplesComponentChild) -> String {
     switch child {
     case is ExamplesComponentChildList:
-        return NSLocalizedString("examples_title", comment: "")
+        return String(localized: "Navigation examples")
     case is ExamplesComponentChildDetail:
-        return NSLocalizedString("examples_detail_title", comment: "")
+        return String(localized: "Stack detail")
     default:
         return ""
     }
+}
+
+private func localizedFormat(
+    _ format: LocalizedStringResource,
+    _ arguments: CVarArg...,
+) -> String {
+    String(
+        format: String(localized: format),
+        locale: Locale.current,
+        arguments: arguments
+    )
+}
+
+private func localizedPanelsModeName(_ modeName: String) -> String {
+    switch modeName {
+    case "SINGLE":
+        return String(localized: "Single")
+    case "DUAL":
+        return String(localized: "Dual")
+    case "TRIPLE":
+        return String(localized: "Triple")
+    default:
+        return ""
+    }
+}
+
+private func localizedBoolean(_ value: Bool) -> String {
+    value ? String(localized: "Yes") : String(localized: "No")
 }
 
 #Preview("Examples - English") {

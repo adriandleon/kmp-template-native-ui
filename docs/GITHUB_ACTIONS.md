@@ -100,9 +100,9 @@ env:
   IOS_TEAM_ID: "XXXXXXXXXX"
   
   # Build Configuration
-  JAVA_VERSION: "17"
+  JAVA_VERSION: "21"
   GRADLE_WRAPPER: "./gradlew"
-  XCODE_VERSION: "15.2"
+  XCODE_VERSION: "16.0"
   
   # Testing Configuration
   FIREBASE_DEVICE_MODEL: "shiba"
@@ -186,7 +186,7 @@ To migrate these workflows to a new repository:
 ```yaml
 env:
   # Build Configuration
-  JAVA_VERSION: "17"
+  JAVA_VERSION: "21"
   GRADLE_WRAPPER: "./gradlew"
   
   # Project Paths
@@ -269,7 +269,7 @@ env:
   ANDROID_NAMESPACE: "com.yourcompany.yourapp"
   
   # Build Configuration
-  JAVA_VERSION: "17"
+  JAVA_VERSION: "21"
   GRADLE_WRAPPER: "./gradlew"
   
   # Firebase Test Lab
@@ -346,7 +346,7 @@ env:
   IOS_TEAM_ID: "XXXXXXXXXX"
   
   # Build Configuration
-  XCODE_VERSION: "15.2"
+  XCODE_VERSION: "16.0"
   IOS_SIMULATOR: "iPhone 16"
   IOS_OS_VERSION: "latest"
   
@@ -363,11 +363,11 @@ env:
 ```yaml
 # Use different Java version
 env:
-  JAVA_VERSION: "21"  # Instead of "17"
+  JAVA_VERSION: "21"  # Current project baseline
 
 # Use different Xcode version
 env:
-  XCODE_VERSION: "16.0"  # Instead of "15.2"
+  XCODE_VERSION: "16.0"  # Current project baseline
 ```
 
 #### **Modify Test Configuration**
