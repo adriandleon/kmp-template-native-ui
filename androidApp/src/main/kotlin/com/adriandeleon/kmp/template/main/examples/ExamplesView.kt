@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
+import com.adriandeleon.kmp.template.theme.TemplateTheme
 import com.arkivanov.decompose.extensions.compose.stack.Children
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -450,5 +451,5 @@ private fun ExamplesDetailView(
 @Preview(name = "Examples - Dark - PT", locale = "pt-rBR", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun ExamplesPreview() {
-    MaterialTheme { ExamplesView(PreviewExamplesComponent()) }
+    TemplateTheme { ExamplesView(PreviewExamplesComponent()) }
 }

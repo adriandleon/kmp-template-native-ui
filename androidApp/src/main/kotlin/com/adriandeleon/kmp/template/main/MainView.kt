@@ -20,6 +20,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
 import com.adriandeleon.kmp.template.main.examples.ExamplesView
+import com.adriandeleon.kmp.template.theme.TemplateTheme
 import com.arkivanov.decompose.extensions.compose.pages.ChildPages
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
@@ -122,5 +123,5 @@ private fun MainComponent.Page.iconLabel(): String =
 @Preview(name = "Main - Dark - PT", locale = "pt-rBR", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun MainPreview() {
-    MaterialTheme { MainView(PreviewMainComponent()) }
+    TemplateTheme { MainView(PreviewMainComponent()) }
 }

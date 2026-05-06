@@ -23,6 +23,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
+import com.adriandeleon.kmp.template.theme.TemplateTheme
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
@@ -104,7 +105,7 @@ private fun PostsErrorContent(
 @Preview(name = "Posts Loading – Dark – EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PostsLoadingPreview() {
-    MaterialTheme {
+    TemplateTheme {
         PostsView(
             PreviewPostsComponent().also {
                 it.setUiState(PostsComponent.UiState.Loading)
@@ -119,7 +120,7 @@ private fun PostsLoadingPreview() {
 @Preview(name = "Posts Content – Dark – EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PostsContentPreview() {
-    MaterialTheme { PostsView(PreviewPostsComponent()) }
+    TemplateTheme { PostsView(PreviewPostsComponent()) }
 }
 
 @Preview(name = "Posts Error – Light – EN", locale = "en")
@@ -128,9 +129,11 @@ private fun PostsContentPreview() {
 @Preview(name = "Posts Error – Dark – EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PostsErrorPreview() {
-    MaterialTheme {
-        PostsView(PreviewPostsComponent().also {
-            it.setUiState(PostsComponent.UiState.Error("Something went wrong."))
-        })
+    TemplateTheme {
+        PostsView(
+            PreviewPostsComponent().also {
+                it.setUiState(PostsComponent.UiState.Error("Something went wrong."))
+            }
+        )
     }
 }
