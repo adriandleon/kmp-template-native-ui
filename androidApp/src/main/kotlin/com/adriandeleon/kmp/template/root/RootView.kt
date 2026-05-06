@@ -2,6 +2,8 @@ package com.adriandeleon.kmp.template.root
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -20,12 +22,18 @@ fun RootView(component: RootComponent, modifier: Modifier = Modifier) {
     val slot by component.slot.subscribeAsState()
 
     TemplateTheme {
-        Box(modifier = modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-            when (val child = slot.child?.instance) {
-                is RootComponent.Child.Onboarding -> OnboardingView(component = child.component)
-                is RootComponent.Child.Auth -> AuthView(component = child.component)
-                is RootComponent.Child.Main -> MainView(component = child.component)
-                null -> Text(stringResource(R.string.root_starting_placeholder))
+        Surface(
+            modifier = modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background,
+            contentColor = MaterialTheme.colorScheme.onBackground,
+        ) {
+            Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
+                when (val child = slot.child?.instance) {
+                    is RootComponent.Child.Onboarding -> OnboardingView(component = child.component)
+                    is RootComponent.Child.Auth -> AuthView(component = child.component)
+                    is RootComponent.Child.Main -> MainView(component = child.component)
+                    null -> Text(stringResource(R.string.root_starting_placeholder))
+                }
             }
         }
     }
