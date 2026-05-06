@@ -31,4 +31,11 @@ class ExamplesViewTest {
             confirmationModalIsDisplayed()
         }
     }
+
+    @Test
+    fun verifyExamplesScreenCanScrollToLowerSections() {
+        composeTestRule.launchExamplesView(component) { scrollToDeepLinkSection() } verify {
+            deepLinkSectionIsDisplayed()
+        }
+    }
 }

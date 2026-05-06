@@ -12,6 +12,7 @@ androidx-lifecycle = "2.10.0"
 buildkonfig = "0.18.0"
 coil-compose = "3.4.0"
 compose-multiplatform = "1.10.3"
+compose-ui-test-android = "1.11.0-rc01"
 compose-rules = "0.5.7"
 configcat = "5.1.0"
 crashkios = "0.9.0"
@@ -56,6 +57,7 @@ compose-ui = { module = "org.jetbrains.compose.ui:ui", version.ref = "compose-mu
 compose-ui-tooling = { module = "org.jetbrains.compose.ui:ui-tooling", version.ref = "compose-multiplatform" }
 compose-ui-tooling-preview = { module = "org.jetbrains.compose.ui:ui-tooling-preview", version.ref = "compose-multiplatform" }
 compose-ui-test-junit4 = { module = "org.jetbrains.compose.ui:ui-test-junit4", version.ref = "compose-multiplatform" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest", version.ref = "compose-ui-test-android" }
 configcat = { module = "com.configcat:configcat-kotlin-client", version.ref = "configcat" }
 crashkios-crashlytics = { module = "co.touchlab.crashkios:crashlytics", version.ref = "crashkios" }
 datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidx-datastore" }

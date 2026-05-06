@@ -3,6 +3,8 @@
 package com.adriandeleon.kmp.template.main.examples
 
 import android.content.res.Configuration
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +13,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
@@ -38,8 +42,7 @@ fun ExamplesView(component: ExamplesComponent, modifier: Modifier = Modifier) {
         modifier =
             modifier
                 .fillMaxSize()
-                .padding(24.dp)
-                .testTag(stringResource(R.string.tag_examples_screen)),
+                .padding(24.dp),
     ) { child ->
         when (val instance = child.instance) {
             is ExamplesComponent.Child.List -> ExamplesListView(component)
@@ -65,34 +68,47 @@ fun ExamplesView(component: ExamplesComponent, modifier: Modifier = Modifier) {
 private fun ExamplesListView(component: ExamplesComponent) {
     val state by component.uiState.subscribeAsState()
 
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
-        Text(
-            text = stringResource(R.string.examples_title),
-            style = MaterialTheme.typography.headlineSmall,
-        )
-        Text(
-            text = stringResource(R.string.examples_body),
-            style = MaterialTheme.typography.bodyMedium,
-        )
+    LazyColumn(
+        modifier =
+            Modifier.fillMaxSize()
+                .testTag(stringResource(R.string.tag_examples_screen)),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
+        item {
+            Text(
+                text = stringResource(R.string.examples_title),
+                style = MaterialTheme.typography.headlineSmall,
+            )
+        }
+        item {
+            Text(
+                text = stringResource(R.string.examples_body),
+                style = MaterialTheme.typography.bodyMedium,
+            )
+        }
 
-        Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-            Button(
-                onClick = component::addItem,
-                modifier = Modifier.weight(1f).testTag(stringResource(R.string.tag_examples_add_button)),
-            ) {
-                Text(stringResource(R.string.examples_add_item_button))
-            }
-            OutlinedButton(
-                onClick = component::showConfirmation,
-                modifier =
-                    Modifier.weight(1f)
-                        .testTag(stringResource(R.string.tag_examples_modal_button)),
-            ) {
-                Text(stringResource(R.string.examples_show_modal_button))
+        item {
+            Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
+                Button(
+                    onClick = component::addItem,
+                    modifier =
+                        Modifier.weight(1f)
+                            .testTag(stringResource(R.string.tag_examples_add_button)),
+                ) {
+                    Text(stringResource(R.string.examples_add_item_button))
+                }
+                OutlinedButton(
+                    onClick = component::showConfirmation,
+                    modifier =
+                        Modifier.weight(1f)
+                            .testTag(stringResource(R.string.tag_examples_modal_button)),
+                ) {
+                    Text(stringResource(R.string.examples_show_modal_button))
+                }
             }
         }
 
-        state.itemIds.forEach { itemId ->
+        items(items = state.itemIds, key = { it }) { itemId ->
             SampleItemRow(
                 component = component.itemComponent(itemId),
                 isSelected = state.selectedItemId == itemId,
@@ -102,14 +118,16 @@ private fun ExamplesListView(component: ExamplesComponent) {
             )
         }
 
-        PanelsShowcaseView(
-            component = component,
-            state = state,
-        )
+        item {
+            PanelsShowcaseView(
+                component = component,
+                state = state,
+            )
+        }
 
-        GenericNavigationShowcaseView(component = component, state = state)
+        item { GenericNavigationShowcaseView(component = component, state = state) }
 
-        DeepLinkShowcaseView(component = component, state = state)
+        item { DeepLinkShowcaseView(component = component, state = state) }
     }
 }
 
@@ -419,7 +437,13 @@ private fun ExamplesDetailView(
     val sampleComponent = component.itemComponent(detailComponent.itemId)
     val sampleState by sampleComponent.uiState.subscribeAsState()
 
-    Column(verticalArrangement = Arrangement.spacedBy(16.dp)) {
+    Column(
+        modifier =
+            Modifier.fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .testTag(stringResource(R.string.tag_examples_screen)),
+        verticalArrangement = Arrangement.spacedBy(16.dp),
+    ) {
         TextButton(onClick = component::back) {
             Text(stringResource(R.string.examples_back_button))
         }
