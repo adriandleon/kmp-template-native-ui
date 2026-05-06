@@ -3,6 +3,7 @@ import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.BOOLEAN
 import com.codingfeline.buildkonfig.compiler.FieldSpec.Type.STRING
 import com.ncorti.ktfmt.gradle.TrailingCommaManagementStrategy.COMPLETE
+import org.gradle.api.tasks.testing.Test
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
 
 plugins {
@@ -28,6 +29,7 @@ kotlin {
         compileSdk = libs.versions.android.compileSdk.get().toInt()
         minSdk = libs.versions.android.minSdk.get().toInt()
         compilerOptions { jvmTarget.set(JvmTarget.JVM_21) }
+        withHostTest {}
     }
 
     listOf(iosArm64(), iosSimulatorArm64(), iosX64()).forEach { iosTarget ->
@@ -91,6 +93,8 @@ kotlin {
             implementation(libs.kotlinx.coroutines.test)
             implementation(libs.ktor.client.mock)
         }
+
+        named("androidHostTest").dependencies { implementation(libs.kotest.runner.junit5) }
     }
 }
 
@@ -109,6 +113,12 @@ ktfmt {
     removeUnusedImports = true
     trailingCommaManagementStrategy = COMPLETE
 }
+
+kotest { customGradleTask.set(true) }
+
+tasks.named("kotest") { dependsOn("testAndroidHostTest") }
+
+tasks.withType<Test>().configureEach { useJUnitPlatform() }
 
 detekt {
     parallel = true

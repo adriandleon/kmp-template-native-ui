@@ -319,8 +319,8 @@ After running the script, you'll need to:
 # Test shared Kotlin iOS compilation
 ./gradlew :shared:compileKotlinIosSimulatorArm64
 
-# Test the iOS app and test target build
-xcodebuild -project iosApp/YourApp.xcodeproj -scheme YourApp -destination 'generic/platform=iOS Simulator' -configuration Debug build-for-testing
+# Test the iOS app and Swift Testing target
+xcodebuild -project iosApp/YourApp.xcodeproj -scheme YourApp -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug test
 ```
 
 ## 🐛 Troubleshooting
@@ -357,7 +357,7 @@ chmod +x setup_new_project.sh
 
 #### iOS Test Target Issues
 - **Missing test folder**: Confirm the script renamed `iosApp/KMP-TemplateTests` to `iosApp/YourAppTests`
-- **Build-for-testing check**: Run the `xcodebuild ... build-for-testing` command to verify the app target and test target both compile
+- **Swift Testing check**: Run the `xcodebuild ... test` command to verify the app target and Swift test target both compile and pass
 - **Shared framework import errors**: If Swift tests report `No such module 'Shared'`, verify the generated Xcode project still contains the `FRAMEWORK_SEARCH_PATHS` entries under the test target build settings
 
 #### API Key Configuration Issues

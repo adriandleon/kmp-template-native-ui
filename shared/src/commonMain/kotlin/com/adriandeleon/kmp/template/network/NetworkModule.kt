@@ -8,10 +8,6 @@ import org.koin.dsl.module
 
 internal val networkModule = module {
     single {
-        HttpClient {
-            install(ContentNegotiation) {
-                json(Json { ignoreUnknownKeys = true })
-            }
-        }
+        HttpClient { install(ContentNegotiation) { json(Json { ignoreUnknownKeys = true }) } }
     }
 }

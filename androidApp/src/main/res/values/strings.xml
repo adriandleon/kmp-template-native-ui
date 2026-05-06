@@ -21,7 +21,130 @@
     <string name="home_screen_title">Home Screen</string>
     <string name="home_log_button">Log Message</string>
 
+    <!-- Root placeholders -->
+    <string name="root_onboarding_placeholder">Onboarding</string>
+    <string name="root_auth_placeholder">Authentication</string>
+    <string name="root_main_placeholder">Main</string>
+    <string name="root_starting_placeholder">Starting</string>
+
+    <!-- Onboarding flow -->
+    <string name="onboarding_skip_button">Skip</string>
+    <string name="onboarding_previous_button">Previous</string>
+    <string name="onboarding_next_button">Next</string>
+    <string name="onboarding_finish_button">Finish</string>
+    <string name="onboarding_welcome_title">Welcome</string>
+    <string name="onboarding_welcome_body">Start with a shared flow that decides what the app shows first.</string>
+    <string name="onboarding_organize_title">Organize</string>
+    <string name="onboarding_organize_body">Keep page order and completion rules in shared Kotlin components.</string>
+    <string name="onboarding_customize_title">Customize</string>
+    <string name="onboarding_customize_body">Replace the copy and screens while preserving the Child Pages pattern.</string>
+
+    <!-- Auth flow -->
+    <string name="auth_back_button">Back</string>
+    <string name="auth_sign_in_title">Sign in</string>
+    <string name="auth_sign_in_body">Use this screen as the entry point for any authentication provider.</string>
+    <string name="auth_sign_in_button">Sign in</string>
+    <string name="auth_create_account_button">Create account</string>
+    <string name="auth_forgot_button">Forgot?</string>
+    <string name="auth_sign_up_title">Create account</string>
+    <string name="auth_sign_up_body">Replace this fake action with your provider registration flow.</string>
+    <string name="auth_sign_up_button">Create account</string>
+    <string name="auth_terms_button">View terms</string>
+    <string name="auth_forgot_title">Recover access</string>
+    <string name="auth_forgot_body">This route demonstrates stack navigation before a verification step.</string>
+    <string name="auth_send_verification_button">Send verification</string>
+    <string name="auth_verification_title">Verification</string>
+    <string name="auth_verification_body">Use this route for confirmation, codes, or password reset completion.</string>
+    <string name="auth_verification_done_button">Done</string>
+    <string name="auth_terms_title">Terms</string>
+    <string name="auth_terms_body">This modal demonstrates Child Slot navigation for optional authentication content.</string>
+    <string name="auth_terms_close_button">Close</string>
+
+    <!-- Main tabs -->
+    <string name="main_home_tab">Home</string>
+    <string name="main_examples_tab">Examples</string>
+    <string name="main_adaptive_tab">Adaptive</string>
+    <string name="main_settings_tab">Settings</string>
+    <string name="main_home_title">Home</string>
+    <string name="main_home_body">This tab is the signed-in starting point for app-specific content.</string>
+    <string name="main_examples_title">Examples</string>
+    <string name="main_examples_body">This tab will host stack, slot, and child item navigation examples.</string>
+    <string name="main_adaptive_title">Adaptive</string>
+    <string name="main_adaptive_body">This tab will host the Child Panels adaptive layout example.</string>
+    <string name="main_settings_title">Settings</string>
+    <string name="main_settings_body">This tab is the template place for account, preferences, and reset actions.</string>
+
+    <!-- Navigation examples -->
+    <string name="examples_title">Navigation examples</string>
+    <string name="examples_body">This screen demonstrates stack, slot, and child item navigation in one neutral flow.</string>
+    <string name="examples_add_item_button">Add item</string>
+    <string name="examples_show_modal_button">Show modal</string>
+    <string name="examples_item_title_format">%1$s · count %2$d</string>
+    <string name="examples_item_selected">Selected</string>
+    <string name="examples_item_not_selected">Not selected</string>
+    <string name="examples_select_item_button">Select</string>
+    <string name="examples_increment_item_button">Increment</string>
+    <string name="examples_open_detail_button">Open detail</string>
+    <string name="examples_remove_item_button">Remove</string>
+    <string name="examples_back_button">Back</string>
+    <string name="examples_detail_title">Stack detail</string>
+    <string name="examples_detail_body_format">%1$s has independent count %2$d.</string>
+    <string name="examples_confirmation_title">Slot modal</string>
+    <string name="examples_confirmation_body">This dialog is hosted by a Child Slot and can be replaced with any optional child flow.</string>
+    <string name="examples_confirmation_close_button">Close</string>
+    <string name="examples_panels_title">Panels</string>
+    <string name="examples_panels_body">This area demonstrates one main panel with optional details and extra panels.</string>
+    <string name="examples_panels_mode_format">Mode: %1$s</string>
+    <string name="examples_panels_single_mode">Single</string>
+    <string name="examples_panels_dual_mode">Dual</string>
+    <string name="examples_panels_triple_mode">Triple</string>
+    <string name="examples_panels_main_title">Main panel</string>
+    <string name="examples_panels_main_body">The main panel remains the stable entry point for selecting a child.</string>
+    <string name="examples_panels_open_details_button">Open details</string>
+    <string name="examples_panels_open_extra_button">Open extra</string>
+    <string name="examples_panels_details_body_format">Details panel is showing %1$s.</string>
+    <string name="examples_panels_details_empty">Details panel is closed.</string>
+    <string name="examples_panels_dismiss_details_button">Close details</string>
+    <string name="examples_panels_extra_body_format">Extra panel is showing more context for %1$s.</string>
+    <string name="examples_panels_extra_empty">Extra panel is closed.</string>
+    <string name="examples_panels_dismiss_extra_button">Close extra</string>
+    <string name="examples_generic_title">Generic navigation</string>
+    <string name="examples_generic_body">This area uses Decompose children for a custom navigation model with an arbitrary set of panes.</string>
+    <string name="examples_generic_active_format">Active pane: %1$s</string>
+    <string name="examples_generic_add_button">Add pane</string>
+    <string name="examples_generic_close_button">Close active</string>
+    <string name="examples_deeplink_title">Deep links</string>
+    <string name="examples_deeplink_body">These actions simulate platform links entering shared navigation and resolving to stack, slot, panels, or generic children.</string>
+    <string name="examples_deeplink_item_button">Item link</string>
+    <string name="examples_deeplink_panel_button">Panel link</string>
+    <string name="examples_deeplink_workspace_button">Pane link</string>
+    <string name="examples_deeplink_modal_button">Modal link</string>
+    <string name="examples_deeplink_empty">No link handled yet.</string>
+    <string name="examples_deeplink_status_format">Last link: %1$s · handled: %2$s</string>
+
     <!-- Test tags — do NOT localize these; they are identifiers, not display text -->
+    <string name="tag_onboarding_screen" translatable="false">onboarding_screen</string>
+    <string name="tag_onboarding_skip_button" translatable="false">onboarding_skip_button</string>
+    <string name="tag_onboarding_previous_button" translatable="false">onboarding_previous_button</string>
+    <string name="tag_onboarding_next_button" translatable="false">onboarding_next_button</string>
+    <string name="tag_onboarding_page_indicator" translatable="false">onboarding_page_indicator</string>
+    <string name="tag_onboarding_title" translatable="false">onboarding_title</string>
+    <string name="tag_onboarding_body" translatable="false">onboarding_body</string>
+    <string name="tag_auth_screen" translatable="false">auth_screen</string>
+    <string name="tag_auth_back_button" translatable="false">auth_back_button</string>
+    <string name="tag_auth_title" translatable="false">auth_title</string>
+    <string name="tag_auth_body" translatable="false">auth_body</string>
+    <string name="tag_auth_primary_button" translatable="false">auth_primary_button</string>
+    <string name="tag_auth_secondary_button" translatable="false">auth_secondary_button</string>
+    <string name="tag_auth_forgot_button" translatable="false">auth_forgot_button</string>
+    <string name="tag_auth_terms_button" translatable="false">auth_terms_button</string>
+    <string name="tag_auth_terms_close_button" translatable="false">auth_terms_close_button</string>
+    <string name="tag_main_screen" translatable="false">main_screen</string>
+    <string name="tag_main_page_content" translatable="false">main_page_content</string>
+    <string name="tag_examples_screen" translatable="false">examples_screen</string>
+    <string name="tag_examples_add_button" translatable="false">examples_add_button</string>
+    <string name="tag_examples_modal_button" translatable="false">examples_modal_button</string>
+    <string name="tag_examples_item" translatable="false">examples_item</string>
     <string name="tag_posts_loading" translatable="false">posts_loading</string>
     <string name="tag_posts_list" translatable="false">posts_list</string>
     <string name="tag_posts_item" translatable="false">posts_item</string>

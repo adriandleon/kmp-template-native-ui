@@ -1,8 +1,10 @@
 package com.adriandeleon.kmp.template.root
 
-import com.adriandeleon.kmp.template.home.HomeComponent
-import com.adriandeleon.kmp.template.posts.PostsComponent
-import com.arkivanov.decompose.router.stack.ChildStack
+import com.adriandeleon.kmp.template.auth.AuthComponent
+import com.adriandeleon.kmp.template.main.MainComponent
+import com.adriandeleon.kmp.template.onboarding.OnboardingComponent
+import com.arkivanov.decompose.ComponentContext
+import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.essenty.backhandler.BackHandlerOwner
 
@@ -13,14 +15,28 @@ import com.arkivanov.essenty.backhandler.BackHandlerOwner
  */
 interface RootComponent : BackHandlerOwner {
 
-    val stack: Value<ChildStack<*, Child>>
+    val slot: Value<ChildSlot<*, Child>>
+
+    fun completeOnboarding()
+
+    fun completeAuthentication()
+
+    fun signOut()
+
+    fun resetOnboarding()
+
+    fun setAuthRequired(authRequired: Boolean)
 
     sealed interface Child {
 
-        /** @param component Child component for the home screen */
-        data class Home(val component: HomeComponent) : Child
+        data class Onboarding(val component: OnboardingComponent) : Child
 
-        /** @param component Child component for the posts screen */
-        data class Posts(val component: PostsComponent) : Child
+        data class Auth(val component: AuthComponent) : Child
+
+        data class Main(val component: MainComponent) : Child
     }
 }
+
+/** Creates the root component without exposing the default implementation. */
+fun createRootComponent(componentContext: ComponentContext): RootComponent =
+    DefaultRootComponent(componentContext)

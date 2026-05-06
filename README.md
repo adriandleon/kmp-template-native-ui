@@ -38,6 +38,9 @@ architecture behind generated code.
 - Kotest and Mokkery for shared Kotlin tests
 - Swift Testing and ViewInspector for iOS UI tests
 
+For the Decompose navigation examples, see
+[Navigation showcase](docs/NAVIGATION_SHOWCASE.md).
+
 ## Supported platforms
 
 This template currently targets the following platforms:

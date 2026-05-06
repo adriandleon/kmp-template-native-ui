@@ -22,3 +22,103 @@
 // Home screen
 "home_screen_title" = "Home Screen";
 "home_log_button" = "Log Message";
+
+// Root placeholders
+"root_onboarding_placeholder" = "Onboarding";
+"root_auth_placeholder" = "Authentication";
+"root_main_placeholder" = "Main";
+"root_starting_placeholder" = "Starting";
+
+// Onboarding flow
+"onboarding_skip_button" = "Skip";
+"onboarding_previous_button" = "Previous";
+"onboarding_next_button" = "Next";
+"onboarding_finish_button" = "Finish";
+"onboarding_welcome_title" = "Welcome";
+"onboarding_welcome_body" = "Start with a shared flow that decides what the app shows first.";
+"onboarding_organize_title" = "Organize";
+"onboarding_organize_body" = "Keep page order and completion rules in shared Kotlin components.";
+"onboarding_customize_title" = "Customize";
+"onboarding_customize_body" = "Replace the copy and screens while preserving the Child Pages pattern.";
+
+// Auth flow
+"auth_sign_in_title" = "Sign in";
+"auth_sign_in_body" = "Use this screen as the entry point for any authentication provider.";
+"auth_sign_in_button" = "Sign in";
+"auth_create_account_button" = "Create account";
+"auth_forgot_button" = "Forgot?";
+"auth_sign_up_title" = "Create account";
+"auth_sign_up_body" = "Replace this fake action with your provider registration flow.";
+"auth_sign_up_button" = "Create account";
+"auth_terms_button" = "View terms";
+"auth_forgot_title" = "Recover access";
+"auth_forgot_body" = "This route demonstrates stack navigation before a verification step.";
+"auth_send_verification_button" = "Send verification";
+"auth_verification_title" = "Verification";
+"auth_verification_body" = "Use this route for confirmation, codes, or password reset completion.";
+"auth_verification_done_button" = "Done";
+"auth_terms_title" = "Terms";
+"auth_terms_body" = "This modal demonstrates Child Slot navigation for optional authentication content.";
+"auth_terms_close_button" = "Close";
+
+// Main tabs
+"main_home_tab" = "Home";
+"main_examples_tab" = "Examples";
+"main_adaptive_tab" = "Adaptive";
+"main_settings_tab" = "Settings";
+"main_home_title" = "Home";
+"main_home_body" = "This tab is the signed-in starting point for app-specific content.";
+"main_examples_title" = "Examples";
+"main_examples_body" = "This tab will host stack, slot, and child item navigation examples.";
+"main_adaptive_title" = "Adaptive";
+"main_adaptive_body" = "This tab will host the Child Panels adaptive layout example.";
+"main_settings_title" = "Settings";
+"main_settings_body" = "This tab is the template place for account, preferences, and reset actions.";
+
+// Navigation examples
+"examples_title" = "Navigation examples";
+"examples_body" = "This screen demonstrates stack, slot, and child item navigation in one neutral flow.";
+"examples_add_item_button" = "Add item";
+"examples_show_modal_button" = "Show modal";
+"examples_item_title_format" = "%@ · count %d";
+"examples_item_selected" = "Selected";
+"examples_item_not_selected" = "Not selected";
+"examples_select_item_button" = "Select";
+"examples_increment_item_button" = "Increment";
+"examples_open_detail_button" = "Open detail";
+"examples_remove_item_button" = "Remove";
+"examples_back_button" = "Back";
+"examples_detail_title" = "Stack detail";
+"examples_detail_body_format" = "%@ has independent count %d.";
+"examples_confirmation_title" = "Slot modal";
+"examples_confirmation_body" = "This dialog is hosted by a Child Slot and can be replaced with any optional child flow.";
+"examples_confirmation_close_button" = "Close";
+"examples_panels_title" = "Panels";
+"examples_panels_body" = "This area demonstrates one main panel with optional details and extra panels.";
+"examples_panels_mode_format" = "Mode: %@";
+"examples_panels_single_mode" = "Single";
+"examples_panels_dual_mode" = "Dual";
+"examples_panels_triple_mode" = "Triple";
+"examples_panels_main_title" = "Main panel";
+"examples_panels_main_body" = "The main panel remains the stable entry point for selecting a child.";
+"examples_panels_open_details_button" = "Open details";
+"examples_panels_open_extra_button" = "Open extra";
+"examples_panels_details_body_format" = "Details panel is showing %@.";
+"examples_panels_details_empty" = "Details panel is closed.";
+"examples_panels_dismiss_details_button" = "Close details";
+"examples_panels_extra_body_format" = "Extra panel is showing more context for %@.";
+"examples_panels_extra_empty" = "Extra panel is closed.";
+"examples_panels_dismiss_extra_button" = "Close extra";
+"examples_generic_title" = "Generic navigation";
+"examples_generic_body" = "This area uses Decompose children for a custom navigation model with an arbitrary set of panes.";
+"examples_generic_active_format" = "Active pane: %@";
+"examples_generic_add_button" = "Add pane";
+"examples_generic_close_button" = "Close active";
+"examples_deeplink_title" = "Deep links";
+"examples_deeplink_body" = "These actions simulate platform links entering shared navigation and resolving to stack, slot, panels, or generic children.";
+"examples_deeplink_item_button" = "Item link";
+"examples_deeplink_panel_button" = "Panel link";
+"examples_deeplink_workspace_button" = "Pane link";
+"examples_deeplink_modal_button" = "Modal link";
+"examples_deeplink_empty" = "No link handled yet.";
+"examples_deeplink_status_format" = "Last link: %@ · handled: %@";

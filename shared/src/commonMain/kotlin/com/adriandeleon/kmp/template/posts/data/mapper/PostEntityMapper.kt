@@ -6,16 +6,8 @@ import com.adriandeleon.kmp.template.posts.domain.model.Post
 
 internal class PostEntityMapper {
     fun toEntity(dto: PostDto): PostEntity =
-        PostEntity(
-            id = dto.id,
-            title = dto.title,
-            body = dto.body,
-        )
+        PostEntity(id = dto.id, title = dto.title, body = dto.body)
 
     fun toDomain(entity: PostEntity): Post =
-        Post(
-            id = entity.id.toString(),
-            title = entity.title,
-            body = entity.body,
-        )
+        Post(id = entity.id.toString(), title = entity.title, body = entity.body)
 }

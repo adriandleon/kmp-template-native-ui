@@ -75,7 +75,7 @@ detekt {
 
 dependencies {
     implementation(projects.shared)
-    
+
     implementation(libs.androidx.activity.compose)
     implementation(libs.splashscreen)
     implementation(libs.compose.components.resources)
@@ -91,11 +91,12 @@ dependencies {
     implementation(libs.koin.compose)
     implementation(libs.lifecycle.runtime.compose)
     implementation(libs.lifecycle.viewmodel.compose)
-    
+
     testImplementation(libs.kotlin.test)
 
     androidTestImplementation(libs.compose.ui.test.junit4)
 
     debugImplementation(libs.compose.ui.tooling)
+    debugImplementation(libs.compose.ui.test.manifest)
     detektPlugins(libs.detekt.compose)
 }

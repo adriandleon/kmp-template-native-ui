@@ -13,7 +13,9 @@ logic, and native iOS UI around one end-to-end example.
 The project uses two test layers:
 
 - Shared Kotlin tests in `shared/src/commonTest/kotlin`
+- Android Compose UI tests in `androidApp/src/androidTest/kotlin`
 - iOS Swift tests in `iosApp/KMP-TemplateTests`
+- Architecture tests in `konsistTest/src/test/kotlin`
 
 The shared module does not currently use a dedicated `iosTest` source set for
 feature tests. Shared feature behavior is covered in `commonTest`, and the iOS
@@ -28,8 +30,11 @@ shape for real features.
 - Use case tests validate business behavior.
 - Component tests validate the shared presentation contract exposed to native
   UIs.
-- Swift UI tests validate that the iOS `PostsView` renders shared state
-  correctly and handles retry interaction.
+- Android robot tests validate representative Compose rendering and
+  interaction through preview components.
+- Swift UI tests validate that SwiftUI screens render shared state correctly
+  and handle representative interactions through preview components.
+- Konsist tests validate architecture and encapsulation rules.
 
 This keeps the template focused on one understandable example instead of
 spreading test patterns across multiple unrelated demo features.
@@ -53,6 +58,7 @@ include:
 - `posts/domain/usecase/GetPostsUseCaseTest.kt`
 - `posts/presentation/mapper/PostsUiMapperTest.kt`
 - `posts/presentation/DefaultPostsComponentTest.kt`
+- `main/examples/DefaultExamplesComponentTest.kt`
 
 These tests are the best starting point when you add new shared features to the
 template.
@@ -63,9 +69,26 @@ The iOS SwiftUI tests live under `iosApp/KMP-TemplateTests`. The template
 currently includes:
 
 - `Posts/PostsViewTests.swift`
+- `MainFlow/ExamplesViewTests.swift`
 
-That file shows how to use `PreviewPostsComponent` from the shared framework to
-drive SwiftUI state-based tests without duplicating feature logic in Swift.
+These files show how to use shared `Preview*Component` test doubles to drive
+SwiftUI state-based tests without duplicating feature logic in Swift.
+
+## Android UI test locations
+
+Android Compose UI tests live under `androidApp/src/androidTest/kotlin`. The
+template currently includes:
+
+- `posts/PostsViewTest.kt`
+- `main/examples/ExamplesViewTest.kt`
+
+The robot files beside those tests show how to keep Compose assertions readable
+and how to drive UI from shared preview components.
+
+## Architecture test locations
+
+Konsist architecture tests live under `konsistTest/src/test/kotlin`. These
+tests enforce shared-module encapsulation and platform import boundaries.
 
 ## Run tests
 
@@ -97,24 +120,32 @@ Compile the shared Kotlin code for the iOS simulator with:
 
 This is useful when you change shared APIs that are consumed by SwiftUI.
 
-### Build the iOS app and Swift test bundle
+### Run architecture tests
 
-Build the iOS app and its Swift test target with:
+Run Konsist architecture tests with:
+
+```bash
+./gradlew :konsistTest:test
+```
+
+### Run the iOS app and Swift test bundle
+
+Run the iOS app and its Swift Testing target with:
 
 ```bash
 xcodebuild \
   -project iosApp/KMP-Template.xcodeproj \
   -scheme KMP-Template \
-  -destination 'generic/platform=iOS Simulator' \
+  -destination 'platform=iOS Simulator,name=iPhone 17' \
   -configuration Debug \
-  build-for-testing
+  test
 ```
 
 This command verifies that:
 
 - the shared `Shared` framework is exposed to the iOS app and test target,
 - the app target compiles against the current shared Kotlin API, and
-- the `KMP-TemplateTests` bundle compiles successfully.
+- the `KMP-TemplateTests` bundle compiles and passes.
 
 ## Write new shared tests
 

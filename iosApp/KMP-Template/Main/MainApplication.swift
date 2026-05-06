@@ -27,7 +27,7 @@ struct MainApplication: App {
 }
 
 private class AppDelegate: NSObject, UIApplicationDelegate {
-    let root: RootComponent = DefaultRootComponent(
-        componentContext: DefaultComponentContext(lifecycle: ApplicationLifecycle()),
+    let root: RootComponent = RootComponentKt.createRootComponent(
+        componentContext: DefaultComponentContext(lifecycle: ApplicationLifecycle())
     )
 }

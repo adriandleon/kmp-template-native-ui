@@ -15,4 +15,105 @@
     <!-- Home screen -->
     <string name="home_screen_title">Pantalla de Inicio</string>
     <string name="home_log_button">Registrar Mensaje</string>
+
+    <!-- Root placeholders -->
+    <string name="root_onboarding_placeholder">Introducción</string>
+    <string name="root_auth_placeholder">Autenticación</string>
+    <string name="root_main_placeholder">Principal</string>
+    <string name="root_starting_placeholder">Iniciando</string>
+
+    <!-- Onboarding flow -->
+    <string name="onboarding_skip_button">Omitir</string>
+    <string name="onboarding_previous_button">Anterior</string>
+    <string name="onboarding_next_button">Siguiente</string>
+    <string name="onboarding_finish_button">Finalizar</string>
+    <string name="onboarding_welcome_title">Bienvenida</string>
+    <string name="onboarding_welcome_body">Comienza con un flujo compartido que decide qué muestra primero la app.</string>
+    <string name="onboarding_organize_title">Organiza</string>
+    <string name="onboarding_organize_body">Mantén el orden de páginas y las reglas de finalización en componentes Kotlin compartidos.</string>
+    <string name="onboarding_customize_title">Personaliza</string>
+    <string name="onboarding_customize_body">Reemplaza los textos y pantallas sin perder el patrón Child Pages.</string>
+
+    <!-- Auth flow -->
+    <string name="auth_back_button">Atrás</string>
+    <string name="auth_sign_in_title">Iniciar sesión</string>
+    <string name="auth_sign_in_body">Usa esta pantalla como entrada para cualquier proveedor de autenticación.</string>
+    <string name="auth_sign_in_button">Iniciar sesión</string>
+    <string name="auth_create_account_button">Crear cuenta</string>
+    <string name="auth_forgot_button">¿Olvidaste?</string>
+    <string name="auth_sign_up_title">Crear cuenta</string>
+    <string name="auth_sign_up_body">Reemplaza esta acción falsa por el flujo de registro de tu proveedor.</string>
+    <string name="auth_sign_up_button">Crear cuenta</string>
+    <string name="auth_terms_button">Ver términos</string>
+    <string name="auth_forgot_title">Recuperar acceso</string>
+    <string name="auth_forgot_body">Esta ruta demuestra navegación de pila antes de un paso de verificación.</string>
+    <string name="auth_send_verification_button">Enviar verificación</string>
+    <string name="auth_verification_title">Verificación</string>
+    <string name="auth_verification_body">Usa esta ruta para confirmación, códigos o completar un restablecimiento.</string>
+    <string name="auth_verification_done_button">Listo</string>
+    <string name="auth_terms_title">Términos</string>
+    <string name="auth_terms_body">Este modal demuestra navegación Child Slot para contenido opcional de autenticación.</string>
+    <string name="auth_terms_close_button">Cerrar</string>
+
+    <!-- Main tabs -->
+    <string name="main_home_tab">Inicio</string>
+    <string name="main_examples_tab">Ejemplos</string>
+    <string name="main_adaptive_tab">Adaptable</string>
+    <string name="main_settings_tab">Ajustes</string>
+    <string name="main_home_title">Inicio</string>
+    <string name="main_home_body">Esta pestaña es el punto inicial con sesión para contenido propio de la app.</string>
+    <string name="main_examples_title">Ejemplos</string>
+    <string name="main_examples_body">Esta pestaña alojará ejemplos de stack, slot y child item navigation.</string>
+    <string name="main_adaptive_title">Adaptable</string>
+    <string name="main_adaptive_body">Esta pestaña alojará el ejemplo de layout adaptable con Child Panels.</string>
+    <string name="main_settings_title">Ajustes</string>
+    <string name="main_settings_body">Esta pestaña es el lugar de la plantilla para cuenta, preferencias y reinicios.</string>
+
+    <!-- Navigation examples -->
+    <string name="examples_title">Ejemplos de navegación</string>
+    <string name="examples_body">Esta pantalla demuestra stack, slot y child item navigation en un flujo neutral.</string>
+    <string name="examples_add_item_button">Agregar item</string>
+    <string name="examples_show_modal_button">Mostrar modal</string>
+    <string name="examples_item_title_format">%1$s · contador %2$d</string>
+    <string name="examples_item_selected">Seleccionado</string>
+    <string name="examples_item_not_selected">No seleccionado</string>
+    <string name="examples_select_item_button">Seleccionar</string>
+    <string name="examples_increment_item_button">Incrementar</string>
+    <string name="examples_open_detail_button">Abrir detalle</string>
+    <string name="examples_remove_item_button">Eliminar</string>
+    <string name="examples_back_button">Atrás</string>
+    <string name="examples_detail_title">Detalle de stack</string>
+    <string name="examples_detail_body_format">%1$s tiene contador independiente %2$d.</string>
+    <string name="examples_confirmation_title">Modal de slot</string>
+    <string name="examples_confirmation_body">Este diálogo vive en un Child Slot y puede reemplazarse por cualquier flujo opcional.</string>
+    <string name="examples_confirmation_close_button">Cerrar</string>
+    <string name="examples_panels_title">Paneles</string>
+    <string name="examples_panels_body">Esta área demuestra un panel principal con paneles opcionales de detalle y contexto extra.</string>
+    <string name="examples_panels_mode_format">Modo: %1$s</string>
+    <string name="examples_panels_single_mode">Simple</string>
+    <string name="examples_panels_dual_mode">Doble</string>
+    <string name="examples_panels_triple_mode">Triple</string>
+    <string name="examples_panels_main_title">Panel principal</string>
+    <string name="examples_panels_main_body">El panel principal permanece como entrada estable para seleccionar un hijo.</string>
+    <string name="examples_panels_open_details_button">Abrir detalle</string>
+    <string name="examples_panels_open_extra_button">Abrir extra</string>
+    <string name="examples_panels_details_body_format">El panel de detalle muestra %1$s.</string>
+    <string name="examples_panels_details_empty">El panel de detalle está cerrado.</string>
+    <string name="examples_panels_dismiss_details_button">Cerrar detalle</string>
+    <string name="examples_panels_extra_body_format">El panel extra muestra más contexto para %1$s.</string>
+    <string name="examples_panels_extra_empty">El panel extra está cerrado.</string>
+    <string name="examples_panels_dismiss_extra_button">Cerrar extra</string>
+    <string name="examples_generic_title">Navegación genérica</string>
+    <string name="examples_generic_body">Esta área usa Decompose children para un modelo de navegación personalizado con un conjunto arbitrario de paneles.</string>
+    <string name="examples_generic_active_format">Panel activo: %1$s</string>
+    <string name="examples_generic_add_button">Agregar panel</string>
+    <string name="examples_generic_close_button">Cerrar activo</string>
+    <string name="examples_deeplink_title">Deep links</string>
+    <string name="examples_deeplink_body">Estas acciones simulan enlaces de plataforma que entran a la navegación compartida y resuelven stack, slot, panels o generic children.</string>
+    <string name="examples_deeplink_item_button">Link de item</string>
+    <string name="examples_deeplink_panel_button">Link de panel</string>
+    <string name="examples_deeplink_workspace_button">Link de panel genérico</string>
+    <string name="examples_deeplink_modal_button">Link de modal</string>
+    <string name="examples_deeplink_empty">Aún no se procesó ningún link.</string>
+    <string name="examples_deeplink_status_format">Último link: %1$s · procesado: %2$s</string>
 </resources>

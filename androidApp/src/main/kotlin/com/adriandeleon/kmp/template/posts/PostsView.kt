@@ -23,16 +23,18 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.adriandeleon.kmp.template.R
+import com.adriandeleon.kmp.template.theme.TemplateTheme
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
 fun PostsView(component: PostsComponent, modifier: Modifier = Modifier) {
-    val state by component.state.subscribeAsState()
+    val uiState by component.uiState.subscribeAsState()
 
-    when (val s = state) {
-        is PostsUiState.Loading -> PostsLoadingContent(modifier)
-        is PostsUiState.Content -> PostsListContent(s.posts, modifier)
-        is PostsUiState.Error -> PostsErrorContent(s.message, component::onRetry, modifier)
+    when (val state = uiState) {
+        is PostsComponent.UiState.Loading -> PostsLoadingContent(modifier)
+        is PostsComponent.UiState.Content -> PostsListContent(state.posts, modifier)
+        is PostsComponent.UiState.Error ->
+            PostsErrorContent(state.message, component::onRetry, modifier)
     }
 }
 
@@ -103,8 +105,12 @@ private fun PostsErrorContent(
 @Preview(name = "Posts Loading – Dark – EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PostsLoadingPreview() {
-    MaterialTheme {
-        PostsView(PreviewPostsComponent().also { it.setState(PostsUiState.Loading) })
+    TemplateTheme {
+        PostsView(
+            PreviewPostsComponent().also {
+                it.setUiState(PostsComponent.UiState.Loading)
+            }
+        )
     }
 }
 
@@ -114,7 +120,7 @@ private fun PostsLoadingPreview() {
 @Preview(name = "Posts Content – Dark – EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PostsContentPreview() {
-    MaterialTheme { PostsView(PreviewPostsComponent()) }
+    TemplateTheme { PostsView(PreviewPostsComponent()) }
 }
 
 @Preview(name = "Posts Error – Light – EN", locale = "en")
@@ -123,9 +129,11 @@ private fun PostsContentPreview() {
 @Preview(name = "Posts Error – Dark – EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun PostsErrorPreview() {
-    MaterialTheme {
-        PostsView(PreviewPostsComponent().also {
-            it.setState(PostsUiState.Error("Something went wrong."))
-        })
+    TemplateTheme {
+        PostsView(
+            PreviewPostsComponent().also {
+                it.setUiState(PostsComponent.UiState.Error("Something went wrong."))
+            }
+        )
     }
 }

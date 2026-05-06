@@ -25,7 +25,7 @@ struct PostsViewTests {
 
     @Test("shows loading view when state is Loading")
     func showsLoadingViewWhenLoading() async throws {
-        component.setState(newState: PostsUiState.Loading())
+        component.setUiState(newState: PostsComponentUiState.Loading())
 
         let loadingView = try sut.inspect()
             .find(viewWithAccessibilityIdentifier: "posts_loading")
@@ -42,20 +42,19 @@ struct PostsViewTests {
         #expect(!listView.isHidden())
     }
 
-    @Test("shows correct number of posts in Content state")
-    func showsCorrectPostCount() async throws {
+    @Test("shows preview post titles in Content state")
+    func showsPreviewPostTitles() async throws {
         let posts = PreviewPostsComponent.companion.previewPosts
-        let expectedCount = posts.count
 
-        let listView = try sut.inspect()
-            .find(ViewType.List.self)
-
-        #expect(try listView.count == expectedCount)
+        for post in posts {
+            let title = try sut.inspect().find(text: post.title)
+            #expect(!title.isHidden())
+        }
     }
 
     @Test("shows error view when state is Error")
     func showsErrorViewWhenError() async throws {
-        component.setState(newState: PostsUiState.Error(message: "Oops"))
+        component.setUiState(newState: PostsComponentUiState.Error(message: "Oops"))
 
         let errorView = try sut.inspect()
             .find(viewWithAccessibilityIdentifier: "posts_error")
@@ -67,7 +66,7 @@ struct PostsViewTests {
 
     @Test("calls onRetry when retry button is tapped")
     func callsOnRetryWhenRetryTapped() async throws {
-        component.setState(newState: PostsUiState.Error(message: "Oops"))
+        component.setUiState(newState: PostsComponentUiState.Error(message: "Oops"))
 
         let retryButton = try sut.inspect()
             .find(viewWithAccessibilityIdentifier: "posts_retry_button")

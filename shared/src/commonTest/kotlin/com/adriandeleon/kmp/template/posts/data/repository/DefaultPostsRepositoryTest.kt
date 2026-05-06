@@ -33,14 +33,12 @@ class DefaultPostsRepositoryTest :
         context("getPosts") {
             test("emits cached posts first when cache is not empty") {
                 runTest {
-                    val cachedEntities =
-                        listOf(PostEntity(id = 1, title = "Cached", body = "Body"))
+                    val cachedEntities = listOf(PostEntity(id = 1, title = "Cached", body = "Body"))
                     everySuspend { mockLocal.getAll() } returns cachedEntities
                     everySuspend { mockRemote.fetchPosts() } returns emptyList()
                     everySuspend { mockLocal.insertAll(any()) } returns Unit
 
-                    val repo =
-                        DefaultPostsRepository(mockRemote, mockLocal, mapper, dispatchers)
+                    val repo = DefaultPostsRepository(mockRemote, mockLocal, mapper, dispatchers)
                     val first = repo.getPosts().first()
 
                     first shouldHaveSize 1
@@ -56,8 +54,7 @@ class DefaultPostsRepositoryTest :
                     everySuspend { mockRemote.fetchPosts() } returns remoteDtos
                     everySuspend { mockLocal.insertAll(any()) } returns Unit
 
-                    val repo =
-                        DefaultPostsRepository(mockRemote, mockLocal, mapper, dispatchers)
+                    val repo = DefaultPostsRepository(mockRemote, mockLocal, mapper, dispatchers)
                     val posts = repo.getPosts().first()
 
                     posts shouldHaveSize 1
