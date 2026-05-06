@@ -1,4 +1,4 @@
-package com.adriandeleon.kmp.template.home
+package com.adriandeleon.kmp.template.settings
 
 import android.content.res.Configuration
 import androidx.compose.foundation.layout.Arrangement
@@ -21,10 +21,7 @@ import com.adriandeleon.kmp.template.theme.TemplateTheme
 import com.arkivanov.decompose.extensions.compose.subscribeAsState
 
 @Composable
-fun HomeView(
-    component: HomeComponent,
-    modifier: Modifier = Modifier,
-) {
+fun SettingsView(component: SettingsComponent, modifier: Modifier = Modifier) {
     val uiState by component.uiState.subscribeAsState()
 
     if (uiState.isReady) {
@@ -35,14 +32,14 @@ fun HomeView(
                 modifier
                     .fillMaxSize()
                     .padding(24.dp)
-                    .testTag(stringResource(R.string.tag_home_screen)),
+                    .testTag(stringResource(R.string.tag_settings_screen)),
         ) {
             Text(
-                text = stringResource(R.string.home_screen_title),
+                text = stringResource(R.string.settings_screen_title),
                 style = MaterialTheme.typography.headlineMedium,
             )
             Text(
-                text = stringResource(R.string.home_screen_body),
+                text = stringResource(R.string.settings_screen_body),
                 style = MaterialTheme.typography.bodyLarge,
                 modifier = Modifier.padding(top = 12.dp),
                 textAlign = TextAlign.Center,
@@ -51,13 +48,13 @@ fun HomeView(
     }
 }
 
-@Preview(name = "Home - Light - EN", locale = "en")
-@Preview(name = "Home - Light - ES", locale = "es-r419")
-@Preview(name = "Home - Light - PT", locale = "pt-rBR")
-@Preview(name = "Home - Dark - EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Home - Dark - ES", locale = "es-r419", uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Preview(name = "Home - Dark - PT", locale = "pt-rBR", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Settings - Light - EN", locale = "en")
+@Preview(name = "Settings - Light - ES", locale = "es-r419")
+@Preview(name = "Settings - Light - PT", locale = "pt-rBR")
+@Preview(name = "Settings - Dark - EN", locale = "en", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Settings - Dark - ES", locale = "es-r419", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Preview(name = "Settings - Dark - PT", locale = "pt-rBR", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-private fun HomePreview() {
-    TemplateTheme { HomeView(PreviewHomeComponent()) }
+private fun SettingsPreview() {
+    TemplateTheme { SettingsView(PreviewSettingsComponent()) }
 }

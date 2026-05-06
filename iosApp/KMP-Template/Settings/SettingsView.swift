@@ -1,19 +1,19 @@
 //
-//  HomeView.swift
+//  SettingsView.swift
 //  KMP-Template
 //
-//  Created by Adrian De León on 30/8/25.
-//  Copyright © 2025 KMP-Template. All rights reserved.
+//  Created by Adrian De León on 5/6/26.
+//  Copyright © 2026 KMP-Template. All rights reserved.
 //
 
 import Shared
 import SwiftUI
 
-struct HomeView: View {
-    private let component: HomeComponent
-    @StateObject private var uiStateObserver: ObservableValue<HomeComponentUiState>
+struct SettingsView: View {
+    private let component: SettingsComponent
+    @StateObject private var uiStateObserver: ObservableValue<SettingsComponentUiState>
 
-    init(_ component: HomeComponent) {
+    init(_ component: SettingsComponent) {
         self.component = component
         self._uiStateObserver = StateObject(
             wrappedValue: ObservableValue(component.uiState)
@@ -23,39 +23,39 @@ struct HomeView: View {
     var body: some View {
         if uiStateObserver.value.isReady {
             VStack(spacing: 12) {
-                Text("Home")
+                Text("Settings")
                     .font(.title)
                     .fontWeight(.semibold)
 
-                Text("This tab is the signed-in starting point for app-specific content.")
+                Text("This tab is the template place for account, preferences, and reset actions.")
                     .font(.body)
                     .foregroundStyle(.secondary)
                     .multilineTextAlignment(.center)
                     .padding(.horizontal, 24)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .accessibilityIdentifier("home_screen")
+            .accessibilityIdentifier("settings_screen")
         }
     }
 }
 
-#Preview("Home - English") {
-    HomeView(PreviewHomeComponent())
+#Preview("Settings - English") {
+    SettingsView(PreviewSettingsComponent())
         .environment(\.locale, .init(identifier: "en"))
 }
 
-#Preview("Home - Spanish") {
-    HomeView(PreviewHomeComponent())
+#Preview("Settings - Spanish") {
+    SettingsView(PreviewSettingsComponent())
         .environment(\.locale, .init(identifier: "es-419"))
 }
 
-#Preview("Home - Portuguese") {
-    HomeView(PreviewHomeComponent())
+#Preview("Settings - Portuguese") {
+    SettingsView(PreviewSettingsComponent())
         .environment(\.locale, .init(identifier: "pt-BR"))
 }
 
-#Preview("Home - English - Dark") {
-    HomeView(PreviewHomeComponent())
+#Preview("Settings - English - Dark") {
+    SettingsView(PreviewSettingsComponent())
         .environment(\.locale, .init(identifier: "en"))
         .preferredColorScheme(.dark)
 }

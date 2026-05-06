@@ -258,7 +258,7 @@ The same `PreviewComponent` pattern is applied retroactively to the existing `Ho
 ```kotlin
 // PreviewHomeComponent.kt — public (added to home feature)
 class PreviewHomeComponent : HomeComponent {
-    override val title: String = "Home Screen"
+    override val uiState = MutableValue(HomeComponent.UiState())
 }
 ```
 
@@ -427,7 +427,7 @@ class DefaultPostsComponentTest : FunSpec({
 class DefaultHomeComponentTest : FunSpec({
     it("exposes the correct title") {
         val component = DefaultHomeComponent(TestComponentContext())
-        component.title shouldBe "Home Screen"
+        component.uiState.value.isReady shouldBe true
     }
 })
 ```

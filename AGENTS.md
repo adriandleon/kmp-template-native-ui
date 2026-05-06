@@ -109,35 +109,76 @@ pre-commit install
 - **Dependency Management**: Use Swift Package Manager (SPM) as primary tool
 
 ### File Organization
+
+Organize app code by feature and keep the feature name consistent across
+shared, Android, Android UI tests, iOS, and iOS tests. Use `*View` for native UI
+files on both platforms; it matches SwiftUI terminology and keeps Android and
+iOS naming symmetric.
+
+Example feature shape:
+
+```
+Feature: Posts
+shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/posts/
+├── PostsComponent.kt
+├── PreviewPostsComponent.kt
+└── presentation/DefaultPostsComponent.kt
+
+shared/src/commonTest/kotlin/com/adriandeleon/kmp/template/posts/
+└── presentation/DefaultPostsComponentTest.kt
+
+androidApp/src/main/kotlin/com/adriandeleon/kmp/template/posts/
+└── PostsView.kt
+
+androidApp/src/androidTest/kotlin/com/adriandeleon/kmp/template/posts/
+├── PostsViewRobot.kt
+└── PostsViewTest.kt
+
+iosApp/KMP-Template/Posts/
+└── PostsView.swift
+
+iosApp/KMP-TemplateTests/Posts/
+└── PostsViewTests.swift
+```
+
+For a simple feature such as Home, keep the same pattern:
+`HomeComponent`, `PreviewHomeComponent`, `DefaultHomeComponent`, `HomeView.kt`,
+`HomeViewTest.kt`, `HomeView.swift`, and `HomeViewTests.swift`.
+
+`MainComponent` and `MainView` are reserved for the signed-in app shell that
+owns the bottom tab navigation. `HomeComponent` and `HomeView` are the first
+tab's feature, not the navigation container.
+
 ```
 shared/
 ├── src/commonMain/kotlin/
-│   ├── data/           # Data layer (repositories, data sources)
-│   │   ├── datasource/
-│   │   ├── mapper/
-│   │   └── repository/
-│   ├── domain/         # Business logic (use cases, entities)
-│   │   ├── entity/
-│   │   ├── repository/
-│   │   └── usecase/
-│   └── presentation/   # UI logic (components, stores)
-│       ├── component/
-│       ├── mapper/
-│       └── store/
+│   └── com/adriandeleon/kmp/template/
+│       ├── home/
+│       ├── main/
+│       ├── posts/
+│       └── settings/
 androidApp/
-├── src/main/kotlin/  # Android-specific UI
-│   └── com/yourcompany/yourapp/
-│       ├── feature_a/
-│       │   ├── FeatureAScreen.kt
-│       │   ├── FeatureAViewModel.kt
-│       │   └── components/
-│       └── common/
+├── src/main/kotlin/com/adriandeleon/kmp/template/
+│   ├── home/
+│   ├── main/
+│   ├── posts/
+│   └── settings/
+├── src/androidTest/kotlin/com/adriandeleon/kmp/template/
+│   ├── home/
+│   ├── main/
+│   ├── posts/
+│   └── settings/
 iosApp/
-├── KMP-Template/       # iOS SwiftUI views
-│   ├── Assets.xcassets/
-│   ├── ContentView.swift
-│   ├── KMPTemplateApp.swift
-│   └── Info.plist
+├── KMP-Template/
+│   ├── Home/
+│   ├── MainFlow/
+│   ├── Posts/
+│   └── Settings/
+├── KMP-TemplateTests/
+│   ├── Home/
+│   ├── MainFlow/
+│   ├── Posts/
+│   └── Settings/
 ```
 
 ## Testing Instructions

@@ -27,7 +27,7 @@ struct MainView: View {
                 set: { component.selectPage(index: Int32($0)) },
             )
         ) {
-            MainPageView(page: .home)
+            HomeView(component.home)
                 .tag(0)
                 .tabItem { Label("Home", systemImage: "house") }
 
@@ -35,65 +35,15 @@ struct MainView: View {
                 .tag(1)
                 .tabItem { Label("Examples", systemImage: "square.stack.3d.up") }
 
-            MainPageView(page: .adaptive)
+            PostsView(component.posts)
                 .tag(2)
-                .tabItem { Label("Adaptive", systemImage: "sidebar.left") }
+                .tabItem { Label("Posts", systemImage: "doc.text") }
 
-            MainPageView(page: .settings)
+            SettingsView(component.settings)
                 .tag(3)
                 .tabItem { Label("Settings", systemImage: "gearshape") }
         }
         .accessibilityIdentifier("main_screen")
-    }
-}
-
-private struct MainPageView: View {
-    let page: MainComponentPage
-
-    var body: some View {
-        VStack(spacing: 12) {
-            Text(title(for: page))
-                .font(.title)
-                .fontWeight(.semibold)
-
-            Text(message(for: page))
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .accessibilityIdentifier("main_page_content")
-    }
-}
-
-private func title(for page: MainComponentPage) -> String {
-    switch page {
-    case .home:
-        return String(localized: "Home")
-    case .examples:
-        return String(localized: "Examples")
-    case .adaptive:
-        return String(localized: "Adaptive")
-    case .settings:
-        return String(localized: "Settings")
-    default:
-        return ""
-    }
-}
-
-private func message(for page: MainComponentPage) -> String {
-    switch page {
-    case .home:
-        return String(localized: "This tab is the signed-in starting point for app-specific content.")
-    case .examples:
-        return String(localized: "This tab will host stack, slot, and child item navigation examples.")
-    case .adaptive:
-        return String(localized: "This tab will host the Child Panels adaptive layout example.")
-    case .settings:
-        return String(localized: "This tab is the template place for account, preferences, and reset actions.")
-    default:
-        return ""
     }
 }
 

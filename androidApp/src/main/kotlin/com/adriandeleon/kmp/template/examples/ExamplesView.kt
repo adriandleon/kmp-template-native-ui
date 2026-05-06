@@ -1,6 +1,6 @@
-@file:Suppress("TooManyFunctions")
+@file:Suppress("LongMethod", "TooManyFunctions")
 
-package com.adriandeleon.kmp.template.main.examples
+package com.adriandeleon.kmp.template.examples
 
 import android.content.res.Configuration
 import androidx.compose.foundation.rememberScrollState

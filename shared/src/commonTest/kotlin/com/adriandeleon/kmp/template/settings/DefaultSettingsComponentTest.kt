@@ -1,13 +1,14 @@
-package com.adriandeleon.kmp.template.home
+package com.adriandeleon.kmp.template.settings
 
 import com.adriandeleon.kmp.template.common.util.testComponentContext
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.shouldBe
 
-class DefaultHomeComponentTest :
+class DefaultSettingsComponentTest :
     FunSpec({
         test("exposes ready state") {
-            val component = DefaultHomeComponent(testComponentContext())
+            val component = DefaultSettingsComponent(testComponentContext())
+
             component.uiState.value.isReady shouldBe true
         }
     })

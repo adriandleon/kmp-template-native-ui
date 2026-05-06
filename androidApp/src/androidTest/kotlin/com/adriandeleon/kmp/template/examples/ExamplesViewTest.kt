@@ -1,4 +1,4 @@
-package com.adriandeleon.kmp.template.main.examples
+package com.adriandeleon.kmp.template.examples
 
 import androidx.compose.ui.test.junit4.createComposeRule
 import org.junit.Rule

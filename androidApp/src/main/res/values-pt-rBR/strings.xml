@@ -13,8 +13,8 @@
     <string name="posts_retry_button">Tentar novamente</string>
 
     <!-- Home screen -->
-    <string name="home_screen_title">Tela Inicial</string>
-    <string name="home_log_button">Registrar Mensagem</string>
+    <string name="home_screen_title">Início</string>
+    <string name="home_screen_body">Esta aba é o ponto inicial com sessão para conteúdo próprio do app.</string>
 
     <!-- Root placeholders -->
     <string name="root_onboarding_placeholder">Introdução</string>
@@ -58,16 +58,12 @@
     <!-- Main tabs -->
     <string name="main_home_tab">Início</string>
     <string name="main_examples_tab">Exemplos</string>
-    <string name="main_adaptive_tab">Adaptável</string>
+    <string name="main_posts_tab">Publicações</string>
     <string name="main_settings_tab">Ajustes</string>
-    <string name="main_home_title">Início</string>
-    <string name="main_home_body">Esta aba é o ponto inicial com sessão para conteúdo próprio do app.</string>
-    <string name="main_examples_title">Exemplos</string>
-    <string name="main_examples_body">Esta aba receberá exemplos de stack, slot e child item navigation.</string>
-    <string name="main_adaptive_title">Adaptável</string>
-    <string name="main_adaptive_body">Esta aba receberá o exemplo de layout adaptável com Child Panels.</string>
-    <string name="main_settings_title">Ajustes</string>
-    <string name="main_settings_body">Esta aba é o lugar do template para conta, preferências e reinicializações.</string>
+
+    <!-- Settings screen -->
+    <string name="settings_screen_title">Ajustes</string>
+    <string name="settings_screen_body">Esta aba é o lugar do template para conta, preferências e reinicializações.</string>
 
     <!-- Navigation examples -->
     <string name="examples_title">Exemplos de navegação</string>

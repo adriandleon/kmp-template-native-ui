@@ -37,17 +37,17 @@ navigation actions. Platform modules own only native rendering and platform
 event entry points.
 
 - Shared component contract:
-  `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/main/examples/ExamplesComponent.kt`
+  `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/examples/ExamplesComponent.kt`
 - Internal shared component implementation:
-  `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/main/examples/DefaultExamplesComponent.kt`
+  `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/examples/DefaultExamplesComponent.kt`
 - Shared preview component:
-  `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/main/examples/PreviewExamplesComponent.kt`
+  `shared/src/commonMain/kotlin/com/adriandeleon/kmp/template/examples/PreviewExamplesComponent.kt`
 - Shared tests:
-  `shared/src/commonTest/kotlin/com/adriandeleon/kmp/template/main/examples/DefaultExamplesComponentTest.kt`
+  `shared/src/commonTest/kotlin/com/adriandeleon/kmp/template/examples/DefaultExamplesComponentTest.kt`
 - Android UI:
-  `androidApp/src/main/kotlin/com/adriandeleon/kmp/template/main/examples/ExamplesView.kt`
+  `androidApp/src/main/kotlin/com/adriandeleon/kmp/template/examples/ExamplesView.kt`
 - iOS UI:
-  `iosApp/KMP-Template/MainFlow/ExamplesView.swift`
+  `iosApp/KMP-Template/Examples/ExamplesView.swift`
 
 ## Public API boundary
 

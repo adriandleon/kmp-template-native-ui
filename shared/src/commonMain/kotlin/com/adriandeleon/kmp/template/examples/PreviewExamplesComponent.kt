@@ -1,4 +1,4 @@
-package com.adriandeleon.kmp.template.main.examples
+package com.adriandeleon.kmp.template.examples
 
 import com.arkivanov.decompose.Child
 import com.arkivanov.decompose.router.slot.ChildSlot

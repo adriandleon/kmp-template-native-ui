@@ -58,7 +58,7 @@ include:
 - `posts/domain/usecase/GetPostsUseCaseTest.kt`
 - `posts/presentation/mapper/PostsUiMapperTest.kt`
 - `posts/presentation/DefaultPostsComponentTest.kt`
-- `main/examples/DefaultExamplesComponentTest.kt`
+- `examples/DefaultExamplesComponentTest.kt`
 
 These tests are the best starting point when you add new shared features to the
 template.
@@ -69,7 +69,7 @@ The iOS SwiftUI tests live under `iosApp/KMP-TemplateTests`. The template
 currently includes:
 
 - `Posts/PostsViewTests.swift`
-- `MainFlow/ExamplesViewTests.swift`
+- `Examples/ExamplesViewTests.swift`
 
 These files show how to use shared `Preview*Component` test doubles to drive
 SwiftUI state-based tests without duplicating feature logic in Swift.
@@ -80,7 +80,7 @@ Android Compose UI tests live under `androidApp/src/androidTest/kotlin`. The
 template currently includes:
 
 - `posts/PostsViewTest.kt`
-- `main/examples/ExamplesViewTest.kt`
+- `examples/ExamplesViewTest.kt`
 
 The robot files beside those tests show how to keep Compose assertions readable
 and how to drive UI from shared preview components.

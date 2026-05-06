@@ -4,6 +4,7 @@ import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.InMemoryAppStateRepository
 import com.adriandeleon.kmp.template.common.util.activeSlotInstance
 import com.adriandeleon.kmp.template.common.util.testComponentContext
+import com.adriandeleon.kmp.template.posts.PreviewPostsComponent
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.types.shouldBeInstanceOf
 
@@ -208,6 +209,7 @@ private fun rootComponent(
                         authRequired = authRequired,
                     )
             ),
+        postsComponentFactory = { PreviewPostsComponent() },
     )
 
 private fun RootComponent.activeChild(): RootComponent.Child = slot.activeSlotInstance()

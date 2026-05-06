@@ -2,7 +2,6 @@
   "sourceLanguage" : "en",
   "strings" : {
     "" : {
-
     },
     "%@ · count %d" : {
       "extractionState" : "manual",
@@ -89,29 +88,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Painel ativo: %@"
-          }
-        }
-      }
-    },
-    "Adaptive" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaptive"
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaptable"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Adaptável"
           }
         }
       }
@@ -618,29 +594,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Início"
-          }
-        }
-      }
-    },
-    "Home Screen" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Home Screen"
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pantalla de Inicio"
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Tela Inicial"
           }
         }
       }
@@ -1929,52 +1882,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Esta aba é o lugar do template para conta, preferências e reinicializações."
-          }
-        }
-      }
-    },
-    "This tab will host stack, slot, and child item navigation examples." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This tab will host stack, slot, and child item navigation examples."
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta pestaña alojará ejemplos de stack, slot y child item navigation."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta aba receberá exemplos de stack, slot e child item navigation."
-          }
-        }
-      }
-    },
-    "This tab will host the Child Panels adaptive layout example." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This tab will host the Child Panels adaptive layout example."
-          }
-        },
-        "es-419" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta pestaña alojará el ejemplo de layout adaptable con Child Panels."
-          }
-        },
-        "pt-BR" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta aba receberá o exemplo de layout adaptável com Child Panels."
           }
         }
       }

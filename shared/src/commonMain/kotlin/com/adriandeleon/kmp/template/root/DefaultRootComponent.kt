@@ -7,6 +7,7 @@ import com.adriandeleon.kmp.template.auth.DefaultAuthComponent
 import com.adriandeleon.kmp.template.main.DefaultMainComponent
 import com.adriandeleon.kmp.template.onboarding.DefaultOnboardingComponent
 import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output as OnboardingOutput
+import com.adriandeleon.kmp.template.posts.PostsComponent
 import com.adriandeleon.kmp.template.root.RootComponent.Child
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
@@ -19,6 +20,7 @@ import com.arkivanov.decompose.value.subscribe
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
 /**
  * Default implementation of [RootComponent]
@@ -30,6 +32,7 @@ import org.koin.core.component.get
 internal class DefaultRootComponent(
     componentContext: ComponentContext,
     appStateRepository: AppStateRepository? = null,
+    private val postsComponentFactory: ((ComponentContext) -> PostsComponent)? = null,
 ) : RootComponent, KoinComponent, ComponentContext by componentContext {
 
     private val stateRepository: AppStateRepository = appStateRepository ?: get()
@@ -57,7 +60,13 @@ internal class DefaultRootComponent(
         when (configuration) {
             is Configuration.Onboarding -> Child.Onboarding(onboardingComponent(context))
             is Configuration.Auth -> Child.Auth(authComponent(context))
-            is Configuration.Main -> Child.Main(DefaultMainComponent(context))
+            is Configuration.Main ->
+                Child.Main(
+                    DefaultMainComponent(context) { childContext ->
+                        postsComponentFactory?.invoke(childContext)
+                            ?: get<PostsComponent> { parametersOf(childContext) }
+                    }
+                )
         }
 
     private fun onboardingComponent(componentContext: ComponentContext) =

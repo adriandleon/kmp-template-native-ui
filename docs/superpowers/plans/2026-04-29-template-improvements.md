@@ -637,8 +637,7 @@ Expected: `BUILD SUCCESSFUL`
     <string name="posts_retry_button">Retry</string>
 
     <!-- Home screen -->
-    <string name="home_screen_title">Home Screen</string>
-    <string name="home_log_button">Log Message</string>
+    <string name="home_screen_title">Home</string>
 </resources>
 ```
 
@@ -662,7 +661,6 @@ Expected: `BUILD SUCCESSFUL`
 
     <!-- Home screen -->
     <string name="home_screen_title">Pantalla de Inicio</string>
-    <string name="home_log_button">Registrar Mensaje</string>
 </resources>
 ```
 
@@ -686,7 +684,6 @@ Expected: `BUILD SUCCESSFUL`
 
     <!-- Home screen -->
     <string name="home_screen_title">Tela Inicial</string>
-    <string name="home_log_button">Registrar Mensagem</string>
 </resources>
 ```
 
@@ -1537,7 +1534,7 @@ override fun onRetry() {
 package com.adriandeleon.kmp.template.home
 
 class PreviewHomeComponent : HomeComponent {
-    override val title: String = "Home Screen"
+    override val uiState = MutableValue(HomeComponent.UiState())
 }
 ```
 
@@ -2125,7 +2122,7 @@ import io.kotest.matchers.shouldBe
 class DefaultHomeComponentTest : FunSpec({
     test("exposes the correct title") {
         val component = DefaultHomeComponent(testComponentContext())
-        component.title shouldBe "Home Screen"
+        component.uiState.value.isReady shouldBe true
     }
 })
 ```

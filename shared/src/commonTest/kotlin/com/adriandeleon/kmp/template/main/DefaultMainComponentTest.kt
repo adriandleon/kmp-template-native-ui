@@ -1,6 +1,7 @@
 package com.adriandeleon.kmp.template.main
 
 import com.adriandeleon.kmp.template.common.util.testComponentContext
+import com.adriandeleon.kmp.template.posts.PreviewPostsComponent
 import io.kotest.assertions.throwables.shouldNotThrowAny
 import io.kotest.core.spec.style.FunSpec
 import io.kotest.matchers.collections.shouldContainExactly
@@ -16,7 +17,7 @@ class DefaultMainComponentTest :
                 listOf(
                     MainComponent.Page.Home,
                     MainComponent.Page.Examples,
-                    MainComponent.Page.Adaptive,
+                    MainComponent.Page.Posts,
                     MainComponent.Page.Settings,
                 )
             component.uiState.value.selectedPage shouldBe MainComponent.Page.Home
@@ -37,7 +38,7 @@ class DefaultMainComponentTest :
 
             component.selectPage(2)
 
-            component.uiState.value.selectedPage shouldBe MainComponent.Page.Adaptive
+            component.uiState.value.selectedPage shouldBe MainComponent.Page.Posts
             component.pages.value.selectedIndex shouldBe 2
         }
 
@@ -62,9 +63,19 @@ class DefaultMainComponentTest :
 
             shouldNotThrowAny { component.examples } shouldNotBe null
         }
+
+        test("all tab components remain available") {
+            val component = mainComponent()
+
+            shouldNotThrowAny { component.home } shouldNotBe null
+            shouldNotThrowAny { component.examples } shouldNotBe null
+            shouldNotThrowAny { component.posts } shouldNotBe null
+            shouldNotThrowAny { component.settings } shouldNotBe null
+        }
     })
 
-private fun mainComponent(): MainComponent = DefaultMainComponent(testComponentContext())
+private fun mainComponent(): MainComponent =
+    DefaultMainComponent(testComponentContext()) { PreviewPostsComponent() }
 
 private fun MainComponent.pageOrder(): List<MainComponent.Page> =
     pages.value.items.map { it.configuration }

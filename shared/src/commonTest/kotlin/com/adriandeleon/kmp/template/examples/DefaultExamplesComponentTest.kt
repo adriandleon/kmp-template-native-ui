@@ -1,4 +1,4 @@
-package com.adriandeleon.kmp.template.main.examples
+package com.adriandeleon.kmp.template.examples
 
 import com.adriandeleon.kmp.template.common.util.activeInstance
 import com.adriandeleon.kmp.template.common.util.activeSlotInstance
