@@ -11,11 +11,12 @@ import com.arkivanov.decompose.retainedComponent
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
-        installSplashScreen()
+        val splashScreen = installSplashScreen()
         enableEdgeToEdge()
         super.onCreate(savedInstanceState)
 
         val root = retainedComponent { createRootComponent(it) }
+        splashScreen.setKeepOnScreenCondition { root.isStarting.value }
 
         setContent { RootView(component = root) }
     }

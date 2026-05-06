@@ -17,6 +17,8 @@ interface RootComponent : BackHandlerOwner {
 
     val slot: Value<ChildSlot<*, Child>>
 
+    val isStarting: Value<Boolean>
+
     fun completeOnboarding()
 
     fun completeAuthentication()
@@ -28,6 +30,8 @@ interface RootComponent : BackHandlerOwner {
     fun setAuthRequired(authRequired: Boolean)
 
     sealed interface Child {
+
+        data object Startup : Child
 
         data class Onboarding(val component: OnboardingComponent) : Child
 

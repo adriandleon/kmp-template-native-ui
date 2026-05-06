@@ -72,19 +72,26 @@ those models into `UiState`.
 
 ## Root flow
 
-The app starts with a root state gate. The root component decides whether to
-show onboarding, authentication, or the main home flow.
+The app starts with a root state gate. The root component first shows a startup
+child while it loads persisted app state, then decides whether to show
+onboarding, authentication, or the main home flow.
 
 Use this pattern when your app has launch-time routing that depends on
 preferences, session state, feature flags, or account setup.
 
 - `RootComponent` exposes a `Child Slot`.
-- `DefaultRootComponent` activates onboarding, auth, or main.
+- `RootComponent.Child.Startup` is the initial child and prevents onboarding or
+  auth from flashing before persisted state is ready.
+- `RootComponent.isStarting` lets Android keep the native splash screen visible
+  until the shared startup gate resolves.
+- `DefaultRootComponent` activates onboarding, auth, or main after
+  `AppStateRepository.loadInitialState()` completes.
 - `DataStoreAppStateRepository` persists the app state in KMP DataStore.
 
 To customize the root flow, replace the state checks in
 `DefaultRootComponent` and keep the public root API small. Android and iOS
-must not duplicate the launch decision.
+must not duplicate the launch decision. Keep platform launch screens native and
+static; async startup work belongs in the shared root startup gate.
 
 ## Child Pages
 

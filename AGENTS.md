@@ -318,9 +318,12 @@ deep link, read `docs/NAVIGATION_SHOWCASE.md` and inspect the corresponding
 shared component tests.
 
 Use these existing recipes as the source of truth:
-- **Root state gate**: `RootComponent` and `DefaultRootComponent` decide whether
-  the app shows onboarding, auth, or main. Do not duplicate this launch logic in
-  Android or iOS.
+- **Root state gate**: `RootComponent` initially shows
+  `RootComponent.Child.Startup` while `DefaultRootComponent` loads persisted app
+  state through `AppStateRepository.loadInitialState()`. After startup resolves,
+  it decides whether the app shows onboarding, auth, or main. Do not duplicate
+  this launch logic in Android or iOS. Keep native launch screens static and put
+  async startup work in the shared root gate.
 - **Child Pages**: onboarding and main tabs demonstrate page selection flows.
   Use this for peer destinations such as onboarding pages, tabs, or paged
   sections.
