@@ -9,5 +9,5 @@ interface HomeComponent {
     val uiState: Value<UiState>
 
     /** UI-only state exposed to Android and iOS. */
-    data class UiState(val title: String)
+    data class UiState(val isReady: Boolean = true)
 }

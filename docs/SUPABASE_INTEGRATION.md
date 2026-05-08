@@ -81,9 +81,9 @@ The Supabase integration follows a layered architecture pattern:
 ```toml
 # In gradle/libs.versions.toml
 [versions]
-supabase = "3.2.6"
-ktor = "3.3.2"
-buildkonfig = "0.17.1"
+supabase = "3.6.0"
+ktor = "3.4.3"
+buildkonfig = "0.18.0"
 
 [libraries]
 # Supabase modules

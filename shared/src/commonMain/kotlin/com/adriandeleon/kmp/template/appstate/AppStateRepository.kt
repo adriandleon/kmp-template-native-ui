@@ -12,6 +12,14 @@ import com.arkivanov.decompose.value.Value
 interface AppStateRepository {
     val state: Value<AppState>
 
+    /**
+     * Loads the persisted startup state before root navigation leaves the startup screen.
+     *
+     * Implementations may read local storage, restore an auth session, or hydrate cached startup
+     * flags here. Keep network work limited to critical routing dependencies.
+     */
+    suspend fun loadInitialState(): AppState
+
     fun setHasSeenOnboarding(hasSeenOnboarding: Boolean)
 
     fun setAuthenticated(isAuthenticated: Boolean)

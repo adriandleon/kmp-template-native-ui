@@ -5,6 +5,7 @@ import com.arkivanov.decompose.router.pages.ChildPages
 import com.arkivanov.decompose.router.pages.Pages
 import com.arkivanov.decompose.router.pages.PagesNavigation
 import com.arkivanov.decompose.router.pages.childPages
+import com.arkivanov.decompose.router.pages.select
 import com.arkivanov.decompose.router.pages.selectNext
 import com.arkivanov.decompose.router.pages.selectPrev
 import com.arkivanov.decompose.value.MutableValue
@@ -34,6 +35,13 @@ internal class DefaultOnboardingComponent(
 
     override fun previous() {
         navigation.selectPrev { newPages, _ -> mutableUiState.value = newPages.toUiState() }
+    }
+
+    override fun selectPage(index: Int) {
+        val selectedIndex = index.coerceIn(onboardingPages.indices)
+        navigation.select(selectedIndex) { newPages, _ ->
+            mutableUiState.value = newPages.toUiState()
+        }
     }
 
     override fun skip() {

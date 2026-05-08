@@ -26,28 +26,24 @@ struct OnboardingView: View {
         VStack(spacing: 24) {
             HStack {
                 Spacer()
-                Button(NSLocalizedString("onboarding_skip_button", comment: ""), action: component.skip)
+                Button("Skip", action: component.skip)
                     .accessibilityIdentifier("onboarding_skip_button")
             }
 
-            Spacer()
-
-            VStack(spacing: 16) {
-                Text(title(for: state.selectedPage))
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .multilineTextAlignment(.center)
-                    .accessibilityIdentifier("onboarding_title")
-
-                Text(message(for: state.selectedPage))
-                    .font(.body)
-                    .foregroundStyle(.secondary)
-                    .multilineTextAlignment(.center)
-                    .accessibilityIdentifier("onboarding_body")
+            TabView(
+                selection: Binding(
+                    get: { Int(uiStateObserver.value.selectedIndex) },
+                    set: { component.selectPage(index: Int32($0)) },
+                )
+            ) {
+                ForEach(0..<Int(state.pageCount), id: \.self) { index in
+                    OnboardingPageView(page: page(for: index))
+                        .tag(index)
+                }
             }
-            .frame(maxWidth: .infinity)
-
-            Spacer()
+            .tabViewStyle(.page(indexDisplayMode: .never))
+            .animation(.easeInOut(duration: 0.3), value: Int(state.selectedIndex))
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
 
             HStack(spacing: 8) {
                 ForEach(0..<Int(state.pageCount), id: \.self) { index in
@@ -59,19 +55,23 @@ struct OnboardingView: View {
             .accessibilityIdentifier("onboarding_page_indicator")
 
             HStack(spacing: 12) {
-                Button(NSLocalizedString("onboarding_previous_button", comment: ""), action: component.previous)
+                Button("Previous") {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        component.previous()
+                    }
+                }
                     .buttonStyle(.bordered)
                     .disabled(!state.canGoPrevious)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("onboarding_previous_button")
 
-                Button(
-                    NSLocalizedString(
-                        state.isLastPage ? "onboarding_finish_button" : "onboarding_next_button",
-                        comment: ""
-                    ),
-                    action: component.finish
-                )
+                Button {
+                    withAnimation(.easeInOut(duration: 0.3)) {
+                        component.finish()
+                    }
+                } label: {
+                    Text(state.isLastPage ? "Finish" : "Next")
+                }
                 .buttonStyle(.borderedProminent)
                 .frame(maxWidth: .infinity)
                 .accessibilityIdentifier("onboarding_next_button")
@@ -83,27 +83,62 @@ struct OnboardingView: View {
     }
 }
 
-private func title(for page: OnboardingComponentPage) -> String {
+private struct OnboardingPageView: View {
+    let page: OnboardingComponentPage
+
+    var body: some View {
+        VStack(spacing: 16) {
+            Text(title(for: page))
+                .font(.title)
+                .fontWeight(.semibold)
+                .multilineTextAlignment(.center)
+                .accessibilityIdentifier("onboarding_title")
+
+            Text(message(for: page))
+                .font(.body)
+                .foregroundStyle(.secondary)
+                .multilineTextAlignment(.center)
+                .accessibilityIdentifier("onboarding_body")
+        }
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .padding(.horizontal, 16)
+    }
+}
+
+private func page(for index: Int) -> OnboardingComponentPage {
+    switch index {
+    case 0:
+        return .welcome
+    case 1:
+        return .organize
+    case 2:
+        return .customize
+    default:
+        return .welcome
+    }
+}
+
+private func title(for page: OnboardingComponentPage) -> LocalizedStringResource {
     switch page {
     case .welcome:
-        return NSLocalizedString("onboarding_welcome_title", comment: "")
+        return "Welcome"
     case .organize:
-        return NSLocalizedString("onboarding_organize_title", comment: "")
+        return "Organize"
     case .customize:
-        return NSLocalizedString("onboarding_customize_title", comment: "")
+        return "Customize"
     default:
         return ""
     }
 }
 
-private func message(for page: OnboardingComponentPage) -> String {
+private func message(for page: OnboardingComponentPage) -> LocalizedStringResource {
     switch page {
     case .welcome:
-        return NSLocalizedString("onboarding_welcome_body", comment: "")
+        return "Start with a shared flow that decides what the app shows first."
     case .organize:
-        return NSLocalizedString("onboarding_organize_body", comment: "")
+        return "Keep page order and completion rules in shared Kotlin components."
     case .customize:
-        return NSLocalizedString("onboarding_customize_body", comment: "")
+        return "Replace the copy and screens while preserving the Child Pages pattern."
     default:
         return ""
     }

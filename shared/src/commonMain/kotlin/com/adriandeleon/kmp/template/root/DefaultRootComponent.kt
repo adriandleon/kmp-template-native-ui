@@ -4,21 +4,28 @@ import com.adriandeleon.kmp.template.appstate.AppState
 import com.adriandeleon.kmp.template.appstate.AppStateRepository
 import com.adriandeleon.kmp.template.auth.AuthComponent.Output
 import com.adriandeleon.kmp.template.auth.DefaultAuthComponent
+import com.adriandeleon.kmp.template.common.util.DispatcherProvider
 import com.adriandeleon.kmp.template.main.DefaultMainComponent
 import com.adriandeleon.kmp.template.onboarding.DefaultOnboardingComponent
 import com.adriandeleon.kmp.template.onboarding.OnboardingComponent.Output as OnboardingOutput
+import com.adriandeleon.kmp.template.posts.PostsComponent
 import com.adriandeleon.kmp.template.root.RootComponent.Child
 import com.arkivanov.decompose.ComponentContext
 import com.arkivanov.decompose.router.slot.ChildSlot
 import com.arkivanov.decompose.router.slot.SlotNavigation
 import com.arkivanov.decompose.router.slot.activate
 import com.arkivanov.decompose.router.slot.childSlot
+import com.arkivanov.decompose.value.MutableValue
 import com.arkivanov.decompose.value.ObserveLifecycleMode
 import com.arkivanov.decompose.value.Value
 import com.arkivanov.decompose.value.subscribe
+import com.arkivanov.essenty.lifecycle.coroutines.coroutineScope
+import kotlin.coroutines.cancellation.CancellationException
+import kotlinx.coroutines.launch
 import kotlinx.serialization.Serializable
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.get
+import org.koin.core.parameter.parametersOf
 
 /**
  * Default implementation of [RootComponent]
@@ -30,34 +37,62 @@ import org.koin.core.component.get
 internal class DefaultRootComponent(
     componentContext: ComponentContext,
     appStateRepository: AppStateRepository? = null,
+    dispatcherProvider: DispatcherProvider? = null,
+    private val postsComponentFactory: ((ComponentContext) -> PostsComponent)? = null,
 ) : RootComponent, KoinComponent, ComponentContext by componentContext {
 
     private val stateRepository: AppStateRepository = appStateRepository ?: get()
+    private val dispatcher: DispatcherProvider = dispatcherProvider ?: get()
     private val navigation = SlotNavigation<Configuration>()
+    private val startupState = MutableValue(true)
+    override val isStarting: Value<Boolean> = startupState
 
     override val slot: Value<ChildSlot<*, Child>> =
         childSlot(
             source = navigation,
             serializer = Configuration.serializer(),
-            initialConfiguration = { stateRepository.state.value.rootConfiguration() },
+            initialConfiguration = { Configuration.Startup },
             handleBackButton = false,
             childFactory = ::createChild,
         )
 
     init {
-        stateRepository.state.subscribe(
-            lifecycle = lifecycle,
-            mode = ObserveLifecycleMode.CREATE_DESTROY,
-        ) { appState ->
-            navigation.activate(appState.rootConfiguration())
+        coroutineScope(dispatcher.main).launch {
+            val initialState = loadStartupState()
+            navigation.activate(initialState.rootConfiguration())
+            startupState.value = false
+            stateRepository.state.subscribe(
+                lifecycle = lifecycle,
+                mode = ObserveLifecycleMode.CREATE_DESTROY,
+            ) { appState ->
+                if (!startupState.value) {
+                    navigation.activate(appState.rootConfiguration())
+                }
+            }
         }
     }
 
+    private suspend fun loadStartupState(): AppState =
+        try {
+            stateRepository.loadInitialState()
+        } catch (exception: CancellationException) {
+            throw exception
+        } catch (_: Throwable) {
+            AppState()
+        }
+
     private fun createChild(configuration: Configuration, context: ComponentContext): Child =
         when (configuration) {
+            is Configuration.Startup -> Child.Startup
             is Configuration.Onboarding -> Child.Onboarding(onboardingComponent(context))
             is Configuration.Auth -> Child.Auth(authComponent(context))
-            is Configuration.Main -> Child.Main(DefaultMainComponent(context))
+            is Configuration.Main ->
+                Child.Main(
+                    DefaultMainComponent(context) { childContext ->
+                        postsComponentFactory?.invoke(childContext)
+                            ?: get<PostsComponent> { parametersOf(childContext) }
+                    }
+                )
         }
 
     private fun onboardingComponent(componentContext: ComponentContext) =
@@ -119,6 +154,8 @@ internal class DefaultRootComponent(
 
     @Serializable
     private sealed interface Configuration {
+
+        @Serializable data object Startup : Configuration
 
         @Serializable data object Onboarding : Configuration
 

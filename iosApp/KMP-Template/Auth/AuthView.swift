@@ -75,39 +75,39 @@ private struct AuthScreenContent: View {
         VStack(spacing: 12) {
             switch screen {
             case .signin:
-                Button(NSLocalizedString("auth_sign_in_button", comment: ""), action: component.signIn)
+                Button("Sign in", action: component.signIn)
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("auth_primary_button")
 
                 HStack(spacing: 12) {
-                    Button(NSLocalizedString("auth_create_account_button", comment: ""), action: component.openSignUp)
+                    Button("Create account", action: component.openSignUp)
                         .buttonStyle(.bordered)
                         .frame(maxWidth: .infinity)
                         .accessibilityIdentifier("auth_secondary_button")
 
-                    Button(NSLocalizedString("auth_forgot_button", comment: ""), action: component.openForgotPassword)
+                    Button("Forgot?", action: component.openForgotPassword)
                         .buttonStyle(.bordered)
                         .frame(maxWidth: .infinity)
                         .accessibilityIdentifier("auth_forgot_button")
                 }
             case .signup:
-                Button(NSLocalizedString("auth_sign_up_button", comment: ""), action: component.signUp)
+                Button("Create account", action: component.signUp)
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("auth_primary_button")
 
-                Button(NSLocalizedString("auth_terms_button", comment: ""), action: component.showTerms)
+                Button("View terms", action: component.showTerms)
                     .buttonStyle(.plain)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("auth_terms_button")
             case .forgotpassword:
-                Button(NSLocalizedString("auth_send_verification_button", comment: ""), action: component.requestVerification)
+                Button("Send verification", action: component.requestVerification)
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("auth_primary_button")
             case .verification:
-                Button(NSLocalizedString("auth_verification_done_button", comment: ""), action: component.back)
+                Button("Done", action: component.back)
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("auth_primary_button")
@@ -127,14 +127,14 @@ private struct AuthTermsOverlay: View {
                 .ignoresSafeArea()
 
             VStack(alignment: .leading, spacing: 16) {
-                Text(NSLocalizedString("auth_terms_title", comment: ""))
+                Text("Terms")
                     .font(.headline)
 
-                Text(NSLocalizedString("auth_terms_body", comment: ""))
+                Text("This modal demonstrates Child Slot navigation for optional authentication content.")
                     .font(.body)
                     .foregroundStyle(.secondary)
 
-                Button(NSLocalizedString("auth_terms_close_button", comment: ""), action: component.dismissModal)
+                Button("Close", action: component.dismissModal)
                     .buttonStyle(.borderedProminent)
                     .frame(maxWidth: .infinity)
                     .accessibilityIdentifier("auth_terms_close_button")
@@ -166,13 +166,13 @@ private func screen(for child: AuthComponentChild) -> AuthComponentScreen {
 private func title(for child: AuthComponentChild) -> String {
     switch screen(for: child) {
     case .signin:
-        return NSLocalizedString("auth_sign_in_title", comment: "")
+        return String(localized: "Sign in")
     case .signup:
-        return NSLocalizedString("auth_sign_up_title", comment: "")
+        return String(localized: "Create account")
     case .forgotpassword:
-        return NSLocalizedString("auth_forgot_title", comment: "")
+        return String(localized: "Recover access")
     case .verification:
-        return NSLocalizedString("auth_verification_title", comment: "")
+        return String(localized: "Verification")
     default:
         return ""
     }
@@ -181,13 +181,13 @@ private func title(for child: AuthComponentChild) -> String {
 private func message(for child: AuthComponentChild) -> String {
     switch screen(for: child) {
     case .signin:
-        return NSLocalizedString("auth_sign_in_body", comment: "")
+        return String(localized: "Use this screen as the entry point for any authentication provider.")
     case .signup:
-        return NSLocalizedString("auth_sign_up_body", comment: "")
+        return String(localized: "Replace this fake action with your provider registration flow.")
     case .forgotpassword:
-        return NSLocalizedString("auth_forgot_body", comment: "")
+        return String(localized: "This route demonstrates stack navigation before a verification step.")
     case .verification:
-        return NSLocalizedString("auth_verification_body", comment: "")
+        return String(localized: "Use this route for confirmation, codes, or password reset completion.")
     default:
         return ""
     }

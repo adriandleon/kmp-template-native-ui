@@ -256,7 +256,7 @@ env:
   ANDROID_NAMESPACE: "com.yourcompany.yourapp"
   
   # Build Configuration
-  JAVA_VERSION: "17"
+  JAVA_VERSION: "21"
   GRADLE_WRAPPER: "./gradlew"
   
   # Firebase Test Lab

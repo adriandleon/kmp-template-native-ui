@@ -15,6 +15,8 @@ interface OnboardingComponent {
 
     fun previous()
 
+    fun selectPage(index: Int)
+
     fun skip()
 
     /**

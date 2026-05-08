@@ -18,8 +18,8 @@
     <string name="posts_retry_button">Retry</string>
 
     <!-- Home screen -->
-    <string name="home_screen_title">Home Screen</string>
-    <string name="home_log_button">Log Message</string>
+    <string name="home_screen_title">Home</string>
+    <string name="home_screen_body">This tab is the signed-in starting point for app-specific content.</string>
 
     <!-- Root placeholders -->
     <string name="root_onboarding_placeholder">Onboarding</string>
@@ -63,16 +63,12 @@
     <!-- Main tabs -->
     <string name="main_home_tab">Home</string>
     <string name="main_examples_tab">Examples</string>
-    <string name="main_adaptive_tab">Adaptive</string>
+    <string name="main_posts_tab">Posts</string>
     <string name="main_settings_tab">Settings</string>
-    <string name="main_home_title">Home</string>
-    <string name="main_home_body">This tab is the signed-in starting point for app-specific content.</string>
-    <string name="main_examples_title">Examples</string>
-    <string name="main_examples_body">This tab will host stack, slot, and child item navigation examples.</string>
-    <string name="main_adaptive_title">Adaptive</string>
-    <string name="main_adaptive_body">This tab will host the Child Panels adaptive layout example.</string>
-    <string name="main_settings_title">Settings</string>
-    <string name="main_settings_body">This tab is the template place for account, preferences, and reset actions.</string>
+
+    <!-- Settings screen -->
+    <string name="settings_screen_title">Settings</string>
+    <string name="settings_screen_body">This tab is the template place for account, preferences, and reset actions.</string>
 
     <!-- Navigation examples -->
     <string name="examples_title">Navigation examples</string>
@@ -140,7 +136,8 @@
     <string name="tag_auth_terms_button" translatable="false">auth_terms_button</string>
     <string name="tag_auth_terms_close_button" translatable="false">auth_terms_close_button</string>
     <string name="tag_main_screen" translatable="false">main_screen</string>
-    <string name="tag_main_page_content" translatable="false">main_page_content</string>
+    <string name="tag_home_screen" translatable="false">home_screen</string>
+    <string name="tag_settings_screen" translatable="false">settings_screen</string>
     <string name="tag_examples_screen" translatable="false">examples_screen</string>
     <string name="tag_examples_add_button" translatable="false">examples_add_button</string>
     <string name="tag_examples_modal_button" translatable="false">examples_modal_button</string>

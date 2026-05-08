@@ -27,73 +27,23 @@ struct MainView: View {
                 set: { component.selectPage(index: Int32($0)) },
             )
         ) {
-            MainPageView(page: .home)
+            HomeView(component.home)
                 .tag(0)
-                .tabItem { Label(NSLocalizedString("main_home_tab", comment: ""), systemImage: "house") }
+                .tabItem { Label("Home", systemImage: "house") }
 
             ExamplesView(component.examples)
                 .tag(1)
-                .tabItem { Label(NSLocalizedString("main_examples_tab", comment: ""), systemImage: "square.stack.3d.up") }
+                .tabItem { Label("Examples", systemImage: "square.stack.3d.up") }
 
-            MainPageView(page: .adaptive)
+            PostsView(component.posts)
                 .tag(2)
-                .tabItem { Label(NSLocalizedString("main_adaptive_tab", comment: ""), systemImage: "sidebar.left") }
+                .tabItem { Label("Posts", systemImage: "doc.text") }
 
-            MainPageView(page: .settings)
+            SettingsView(component.settings)
                 .tag(3)
-                .tabItem { Label(NSLocalizedString("main_settings_tab", comment: ""), systemImage: "gearshape") }
+                .tabItem { Label("Settings", systemImage: "gearshape") }
         }
         .accessibilityIdentifier("main_screen")
-    }
-}
-
-private struct MainPageView: View {
-    let page: MainComponentPage
-
-    var body: some View {
-        VStack(spacing: 12) {
-            Text(title(for: page))
-                .font(.title)
-                .fontWeight(.semibold)
-
-            Text(message(for: page))
-                .font(.body)
-                .foregroundStyle(.secondary)
-                .multilineTextAlignment(.center)
-                .padding(.horizontal, 24)
-        }
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .accessibilityIdentifier("main_page_content")
-    }
-}
-
-private func title(for page: MainComponentPage) -> String {
-    switch page {
-    case .home:
-        return NSLocalizedString("main_home_title", comment: "")
-    case .examples:
-        return NSLocalizedString("main_examples_title", comment: "")
-    case .adaptive:
-        return NSLocalizedString("main_adaptive_title", comment: "")
-    case .settings:
-        return NSLocalizedString("main_settings_title", comment: "")
-    default:
-        return ""
-    }
-}
-
-private func message(for page: MainComponentPage) -> String {
-    switch page {
-    case .home:
-        return NSLocalizedString("main_home_body", comment: "")
-    case .examples:
-        return NSLocalizedString("main_examples_body", comment: "")
-    case .adaptive:
-        return NSLocalizedString("main_adaptive_body", comment: "")
-    case .settings:
-        return NSLocalizedString("main_settings_body", comment: "")
-    default:
-        return ""
     }
 }
 

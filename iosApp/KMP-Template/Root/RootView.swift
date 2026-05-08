@@ -32,6 +32,8 @@ private struct RootSlotView: View {
     var body: some View {
         VStack {
             switch slotValue.child?.instance {
+            case is RootComponentChildStartup:
+                StartupView()
             case let child as RootComponentChildOnboarding:
                 OnboardingView(child.component)
             case let child as RootComponentChildAuth:
@@ -39,8 +41,40 @@ private struct RootSlotView: View {
             case let child as RootComponentChildMain:
                 MainView(child.component)
             default:
-                Text(NSLocalizedString("root_starting_placeholder", comment: ""))
+                StartupView()
             }
         }
     }
+}
+
+private struct StartupView: View {
+    var body: some View {
+        VStack(spacing: 16) {
+            ProgressView()
+            Text("Starting")
+                .font(.body)
+                .foregroundStyle(.secondary)
+        }
+    }
+}
+
+#Preview("Root startup - English") {
+    StartupView()
+        .environment(\.locale, .init(identifier: "en"))
+}
+
+#Preview("Root startup - Spanish") {
+    StartupView()
+        .environment(\.locale, .init(identifier: "es-419"))
+}
+
+#Preview("Root startup - Portuguese") {
+    StartupView()
+        .environment(\.locale, .init(identifier: "pt-BR"))
+}
+
+#Preview("Root startup - English - Dark") {
+    StartupView()
+        .environment(\.locale, .init(identifier: "en"))
+        .preferredColorScheme(.dark)
 }

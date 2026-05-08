@@ -129,22 +129,22 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             // Firebase Analytics
-            implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
+            implementation("com.google.firebase:firebase-analytics-ktx")
             
             // Crashlytics
-            implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+            implementation("com.google.firebase:firebase-crashlytics-ktx")
         }
         
         androidMain.dependencies {
             // Android-specific Firebase dependencies
-            implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
-            implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+            implementation("com.google.firebase:firebase-analytics-ktx")
+            implementation("com.google.firebase:firebase-crashlytics-ktx")
         }
         
         iosMain.dependencies {
             // iOS-specific Firebase dependencies
-            implementation("com.google.firebase:firebase-analytics-ktx:21.5.0")
-            implementation("com.google.firebase:firebase-crashlytics-ktx:18.6.2")
+            implementation("com.google.firebase:firebase-analytics-ktx")
+            implementation("com.google.firebase:firebase-crashlytics-ktx")
         }
     }
 }
@@ -159,7 +159,7 @@ plugins {
 }
 
 dependencies {
-    implementation(platform("com.google.firebase:firebase-bom:32.7.4"))
+    implementation(platform("com.google.firebase:firebase-bom:33.9.0"))
     implementation("com.google.firebase:firebase-analytics-ktx")
     implementation("com.google.firebase:firebase-crashlytics-ktx")
 }

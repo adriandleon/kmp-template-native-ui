@@ -21,7 +21,41 @@ struct HomeView: View {
     }
 
     var body: some View {
-        Text(uiStateObserver.value.title)
-            .font(.title)
+        if uiStateObserver.value.isReady {
+            VStack(spacing: 12) {
+                Text("Home")
+                    .font(.title)
+                    .fontWeight(.semibold)
+
+                Text("This tab is the signed-in starting point for app-specific content.")
+                    .font(.body)
+                    .foregroundStyle(.secondary)
+                    .multilineTextAlignment(.center)
+                    .padding(.horizontal, 24)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .accessibilityIdentifier("home_screen")
+        }
     }
+}
+
+#Preview("Home - English") {
+    HomeView(PreviewHomeComponent())
+        .environment(\.locale, .init(identifier: "en"))
+}
+
+#Preview("Home - Spanish") {
+    HomeView(PreviewHomeComponent())
+        .environment(\.locale, .init(identifier: "es-419"))
+}
+
+#Preview("Home - Portuguese") {
+    HomeView(PreviewHomeComponent())
+        .environment(\.locale, .init(identifier: "pt-BR"))
+}
+
+#Preview("Home - English - Dark") {
+    HomeView(PreviewHomeComponent())
+        .environment(\.locale, .init(identifier: "en"))
+        .preferredColorScheme(.dark)
 }

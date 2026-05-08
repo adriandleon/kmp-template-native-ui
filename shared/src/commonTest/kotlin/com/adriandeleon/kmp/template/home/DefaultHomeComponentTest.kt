@@ -6,8 +6,8 @@ import io.kotest.matchers.shouldBe
 
 class DefaultHomeComponentTest :
     FunSpec({
-        test("exposes the correct title") {
+        test("exposes ready state") {
             val component = DefaultHomeComponent(testComponentContext())
-            component.uiState.value.title shouldBe "Home Screen"
+            component.uiState.value.isReady shouldBe true
         }
     })

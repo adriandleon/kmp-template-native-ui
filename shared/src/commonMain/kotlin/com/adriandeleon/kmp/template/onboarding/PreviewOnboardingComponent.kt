@@ -37,6 +37,10 @@ class PreviewOnboardingComponent(
         select((mutablePages.value.selectedIndex - 1).coerceAtLeast(0))
     }
 
+    override fun selectPage(index: Int) {
+        select(index.coerceIn(items.indices))
+    }
+
     override fun skip() = Unit
 
     override fun finish() {

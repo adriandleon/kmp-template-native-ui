@@ -13,6 +13,5 @@ import com.arkivanov.decompose.value.Value
 internal class DefaultHomeComponent(componentContext: ComponentContext) :
     HomeComponent, ComponentContext by componentContext {
 
-    override val uiState: Value<HomeComponent.UiState> =
-        MutableValue(HomeComponent.UiState(title = "Home Screen"))
+    override val uiState: Value<HomeComponent.UiState> = MutableValue(HomeComponent.UiState())
 }

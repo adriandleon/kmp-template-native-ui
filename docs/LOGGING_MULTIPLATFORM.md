@@ -83,7 +83,7 @@ interface Logger {
 ```toml
 # In gradle/libs.versions.toml
 [versions]
-kermit = "2.0.8"
+kermit = "2.1.0"
 
 [libraries]
 kermit = { module = "co.touchlab:kermit", version.ref = "kermit" }

@@ -14,6 +14,8 @@ class InMemoryAppStateRepository(initialState: AppState = AppState()) : AppState
 
     override val state: Value<AppState> = mutableState
 
+    override suspend fun loadInitialState(): AppState = mutableState.value
+
     override fun setHasSeenOnboarding(hasSeenOnboarding: Boolean) {
         mutableState.value = mutableState.value.copy(hasSeenOnboarding = hasSeenOnboarding)
     }

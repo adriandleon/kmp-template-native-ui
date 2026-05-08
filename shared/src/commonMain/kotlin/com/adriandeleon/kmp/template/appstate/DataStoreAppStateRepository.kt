@@ -10,6 +10,7 @@ import com.arkivanov.decompose.value.Value
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
@@ -24,7 +25,8 @@ internal class DataStoreAppStateRepository(
     dispatcherProvider: DispatcherProvider,
 ) : AppStateRepository {
     private val mutableState = MutableValue(AppState())
-    private val scope = CoroutineScope(SupervisorJob() + dispatcherProvider.io)
+    private val ioDispatcher = dispatcherProvider.io
+    private val scope = CoroutineScope(SupervisorJob() + ioDispatcher)
     private val mainDispatcher = dispatcherProvider.main
 
     override val state: Value<AppState> = mutableState
@@ -36,6 +38,13 @@ internal class DataStoreAppStateRepository(
             }
         }
     }
+
+    override suspend fun loadInitialState(): AppState =
+        withContext(ioDispatcher) {
+            val appState = dataStore.data.first().toAppState()
+            withContext(mainDispatcher) { mutableState.value = appState }
+            appState
+        }
 
     override fun setHasSeenOnboarding(hasSeenOnboarding: Boolean) {
         updateState { copy(hasSeenOnboarding = hasSeenOnboarding) }

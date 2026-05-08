@@ -13,8 +13,8 @@
     <string name="posts_retry_button">Reintentar</string>
 
     <!-- Home screen -->
-    <string name="home_screen_title">Pantalla de Inicio</string>
-    <string name="home_log_button">Registrar Mensaje</string>
+    <string name="home_screen_title">Inicio</string>
+    <string name="home_screen_body">Esta pestaña es el punto inicial con sesión para contenido propio de la app.</string>
 
     <!-- Root placeholders -->
     <string name="root_onboarding_placeholder">Introducción</string>
@@ -58,16 +58,12 @@
     <!-- Main tabs -->
     <string name="main_home_tab">Inicio</string>
     <string name="main_examples_tab">Ejemplos</string>
-    <string name="main_adaptive_tab">Adaptable</string>
+    <string name="main_posts_tab">Publicaciones</string>
     <string name="main_settings_tab">Ajustes</string>
-    <string name="main_home_title">Inicio</string>
-    <string name="main_home_body">Esta pestaña es el punto inicial con sesión para contenido propio de la app.</string>
-    <string name="main_examples_title">Ejemplos</string>
-    <string name="main_examples_body">Esta pestaña alojará ejemplos de stack, slot y child item navigation.</string>
-    <string name="main_adaptive_title">Adaptable</string>
-    <string name="main_adaptive_body">Esta pestaña alojará el ejemplo de layout adaptable con Child Panels.</string>
-    <string name="main_settings_title">Ajustes</string>
-    <string name="main_settings_body">Esta pestaña es el lugar de la plantilla para cuenta, preferencias y reinicios.</string>
+
+    <!-- Settings screen -->
+    <string name="settings_screen_title">Ajustes</string>
+    <string name="settings_screen_body">Esta pestaña es el lugar de la plantilla para cuenta, preferencias y reinicios.</string>
 
     <!-- Navigation examples -->
     <string name="examples_title">Ejemplos de navegación</string>
