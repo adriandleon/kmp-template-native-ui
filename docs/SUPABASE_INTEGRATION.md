@@ -83,7 +83,7 @@ The Supabase integration follows a layered architecture pattern:
 [versions]
 supabase = "3.6.0"
 ktor = "3.4.3"
-buildkonfig = "0.18.0"
+buildkonfig = "0.20.0"
 
 [libraries]
 # Supabase modules
