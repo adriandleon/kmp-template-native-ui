@@ -78,7 +78,7 @@ The Firebase integration follows a layered architecture pattern:
 
 1. **Navigate to [Firebase Console](https://console.firebase.google.com/)**
 2. **Click "Create a project"**
-3. **Enter project name** (e.g., "YourApp-Firebase")
+3. **Enter project name** (for example, "<ProjectName>-Firebase")
 4. **Enable Google Analytics** (recommended)
 5. **Choose Analytics account** or create new
 6. **Click "Create project"**

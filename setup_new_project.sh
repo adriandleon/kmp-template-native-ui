@@ -64,6 +64,10 @@ to_project_name() {
     echo "$1" | sed 's/[^a-zA-Z0-9]//g' | sed 's/^[0-9]*//g'
 }
 
+to_swift_module_name() {
+    echo "$1" | sed 's/[^a-zA-Z0-9_]/_/g'
+}
+
 # Function to get domain from package name (reversed domain)
 # Converts: org.example.project -> project.example.org
 get_domain() {
@@ -89,18 +93,26 @@ create_directory_structure() {
         fi
     done
     
-    # Create new directory structure for androidApp module
-    if [ -d "androidApp/src/main/kotlin/$old_path" ]; then
-        mkdir -p "androidApp/src/main/kotlin/$new_path"
-        cp -r "androidApp/src/main/kotlin/$old_path"/* "androidApp/src/main/kotlin/$new_path/" 2>/dev/null || true
-        print_success "Created androidApp module directory structure: $new_path"
+    # Create new directory structure for Android source and test source sets.
+    local android_source_sets=("main" "test" "androidTest")
+    for source_set in "${android_source_sets[@]}"; do
+        if [ -d "androidApp/src/$source_set/kotlin/$old_path" ]; then
+            mkdir -p "androidApp/src/$source_set/kotlin/$new_path"
+            cp -r "androidApp/src/$source_set/kotlin/$old_path"/* "androidApp/src/$source_set/kotlin/$new_path/" 2>/dev/null || true
+            print_success "Created androidApp/$source_set directory structure: $new_path"
+        fi
+    done
+
+    if [ -d "konsistTest/src/test/kotlin/$old_path" ]; then
+        mkdir -p "konsistTest/src/test/kotlin/$new_path"
+        cp -r "konsistTest/src/test/kotlin/$old_path"/* "konsistTest/src/test/kotlin/$new_path/" 2>/dev/null || true
+        print_success "Created konsistTest directory structure: $new_path"
     fi
-    
-    # Create new directory structure for androidApp test
-    if [ -d "androidApp/src/test/kotlin/$old_path" ]; then
-        mkdir -p "androidApp/src/test/kotlin/$new_path"
-        cp -r "androidApp/src/test/kotlin/$old_path"/* "androidApp/src/test/kotlin/$new_path/" 2>/dev/null || true
-        print_success "Created androidApp test directory structure: $new_path"
+
+    if [ -d "shared/schemas/$old_package.db.AppDatabase" ]; then
+        mkdir -p "shared/schemas/$new_package.db.AppDatabase"
+        cp -r "shared/schemas/$old_package.db.AppDatabase"/* "shared/schemas/$new_package.db.AppDatabase/" 2>/dev/null || true
+        print_success "Created Room schema directory: $new_package.db.AppDatabase"
     fi
 }
 
@@ -117,16 +129,24 @@ remove_old_directories() {
         rm -rf "shared/src/$source_set/kotlin/$old_path" 2>/dev/null || true
     done
     
-    # Remove old directories from androidApp module
-    rm -rf "androidApp/src/main/kotlin/$old_path" 2>/dev/null || true
-    rm -rf "androidApp/src/test/kotlin/$old_path" 2>/dev/null || true
+    # Remove old directories from Android source and test source sets.
+    local android_source_sets=("main" "test" "androidTest")
+    for source_set in "${android_source_sets[@]}"; do
+        rm -rf "androidApp/src/$source_set/kotlin/$old_path" 2>/dev/null || true
+    done
+
+    rm -rf "konsistTest/src/test/kotlin/$old_path" 2>/dev/null || true
+    rm -rf "shared/schemas/$old_package.db.AppDatabase" 2>/dev/null || true
     
     # Clean up empty parent directories
     for source_set in "${shared_source_sets[@]}"; do
         cleanup_empty_directories "shared/src/$source_set/kotlin"
     done
-    cleanup_empty_directories "androidApp/src/main/kotlin"
-    cleanup_empty_directories "androidApp/src/test/kotlin"
+    for source_set in "${android_source_sets[@]}"; do
+        cleanup_empty_directories "androidApp/src/$source_set/kotlin"
+    done
+    cleanup_empty_directories "konsistTest/src/test/kotlin"
+    cleanup_empty_directories "shared/schemas"
     
     print_success "Removed old directory structure: $old_path"
 }
@@ -162,6 +182,11 @@ update_file_contents() {
     local new_bundle_id="$7"
     local old_domain="$8"
     local new_domain="$9"
+    local old_swift_module
+    local new_swift_module
+
+    old_swift_module=$(to_swift_module_name "$old_project_name")
+    new_swift_module=$(to_swift_module_name "$new_project_name")
     
     if [ -f "$file" ]; then
         # Create backup
@@ -176,6 +201,11 @@ update_file_contents() {
         
         # Replace project names
         sed -i.tmp "s|$old_project_name|$new_project_name|g" "$file"
+
+        # Replace Swift module names and display names that differ from the
+        # filesystem-safe Xcode project name.
+        sed -i.tmp "s|$old_swift_module|$new_swift_module|g" "$file"
+        sed -i.tmp "s|KMP Template|$new_project_name|g" "$file"
         
         # Replace domain names
         sed -i.tmp "s|$old_domain|$new_domain|g" "$file"
@@ -241,6 +271,23 @@ update_xcode_project() {
             "$old_bundle_id" "$new_bundle_id" \
             "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
     done
+
+    # Update Swift test files in the renamed test target folder.
+    find "iosApp/${new_project_name}Tests" -name "*.swift" -type f | while read -r file; do
+        update_file_contents "$file" \
+            "$old_package" "$new_package" \
+            "$old_project_name" "$new_project_name" \
+            "$old_bundle_id" "$new_bundle_id" \
+            "adriandeleon" "$(echo $new_bundle_id | cut -d'.' -f1)"
+    done
+
+    if [ -f "iosApp/${new_project_name}Tests/KMP_TemplateTests.swift" ]; then
+        mv "iosApp/${new_project_name}Tests/KMP_TemplateTests.swift" "iosApp/${new_project_name}Tests/${new_project_name}Tests.swift"
+        print_success "Renamed iOS root test file"
+    elif [ -f "iosApp/${new_project_name}Tests/${old_project_name}Tests.swift" ]; then
+        mv "iosApp/${new_project_name}Tests/${old_project_name}Tests.swift" "iosApp/${new_project_name}Tests/${new_project_name}Tests.swift"
+        print_success "Renamed iOS root test file"
+    fi
 }
 
 # Function to update all source files
@@ -314,6 +361,14 @@ update_config_files() {
         "$old_project_name" "$new_project_name" \
         "$old_bundle_id" "$new_bundle_id" \
         "$old_domain" "$new_domain"
+
+    find "shared/schemas" -name "*.json" -type f | while read -r file; do
+        update_file_contents "$file" \
+            "$old_package" "$new_package" \
+            "$old_project_name" "$new_project_name" \
+            "$old_bundle_id" "$new_bundle_id" \
+            "$old_domain" "$new_domain"
+    done
     
     # Update Android manifest
     if [ -f "androidApp/src/main/AndroidManifest.xml" ]; then
@@ -334,6 +389,126 @@ update_config_files() {
     fi
     
     print_success "Updated configuration files"
+}
+
+write_generated_readme() {
+    local new_package="$1"
+    local new_project_name="$2"
+    local new_bundle_id="$3"
+
+    cat > "README.md" << EOF
+# $new_project_name
+
+$new_project_name is a Kotlin Multiplatform app with native UI on Android and
+iOS. Android uses Compose Multiplatform, iOS uses SwiftUI, and shared business
+logic lives in the \`shared\` module.
+
+## Project structure
+
+\`\`\`text
+androidApp/   Android UI and app configuration
+iosApp/       SwiftUI UI, Xcode project, and iOS tests
+shared/       Shared Kotlin logic, data, navigation, and state
+\`\`\`
+
+## Prerequisites
+
+Install these tools before building the app:
+
+- Android Studio or IntelliJ IDEA with Kotlin Multiplatform support
+- Xcode 16 or later
+- Java 21
+
+The Gradle wrapper is included, so you don't need to install Gradle manually.
+
+## Local configuration
+
+Add local development values to \`local.properties\` or export them as
+environment variables:
+
+\`\`\`properties
+SUPABASE_URL_DEV_AND=your-android-dev-supabase-url
+SUPABASE_URL_DEV_IOS=your-ios-dev-supabase-url
+SUPABASE_KEY_DEV=your-dev-supabase-key
+SUPABASE_URL_PROD=your-prod-supabase-url
+SUPABASE_KEY_PROD=your-prod-supabase-key
+CONFIGCAT_AND_TEST_KEY=your-android-test-configcat-key
+CONFIGCAT_AND_LIVE_KEY=your-android-live-configcat-key
+CONFIGCAT_IOS_TEST_KEY=your-ios-test-configcat-key
+CONFIGCAT_IOS_LIVE_KEY=your-ios-live-configcat-key
+\`\`\`
+
+Firebase configuration files are intentionally ignored by Git. Add your local
+copies at these paths:
+
+- \`androidApp/google-services.json\`
+- \`iosApp/$new_project_name/GoogleService-Info.plist\`
+
+The iOS Gradle build phase reads \`iosApp/.xcode.env\`, which discovers Java 21
+when \`JAVA_HOME\` is unset. Use \`iosApp/.xcode.env.local\` for developer-specific
+overrides.
+
+## Build and test
+
+Use these commands for local verification:
+
+\`\`\`bash
+./gradlew :androidApp:assembleDebug
+./gradlew :shared:testAndroidHostTest
+./gradlew :konsistTest:test
+xcodebuild test -project iosApp/$new_project_name.xcodeproj -scheme $new_project_name -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug
+\`\`\`
+
+## Identifiers
+
+- Android package: \`$new_package\`
+- iOS app bundle ID: \`$new_bundle_id.$new_project_name\`
+- iOS test bundle ID: \`$new_bundle_id.${new_project_name}Tests\`
+EOF
+    print_success "Generated app README.md"
+}
+
+update_generated_branding() {
+    local new_project_name="$1"
+
+    find "androidApp/src/main/res" -name "strings.xml" -type f | while read -r file; do
+        sed -i.tmp "s|<string name=\"app_name\">.*</string>|<string name=\"app_name\">$new_project_name</string>|g" "$file"
+        rm -f "$file.tmp"
+    done
+
+    if [ -f "iosApp/$new_project_name/Localizable.xcstrings" ]; then
+        sed -i.tmp "s|KMP Template|$new_project_name|g" "iosApp/$new_project_name/Localizable.xcstrings"
+        rm -f "iosApp/$new_project_name/Localizable.xcstrings.tmp"
+    fi
+
+    print_success "Updated generated app branding"
+}
+
+create_xcode_env() {
+    cat > "iosApp/.xcode.env" << 'EOF'
+if [ -z "${JAVA_HOME:-}" ]; then
+  export JAVA_HOME="$(/usr/libexec/java_home -v 21 2>/dev/null)"
+fi
+EOF
+    print_success "Created iosApp/.xcode.env"
+}
+
+create_release_note_placeholders() {
+    local release_notes_dir="androidApp/release/whatsNew"
+
+    mkdir -p "$release_notes_dir"
+    printf 'Initial release notes placeholder.\n' > "$release_notes_dir/whatsnew-en-US"
+    printf 'Notas de lanzamiento iniciales.\n' > "$release_notes_dir/whatsnew-es-419"
+    printf 'Notas iniciais da versao.\n' > "$release_notes_dir/whatsnew-pt-BR"
+    print_success "Created Android release-note placeholders"
+}
+
+cleanup_template_only_files() {
+    rm -rf "docs/superpowers" 2>/dev/null || true
+    rm -f "setup_new_project.sh" "SETUP_SCRIPT_README.md" 2>/dev/null || true
+    rm -f "scripts/verify_setup_new_project.sh" 2>/dev/null || true
+    cleanup_empty_directories "scripts"
+    print_success "Removed template-only setup files"
 }
 
 # Function to update documentation files
@@ -482,7 +657,7 @@ SUPABASE_KEY_DEV=supabase-key-placeholder
 
 # Supabase Production Credentials
 SUPABASE_URL_PROD=supabase-url-placeholder
-SUPABASE_KEY_PROD=supabse-key-placeholder
+SUPABASE_KEY_PROD=supabase-key-placeholder
 
 # ConfigCat SDK Keys
 CONFIGCAT_IOS_LIVE_KEY=configcat-key-placeholder
@@ -506,7 +681,7 @@ SUPABASE_KEY_DEV=supabase-key-placeholder
 
 # Supabase Production Credentials
 SUPABASE_URL_PROD=supabase-url-placeholder
-SUPABASE_KEY_PROD=supabse-key-placeholder
+SUPABASE_KEY_PROD=supabase-key-placeholder
 
 # ConfigCat SDK Keys
 CONFIGCAT_IOS_LIVE_KEY=configcat-key-placeholder
@@ -648,6 +823,27 @@ validate_transformation() {
         print_error "New androidApp directory structure not found"
         all_dirs_exist=false
     fi
+
+    if [ -d "androidApp/src/androidTest/kotlin/$new_path" ]; then
+        print_success "New Android instrumentation test directory created successfully"
+    else
+        print_error "New Android instrumentation test directory not found"
+        all_dirs_exist=false
+    fi
+
+    if [ -d "konsistTest/src/test/kotlin/$new_path" ]; then
+        print_success "New Konsist test directory created successfully"
+    else
+        print_error "New Konsist test directory not found"
+        all_dirs_exist=false
+    fi
+
+    if [ -d "shared/schemas/$new_package.db.AppDatabase" ]; then
+        print_success "New Room schema directory created successfully"
+    else
+        print_error "New Room schema directory not found"
+        all_dirs_exist=false
+    fi
     
     if [ "$all_dirs_exist" = false ]; then
         return 1
@@ -666,6 +862,13 @@ validate_transformation() {
         print_success "iOS app folder renamed successfully"
     else
         print_error "iOS app folder not renamed"
+        return 1
+    fi
+
+    if [ -f "iosApp/${new_project_name}Tests/${new_project_name}Tests.swift" ]; then
+        print_success "iOS root test file renamed successfully"
+    else
+        print_error "iOS root test file not renamed"
         return 1
     fi
     
@@ -692,6 +895,7 @@ show_final_instructions() {
     echo "   - Replace androidApp/google-services.json with your actual Firebase config"
     echo "   - Replace iosApp/$new_project_name/GoogleService-Info.plist with your actual Firebase config"
     echo "   - Update local.properties with your actual API keys (placeholders were added)"
+    echo "   - Update GitHub repository owner/repo placeholders in config/Dangerfile.df.kts"
     echo "   - Note: Template files were created with correct package names and bundle IDs"
     echo ""
     echo -e "${YELLOW}3. Update GitHub repository:${NC}"
@@ -702,7 +906,9 @@ show_final_instructions() {
     echo -e "${YELLOW}4. Test your setup:${NC}"
     echo "   - Run: ./gradlew clean build"
     echo "   - Test Android build: ./gradlew :androidApp:assembleDebug"
-    echo "   - Test iOS build in Xcode or with xcodebuild build-for-testing"
+    echo "   - Test shared Android host tests: ./gradlew :shared:testAndroidHostTest"
+    echo "   - Test Konsist rules: ./gradlew :konsistTest:test"
+    echo "   - Test iOS: xcodebuild test -project iosApp/$new_project_name.xcodeproj -scheme $new_project_name -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug"
     echo ""
     echo -e "${CYAN}📊 Project Details:${NC}"
     echo "   Package Name: $new_package"
@@ -793,12 +999,21 @@ main() {
     
     # Create local.properties with API key placeholders
     create_local_properties
+
+    # Generate project-specific docs, release metadata, and local Xcode env.
+    write_generated_readme "$NEW_PACKAGE" "$NEW_PROJECT_NAME" "$NEW_BUNDLE_ID"
+    update_generated_branding "$NEW_PROJECT_NAME"
+    create_xcode_env
+    create_release_note_placeholders
     
     # Remove old directories
     remove_old_directories "$OLD_PACKAGE"
     
     # Clean up backup files
     cleanup_backups
+
+    # Remove generator-only files so stale template names are not left behind.
+    cleanup_template_only_files
     
     # Validate transformation
     if validate_transformation "$NEW_PACKAGE" "$NEW_PROJECT_NAME" "$NEW_BUNDLE_ID"; then

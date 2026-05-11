@@ -94,8 +94,8 @@ The script updates the following types of files:
 
 #### **iOS Files**
 - `iosApp/Configuration/Config.xcconfig`
-- `iosApp/YourApp/Info.plist`
-- All Swift source files in `iosApp/YourApp/`
+- `iosApp/<ProjectName>/Info.plist`
+- All Swift source files in `iosApp/<ProjectName>/`
 - Xcode project file (`project.pbxproj`)
 
 #### **Shared Module Files**
@@ -112,7 +112,7 @@ The script updates the following types of files:
 
 #### **Firebase Configuration Files**
 - `androidApp/google-services.json` - Android Firebase configuration with correct package name
-- `iosApp/YourApp/GoogleService-Info.plist` - iOS Firebase configuration with correct bundle ID
+- `iosApp/<ProjectName>/GoogleService-Info.plist` - iOS Firebase configuration with correct bundle ID
 
 #### **API Key Configuration Files**
 - `local.properties` - API key placeholders for Supabase and ConfigCat services
@@ -294,14 +294,14 @@ After running the script, you'll need to:
 ### 1. Update Your IDE
 - Close and reopen Android Studio
 - Sync Gradle files
-- Open the new Xcode project: `iosApp/YourApp.xcodeproj`
+- Open the new Xcode project: `iosApp/<ProjectName>.xcodeproj`
 
 ### 2. Update Configuration Files
 - Replace `androidApp/google-services.json` with your actual Firebase configuration
-- Replace `iosApp/YourApp/GoogleService-Info.plist` with your actual Firebase configuration
+- Replace `iosApp/<ProjectName>/GoogleService-Info.plist` with your actual Firebase configuration
 - Update `local.properties` with your actual API keys (placeholders were added)
 - Note: Template files were created with correct package names and bundle IDs
-- Verify the iOS test sources now live under `iosApp/YourAppTests/`
+- Verify the iOS test sources now live under `iosApp/<ProjectName>Tests/`
 
 ### 3. Update GitHub Repository
 - Update repository secrets in GitHub Settings
@@ -320,7 +320,7 @@ After running the script, you'll need to:
 ./gradlew :shared:compileKotlinIosSimulatorArm64
 
 # Test the iOS app and Swift Testing target
-xcodebuild -project iosApp/YourApp.xcodeproj -scheme YourApp -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug test
+xcodebuild -project iosApp/<ProjectName>.xcodeproj -scheme <ProjectName> -destination 'platform=iOS Simulator,name=iPhone 17' -configuration Debug test
 ```
 
 ## 🐛 Troubleshooting
@@ -353,10 +353,10 @@ chmod +x setup_new_project.sh
 - **Bundle ID must match**: Ensure the bundle ID in Firebase Console matches your project's bundle ID
 - **File locations**: 
   - Android: `androidApp/google-services.json`
-  - iOS: `iosApp/YourApp/GoogleService-Info.plist`
+  - iOS: `iosApp/<ProjectName>/GoogleService-Info.plist`
 
 #### iOS Test Target Issues
-- **Missing test folder**: Confirm the script renamed `iosApp/KMP-TemplateTests` to `iosApp/YourAppTests`
+- **Missing test folder**: Confirm the script renamed `iosApp/KMP-TemplateTests` to `iosApp/<ProjectName>Tests`
 - **Swift Testing check**: Run the `xcodebuild ... test` command to verify the app target and Swift test target both compile and pass
 - **Shared framework import errors**: If Swift tests report `No such module 'Shared'`, verify the generated Xcode project still contains the `FRAMEWORK_SEARCH_PATHS` entries under the test target build settings
 

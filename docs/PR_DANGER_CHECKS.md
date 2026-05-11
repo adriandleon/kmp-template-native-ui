@@ -38,7 +38,7 @@ val PROJECT_REPO = "your-repo-name"                     // Repository name
 // Module Paths - Update these to match your project structure
 val SHARED_MODULE_PATH = "shared/src/commonMain/"       // Path to shared module
 val ANDROID_MODULE_PATH = "app/src/main/"               // Path to Android module
-val IOS_MODULE_PATH = "iosApp/YourApp/"                 // Path to iOS module
+val IOS_MODULE_PATH = "iosApp/<ProjectName>/"           // Path to iOS module
 ```
 
 ### **Step 3: Customize Rules**
