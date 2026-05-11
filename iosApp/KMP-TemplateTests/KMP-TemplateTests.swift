@@ -1,5 +1,5 @@
 //
-//  KMP_TemplateTests.swift
+//  KMP-TemplateTests.swift
 //  KMP-TemplateTests
 //
 //  Created by Adrian De León on 4/29/26.

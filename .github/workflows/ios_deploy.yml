@@ -22,7 +22,7 @@ env:
   IOS_TEST_DESTINATION: platform=iOS Simulator,name=iPhone 17
 
   # Build Configuration
-  JAVA_VERSION: '17'
+  JAVA_VERSION: '21'
   RUBY_VERSION: '3.3'
   GRADLE_WRAPPER: ./gradlew
   XCODE_VERSION: latest-stable
@@ -36,9 +36,9 @@ env:
   PILOT_GROUPS: Internals
 
   # Environment Variables (from secrets)
-  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_PROD }}
+  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_DEV_AND }}
+  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_DEV_IOS }}
+  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_DEV }}
   SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_KEY_PROD: ${{ secrets.SUPABASE_KEY_PROD }}
   CONFIGCAT_AND_TEST_KEY: ${{ secrets.CONFIGCAT_AND_TEST_KEY }}

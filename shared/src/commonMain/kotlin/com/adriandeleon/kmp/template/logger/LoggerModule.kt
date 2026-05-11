@@ -30,6 +30,6 @@ private fun kermitLogger(): KermitLogger {
         }
 
     KermitLogger.setLogWriters(logWriter)
-    KermitLogger.setTag("TemplateApp")
+    KermitLogger.setTag("KMP-Template")
     return co.touchlab.kermit.Logger
 }

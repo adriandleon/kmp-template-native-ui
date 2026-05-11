@@ -15,7 +15,7 @@ env:
   ANDROID_NAMESPACE: com.adriandeleon.kmp.template
 
   # Build Configuration
-  JAVA_VERSION: '17'
+  JAVA_VERSION: '21'
   GRADLE_WRAPPER: ./gradlew
   GRADLE_PATH: androidApp/build.gradle.kts
 
@@ -39,9 +39,9 @@ env:
   RELEASE_NOTES_DIR: androidApp/release/whatsNew
 
   # Environment Variables (from secrets)
-  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_PROD }}
+  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_DEV_AND }}
+  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_DEV_IOS }}
+  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_DEV }}
   SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_KEY_PROD: ${{ secrets.SUPABASE_KEY_PROD }}
   CONFIGCAT_AND_TEST_KEY: ${{ secrets.CONFIGCAT_AND_TEST_KEY }}

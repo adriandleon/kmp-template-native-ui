@@ -206,9 +206,9 @@ SUPABASE_KEY_PROD=your_production_supabase_anon_key # pragma: allowlist secret
 ```yaml
 # In GitHub Actions workflows
 env:
-  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_PROD }}
+  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_DEV_AND }}
+  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_DEV_IOS }}
+  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_DEV }}
   SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_KEY_PROD: ${{ secrets.SUPABASE_KEY_PROD }}
 ```
@@ -747,6 +747,9 @@ supabase db reset
 #### **GitHub Secrets**
 ```yaml
 # Required secrets for CI/CD
+SUPABASE_URL_DEV_AND: "https://your-dev-android-project.supabase.co"
+SUPABASE_URL_DEV_IOS: "https://your-dev-ios-project.supabase.co"
+SUPABASE_KEY_DEV: "your-development-anon-key"
 SUPABASE_URL_PROD: "https://your-project.supabase.co"
 SUPABASE_KEY_PROD: "your-production-anon-key"
 ```
@@ -755,9 +758,9 @@ SUPABASE_KEY_PROD: "your-production-anon-key"
 ```yaml
 # In .github/workflows/android_deploy.yml and ios_deploy.yml
 env:
-  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_PROD }}
-  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_PROD }}
+  SUPABASE_URL_DEV_AND: ${{ secrets.SUPABASE_URL_DEV_AND }}
+  SUPABASE_URL_DEV_IOS: ${{ secrets.SUPABASE_URL_DEV_IOS }}
+  SUPABASE_KEY_DEV: ${{ secrets.SUPABASE_KEY_DEV }}
   SUPABASE_URL_PROD: ${{ secrets.SUPABASE_URL_PROD }}
   SUPABASE_KEY_PROD: ${{ secrets.SUPABASE_KEY_PROD }}
 ```

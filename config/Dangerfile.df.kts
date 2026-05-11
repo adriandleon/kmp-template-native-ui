@@ -5,14 +5,14 @@ import systems.danger.kotlin.*
 // =============================================================================
 
 // Project Configuration
-val PROJECT_NAME = "Template"                                    // Your project name
-val PROJECT_OWNER = "adriandleon"                                // GitHub username/organization
-val PROJECT_REPO = "kmp-template-native-ui"                      // Repository name
+val PROJECT_NAME = "KMP-Template"                                // Your project name
+val PROJECT_OWNER = "<github-owner>"                             // GitHub username/organization
+val PROJECT_REPO = "<github-repo>"                               // Repository name
 
 // Module Paths - Update these to match your project structure
 val SHARED_MODULE_PATH = "shared/src/commonMain/"                // Path to shared module common code
-val ANDROID_MODULE_PATH = "composeApp/src/androidMain/"          // Path to Android module code
-val IOS_MODULE_PATH = "iosApp/Template/"                         // Path to iOS module code
+val ANDROID_MODULE_PATH = "androidApp/src/main/"                 // Path to Android module code
+val IOS_MODULE_PATH = "iosApp/KMP-Template/"                     // Path to iOS module code
 
 // Android App Configuration
 val ANDROID_APP_MODULE = "androidApp"                            // Your Android module name

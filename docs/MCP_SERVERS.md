@@ -207,7 +207,7 @@ You can add additional MCP servers by extending the configuration:
     "url": "https://mcp.context7.com/mcp",
     "headers": {
       "CONTEXT7_API_KEY": "${env.PERSONAL_CONTEXT7_API_KEY}",
-      "User-Agent": "YourApp/1.0"
+      "User-Agent": "<ProjectName>/1.0"
     },
     "timeout": 30000
   }
