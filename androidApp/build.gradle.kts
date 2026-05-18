@@ -37,7 +37,6 @@ android {
 
     buildTypes {
         getByName("debug") {
-            isShrinkResources = false
             isMinifyEnabled = false
             isDebuggable = true
             testProguardFiles("proguard-test-rules.pro")

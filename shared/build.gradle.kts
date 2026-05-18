@@ -48,7 +48,6 @@ kotlin {
             api(libs.koin.core)
             implementation(libs.configcat)
             implementation(libs.datastore.preferences)
-            implementation(libs.decompose.extensions)
             implementation(libs.crashkios.crashlytics)
             implementation(libs.essenty.lifecycle.coroutines)
             implementation(libs.firebase.analytics)
@@ -99,7 +98,6 @@ kotlin {
 }
 
 dependencies {
-    detektPlugins(libs.detekt.compose)
     add("kspAndroid", libs.room.compiler)
     add("kspIosArm64", libs.room.compiler)
     add("kspIosSimulatorArm64", libs.room.compiler)
